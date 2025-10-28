@@ -20,11 +20,11 @@ export const Avatar = ({ src, alt, fallbackText, size = 'md', className }: Avata
 
   const initials = fallbackText
     ? fallbackText
-      .split(' ')
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2)
+        .split(' ')
+        .map((word) => word[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
     : alt[0]?.toUpperCase() || '?';
 
   return (

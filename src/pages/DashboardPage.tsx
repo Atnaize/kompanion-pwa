@@ -80,7 +80,7 @@ export const DashboardPage = () => {
 
       // Clear progress
       setSyncProgress(null);
-    } catch (error) {
+    } catch {
       setToastMessage({
         message: 'Failed to sync activities. Please try again.',
         type: 'error',

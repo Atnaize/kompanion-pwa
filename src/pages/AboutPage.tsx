@@ -59,9 +59,7 @@ export const AboutPage = () => {
                   Strava
                 </a>
               </p>
-              <p className="mt-4 text-xs">
-                Made with ❤️ for athletes who love to level up
-              </p>
+              <p className="mt-4 text-xs">Made with ❤️ for athletes who love to level up</p>
             </div>
           </GlassCard>
         </section>

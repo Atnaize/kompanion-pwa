@@ -70,7 +70,7 @@ export const ProfileMenu = () => {
                 'hover:bg-gray-100'
               )}
             >
-              <span className="font-medium text-gray-900">Profile & Settings</span>
+              <span className="font-medium text-gray-900">Profile</span>
             </Link>
             <Link
               to="/about"
