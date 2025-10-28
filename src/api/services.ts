@@ -23,7 +23,8 @@ export const activitiesService = {
     }) => void
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
-      const eventSource = new EventSource('/api/activities/sync/stream', {
+      const baseURL = apiClient.getBaseURL();
+      const eventSource = new EventSource(`${baseURL}/activities/sync/stream`, {
         withCredentials: true,
       });
 
