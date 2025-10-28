@@ -42,24 +42,57 @@ export const QuestsPage = () => {
                       </div>
 
                       <div className="mt-4 space-y-3">
-                        {quest.objectives.map((objective) => (
-                          <div key={objective.id}>
-                            <div className="mb-2 flex justify-between text-sm">
-                              <span className="text-gray-700">{objective.description}</span>
-                              <span className="font-medium text-gray-900">
-                                {objective.current}/{objective.target}
-                              </span>
+                        {quest.objectives.map((objective) => {
+                          const isCompleted = objective.completed;
+                          const progress = Math.min(
+                            (objective.current / objective.target) * 100,
+                            100
+                          );
+
+                          return (
+                            <div key={objective.id} className={isCompleted ? 'opacity-50' : ''}>
+                              <div className="mb-2 flex items-center justify-between gap-2 text-sm">
+                                <div className="flex flex-1 items-center gap-2">
+                                  {isCompleted && (
+                                    <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-gray-400 text-xs text-white">
+                                      ✓
+                                    </span>
+                                  )}
+                                  <span
+                                    className={
+                                      isCompleted
+                                        ? 'text-gray-500 line-through'
+                                        : 'font-medium text-gray-900'
+                                    }
+                                  >
+                                    {objective.description}
+                                  </span>
+                                </div>
+                                <span
+                                  className={
+                                    isCompleted
+                                      ? 'font-medium text-gray-400'
+                                      : 'font-bold text-gray-900'
+                                  }
+                                >
+                                  {objective.current}/{objective.target}
+                                </span>
+                              </div>
+                              <div className="h-3 w-full overflow-hidden rounded-full bg-gray-200">
+                                <div
+                                  className={`h-3 rounded-full transition-all duration-500 ${
+                                    isCompleted
+                                      ? 'bg-gradient-to-r from-gray-300 to-gray-400'
+                                      : 'bg-gradient-to-r from-strava-orange to-strava-orange-dark'
+                                  }`}
+                                  style={{
+                                    width: `${progress}%`,
+                                  }}
+                                />
+                              </div>
                             </div>
-                            <div className="h-3 w-full rounded-full bg-gray-200">
-                              <div
-                                className="h-3 rounded-full bg-gradient-to-r from-strava-orange to-strava-orange-dark transition-all duration-500"
-                                style={{
-                                  width: `${Math.min((objective.current / objective.target) * 100, 100)}%`,
-                                }}
-                              />
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
 
                       <div className="mt-4 border-t border-gray-200 pt-4 text-xs text-gray-500">
@@ -80,7 +113,6 @@ export const QuestsPage = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <div className="mb-1 flex items-center gap-2">
-                            <span className="text-xl">✅</span>
                             <h3 className="font-bold text-gray-900">{quest.name}</h3>
                           </div>
                           <p className="text-sm text-gray-600">{quest.description}</p>

@@ -63,6 +63,8 @@ export interface Achievement {
     activityType?: string;
   };
   unlockedAt?: string;
+  isRedeemable?: boolean;
+  isSecret?: boolean;
 }
 
 export interface Quest {

@@ -7,6 +7,8 @@ interface BadgeCardProps {
   description: string;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
   unlocked?: boolean;
+  redeemable?: boolean;
+  onRedeem?: () => void;
 }
 
 const rarityColors = {
@@ -22,20 +24,50 @@ export const BadgeCard = ({
   description,
   rarity,
   unlocked = false,
+  redeemable = false,
+  onRedeem,
 }: BadgeCardProps) => {
+  const isSecretLocked = icon === '❓';
+
   return (
-    <GlassCard className={clsx('p-4', !unlocked && 'opacity-50 grayscale')}>
+    <GlassCard
+      className={clsx(
+        'relative p-4 transition-all duration-300',
+        !unlocked && !redeemable && 'opacity-50 grayscale',
+        redeemable &&
+          'cursor-pointer opacity-100 shadow-lg shadow-strava-orange/20 ring-2 ring-strava-orange grayscale-0 hover:scale-105'
+      )}
+      onClick={redeemable && onRedeem ? onRedeem : undefined}
+    >
+      {redeemable && (
+        <div className="absolute right-0 top-0 overflow-hidden">
+          <div className="relative flex items-center justify-center">
+            <div
+              className="absolute bg-strava-orange px-6 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-md"
+              style={{
+                transform: 'rotate(45deg) translate(20%, -50%)',
+                transformOrigin: 'top right',
+                width: '100px',
+              }}
+            >
+              Redeem
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex flex-col items-center gap-3 text-center">
         <div
           className={clsx(
-            'flex h-16 w-16 items-center justify-center rounded-full text-3xl',
-            'bg-gradient-to-br shadow-md',
-            rarityColors[rarity]
+            'flex h-16 w-16 items-center justify-center rounded-full shadow-md transition-transform duration-300',
+            isSecretLocked
+              ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-4xl font-bold text-white'
+              : 'bg-gradient-to-br text-3xl',
+            !isSecretLocked && rarityColors[rarity]
           )}
         >
-          {icon}
+          {isSecretLocked ? '?' : icon}
         </div>
-        <div>
+        <div className="w-full">
           <h3 className="font-bold text-gray-900">{name}</h3>
           <p className="mt-1 text-xs text-gray-600">{description}</p>
           <span

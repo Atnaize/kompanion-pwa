@@ -7,3 +7,4 @@ export * from './Toast';
 export * from './WelcomeCard';
 export * from './QuestSummaryCard';
 export * from './Avatar';
+export * from './AchievementUnlockedModal';

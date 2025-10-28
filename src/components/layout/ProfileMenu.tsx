@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@store/authStore';
 import { Avatar } from '@components/ui';
 import clsx from 'clsx';
 
 export const ProfileMenu = () => {
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -24,6 +25,12 @@ export const ProfileMenu = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  const handleLogout = async () => {
+    setIsOpen(false);
+    await logout();
+    navigate('/');
+  };
 
   if (!user) return null;
 
@@ -72,6 +79,19 @@ export const ProfileMenu = () => {
             >
               <span className="font-medium text-gray-900">Profile</span>
             </Link>
+            <button
+              onClick={handleLogout}
+              className={clsx(
+                'flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors',
+                'hover:bg-gray-100'
+              )}
+            >
+              <span className="font-medium text-gray-900">Logout</span>
+            </button>
+
+            {/* Separator */}
+            <div className="my-2 border-t border-gray-200"></div>
+
             <Link
               to="/about"
               onClick={() => setIsOpen(false)}

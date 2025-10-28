@@ -8,6 +8,15 @@ interface NavItem {
   requiresData?: boolean;
 }
 
+interface TabBadge {
+  count: number;
+  color?: string;
+}
+
+interface TabBadges {
+  [path: string]: TabBadge;
+}
+
 const navItems: NavItem[] = [
   { path: '/dashboard', label: 'Home', icon: '🏠' },
   { path: '/quests', label: 'Quests', icon: '🎯', requiresData: true },
@@ -17,9 +26,10 @@ const navItems: NavItem[] = [
 
 interface BottomNavProps {
   hideDataTabs?: boolean;
+  badges?: TabBadges;
 }
 
-export const BottomNav = ({ hideDataTabs = false }: BottomNavProps) => {
+export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps) => {
   const location = useLocation();
 
   const visibleItems = hideDataTabs ? navItems.filter((item) => !item.requiresData) : navItems;
@@ -31,6 +41,8 @@ export const BottomNav = ({ hideDataTabs = false }: BottomNavProps) => {
           <div className="flex items-center justify-around">
             {visibleItems.map((item) => {
               const isActive = location.pathname === item.path;
+              const badge = badges[item.path];
+              const showBadge = badge && badge.count > 0;
 
               return (
                 <Link
@@ -48,6 +60,16 @@ export const BottomNav = ({ hideDataTabs = false }: BottomNavProps) => {
                   <span className="text-xs font-medium">{item.label}</span>
                   {isActive && (
                     <div className="absolute bottom-0 left-1/2 h-1 w-12 -translate-x-1/2 rounded-t-full bg-strava-orange" />
+                  )}
+                  {showBadge && (
+                    <div
+                      className={clsx(
+                        'absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white shadow-md',
+                        badge.color || 'bg-strava-orange'
+                      )}
+                    >
+                      {badge.count}
+                    </div>
                   )}
                 </Link>
               );

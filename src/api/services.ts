@@ -56,6 +56,8 @@ export const statsService = {
 
 export const achievementsService = {
   list: () => apiClient.get<Achievement[]>('/achievements'),
+  redeem: (achievementId: string) =>
+    apiClient.post<Achievement>(`/achievements/${achievementId}/redeem`),
 };
 
 export const questsService = {
