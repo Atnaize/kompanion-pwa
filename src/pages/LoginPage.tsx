@@ -18,8 +18,7 @@ export const LoginPage = () => {
 
   useEffect(() => {
     const fetchAuthUrl = async () => {
-      const redirectUri = `${window.location.origin}/dashboard`;
-      const response = await authService.login(redirectUri);
+      const response = await authService.login(window.location.origin);
 
       if (response.success && response.data) {
         setAuthUrl(response.data.authUrl);
