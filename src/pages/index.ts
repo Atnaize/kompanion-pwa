@@ -7,3 +7,4 @@ export * from './ComponentsPage';
 export * from './SettingsPage';
 export * from './ProfilePage';
 export * from './AboutPage';
+export * from './NotFoundPage';
