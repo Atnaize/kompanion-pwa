@@ -1,40 +1,50 @@
 import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
 import { BadgeCard, AchievementUnlockedModal } from '@components/ui';
 import { achievementsService } from '@api/services';
-import { useAsync } from '@hooks/useAsync';
 import type { Achievement } from '@app-types/index';
 
 export const AchievementsPage = () => {
   const [unlockedAchievement, setUnlockedAchievement] = useState<Achievement | null>(null);
+  const queryClient = useQueryClient();
+
   const {
-    data: achievements,
+    data: achievements = [],
     isLoading,
-    refetch,
-  } = useAsync<Achievement[]>(async () => {
-    const response = await achievementsService.list();
-    return response.data || [];
+  } = useQuery({
+    queryKey: ['achievements'],
+    queryFn: async () => {
+      const response = await achievementsService.list();
+      return response.data || [];
+    },
+  });
+
+  const redeemMutation = useMutation({
+    mutationFn: (achievementId: string) => achievementsService.redeem(achievementId),
+    onSuccess: (response) => {
+      if (response.data) {
+        setUnlockedAchievement(response.data);
+      }
+      // Invalidate and refetch achievements
+      queryClient.invalidateQueries({ queryKey: ['achievements'] });
+    },
+    onError: (error) => {
+      console.error('Failed to redeem achievement:', error);
+      alert(error instanceof Error ? error.message : 'Failed to redeem achievement');
+    },
   });
 
   const unlocked = achievements?.filter((a) => a.unlockedAt) || [];
   const locked = achievements?.filter((a) => !a.unlockedAt) || [];
   const redeemableCount = locked.filter((a) => a.isRedeemable).length;
 
-  const handleRedeem = async (achievement: Achievement) => {
-    try {
-      const response = await achievementsService.redeem(achievement.id);
-      if (response.data) {
-        setUnlockedAchievement(response.data);
-      }
-    } catch (error) {
-      console.error('Failed to redeem achievement:', error);
-      alert(error instanceof Error ? error.message : 'Failed to redeem achievement');
-    }
+  const handleRedeem = (achievement: Achievement) => {
+    redeemMutation.mutate(achievement.id);
   };
 
-  const handleCloseModal = async () => {
+  const handleCloseModal = () => {
     setUnlockedAchievement(null);
-    await refetch();
   };
 
   return (

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { achievementsService } from '@api/services';
+import type { Achievement } from '@app-types/index';
 
 interface TabBadge {
   count: number;
@@ -10,48 +11,40 @@ interface TabBadges {
   [path: string]: TabBadge;
 }
 
-export const useTabBadges = () => {
-  const [badges, setBadges] = useState<TabBadges>({});
+export const useTabBadges = (): TabBadges => {
+  // Use the same query that AchievementsPage uses - React Query will deduplicate
+  const { data: achievements } = useQuery({
+    queryKey: ['achievements'],
+    queryFn: async () => {
+      const response = await achievementsService.list();
+      return response.data || [];
+    },
+  });
 
-  useEffect(() => {
-    const fetchBadges = async () => {
-      try {
-        // Fetch achievements badge
-        const achievementsResponse = await achievementsService.list();
-        if (achievementsResponse.data) {
-          const redeemableCount = achievementsResponse.data.filter(
-            (a) => a.isRedeemable && !a.unlockedAt
-          ).length;
+  // Calculate badges from cached data
+  const badges: TabBadges = {};
 
-          setBadges((prev) => ({
-            ...prev,
-            '/achievements': {
-              count: redeemableCount,
-              color: 'bg-strava-orange',
-            },
-          }));
-        }
+  if (achievements) {
+    const redeemableCount = achievements.filter(
+      (a: Achievement) => a.isRedeemable && !a.unlockedAt
+    ).length;
 
-        // Add more badge fetchers here as needed
-        // Example:
-        // const questsResponse = await questsService.list();
-        // if (questsResponse.data) {
-        //   const availableQuests = questsResponse.data.filter(q => q.status === 'new').length;
-        //   setBadges(prev => ({ ...prev, '/quests': { count: availableQuests } }));
-        // }
-      } catch (error) {
-        // Silently fail - badges are not critical
-        console.error('Failed to fetch tab badges:', error);
-      }
-    };
+    if (redeemableCount > 0) {
+      badges['/achievements'] = {
+        count: redeemableCount,
+        color: 'bg-strava-orange',
+      };
+    }
+  }
 
-    fetchBadges();
-
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchBadges, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Add more badge calculations here as needed
+  // Example:
+  // if (quests) {
+  //   const activeQuests = quests.filter(q => q.status === 'active').length;
+  //   if (activeQuests > 0) {
+  //     badges['/quests'] = { count: activeQuests };
+  //   }
+  // }
 
   return badges;
 };

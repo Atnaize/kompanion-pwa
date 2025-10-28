@@ -1,14 +1,16 @@
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
 import { GlassCard, StatTile, ProgressRing } from '@components/ui';
 import { statsService } from '@api/services';
-import { useAsync } from '@hooks/useAsync';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
-import type { Stats } from '@app-types/index';
 
 export const StatsPage = () => {
-  const { data: stats, isLoading } = useAsync<Stats>(async () => {
-    const response = await statsService.getUserStats();
-    return response.data!;
+  const { data: stats, isLoading } = useQuery({
+    queryKey: ['stats'],
+    queryFn: async () => {
+      const response = await statsService.getUserStats();
+      return response.data!;
+    },
   });
 
   if (isLoading) {

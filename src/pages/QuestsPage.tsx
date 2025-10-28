@@ -1,13 +1,15 @@
+import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
 import { GlassCard } from '@components/ui';
 import { questsService } from '@api/services';
-import { useAsync } from '@hooks/useAsync';
-import type { Quest } from '@app-types/index';
 
 export const QuestsPage = () => {
-  const { data: quests, isLoading } = useAsync<Quest[]>(async () => {
-    const response = await questsService.list();
-    return response.data || [];
+  const { data: quests = [], isLoading } = useQuery({
+    queryKey: ['quests'],
+    queryFn: async () => {
+      const response = await questsService.list();
+      return response.data || [];
+    },
   });
 
   const activeQuests = quests?.filter((q) => q.status === 'active') || [];

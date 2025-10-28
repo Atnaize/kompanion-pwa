@@ -1,14 +1,14 @@
 import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
 import { GlassCard, Button, StatTile, Toast, WelcomeCard, QuestSummaryCard } from '@components/ui';
 import { activitiesService, statsService, questsService } from '@api/services';
-import { useAsync } from '@hooks/useAsync';
 import { useAuthStore } from '@store/authStore';
 import { formatDistance, formatElevation, formatRelativeTime } from '@utils/format';
-import type { Activity, Stats, Quest } from '@app-types/index';
 
 export const DashboardPage = () => {
   const { user, setUser } = useAuthStore();
+  const queryClient = useQueryClient();
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncProgress, setSyncProgress] = useState<{
     type: 'fetching' | 'saving' | 'complete' | 'error';
@@ -22,26 +22,33 @@ export const DashboardPage = () => {
   } | null>(null);
 
   const {
-    data: activities,
+    data: activities = [],
     isLoading: activitiesLoading,
-    refetch: refetchActivities,
-  } = useAsync<Activity[]>(async () => {
-    const response = await activitiesService.list();
-    return response.data || [];
+  } = useQuery({
+    queryKey: ['activities'],
+    queryFn: async () => {
+      const response = await activitiesService.list();
+      return response.data || [];
+    },
   });
 
   const {
     data: stats,
     isLoading: statsLoading,
-    refetch: refetchStats,
-  } = useAsync<Stats>(async () => {
-    const response = await statsService.getUserStats();
-    return response.data!;
+  } = useQuery({
+    queryKey: ['stats'],
+    queryFn: async () => {
+      const response = await statsService.getUserStats();
+      return response.data!;
+    },
   });
 
-  const { data: quests, refetch: refetchQuests } = useAsync<Quest[]>(async () => {
-    const response = await questsService.list();
-    return response.data || [];
+  const { data: quests = [] } = useQuery({
+    queryKey: ['quests'],
+    queryFn: async () => {
+      const response = await questsService.list();
+      return response.data || [];
+    },
   });
 
   const handleSync = async () => {
@@ -61,8 +68,11 @@ export const DashboardPage = () => {
         }
       });
 
-      // Refresh data
-      await Promise.all([refetchActivities(), refetchStats(), refetchQuests()]);
+      // Refresh data - invalidate all queries to refetch fresh data
+      await queryClient.invalidateQueries({ queryKey: ['activities'] });
+      await queryClient.invalidateQueries({ queryKey: ['stats'] });
+      await queryClient.invalidateQueries({ queryKey: ['quests'] });
+      await queryClient.invalidateQueries({ queryKey: ['achievements'] });
 
       // Update user with lastSyncedAt
       if (user) {
