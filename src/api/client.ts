@@ -1,7 +1,7 @@
 import type { ApiResponse } from '@app-types/index';
 
 class ApiClient {
-  private baseURL = '/api';
+  private baseURL = import.meta.env.VITE_API_URL || '/api';
 
   private async request<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
     const response = await fetch(`${this.baseURL}${url}`, {
