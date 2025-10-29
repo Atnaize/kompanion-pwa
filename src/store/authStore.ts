@@ -19,6 +19,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchUser: async () => {
     try {
       set({ isLoading: true });
+
+      // Check if token exists in localStorage
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        set({
+          user: null,
+          isAuthenticated: false,
+          isLoading: false,
+        });
+        return;
+      }
+
       const response = await authService.me();
 
       if (response.success && response.data) {
@@ -28,6 +40,8 @@ export const useAuthStore = create<AuthState>((set) => ({
           isLoading: false,
         });
       } else {
+        // Token is invalid, clear it
+        localStorage.removeItem('auth_token');
         set({
           user: null,
           isAuthenticated: false,
@@ -35,6 +49,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         });
       }
     } catch {
+      // Error calling API, clear token
+      localStorage.removeItem('auth_token');
       set({
         user: null,
         isAuthenticated: false,
@@ -44,7 +60,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    await authService.logout();
+    // Clear token from localStorage (no API call needed)
+    localStorage.removeItem('auth_token');
     set({
       user: null,
       isAuthenticated: false,

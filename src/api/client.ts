@@ -8,13 +8,20 @@ class ApiClient {
   }
 
   private async request<T>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
+    const token = localStorage.getItem('auth_token');
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    // Add Authorization header if token exists
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const response = await fetch(`${this.baseURL}${url}`, {
       ...options,
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
+      headers,
     });
 
     if (!response.ok) {

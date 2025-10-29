@@ -7,7 +7,6 @@ export const authService = {
     return apiClient.get<{ authUrl: string }>(`/auth/login${params}`);
   },
   me: () => apiClient.get<User>('/auth/me'),
-  logout: () => apiClient.post('/auth/logout'),
   deleteAccount: () => apiClient.delete('/auth/account'),
 };
 
@@ -24,9 +23,15 @@ export const activitiesService = {
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
       const baseURL = apiClient.getBaseURL();
-      const eventSource = new EventSource(`${baseURL}/activities/sync/stream`, {
-        withCredentials: true,
-      });
+      const token = localStorage.getItem('auth_token');
+
+      if (!token) {
+        reject(new Error('Not authenticated'));
+        return;
+      }
+
+      // EventSource doesn't support custom headers, so pass token as query param
+      const eventSource = new EventSource(`${baseURL}/activities/sync/stream?token=${token}`);
 
       eventSource.onmessage = (event) => {
         const data = JSON.parse(event.data);

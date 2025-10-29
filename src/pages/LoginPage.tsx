@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { authService } from '@api/services';
 import { Button, GlassCard } from '@components/ui';
 
@@ -10,6 +10,7 @@ const ERROR_MESSAGES: Record<string, string> = {
 };
 
 export const LoginPage = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [authUrl, setAuthUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +18,23 @@ export const LoginPage = () => {
   const errorMessage = errorCode ? ERROR_MESSAGES[errorCode] || 'An error occurred' : null;
 
   useEffect(() => {
+    const token = searchParams.get('token');
+    const errorParam = searchParams.get('error');
+
+    // If we have a token from OAuth callback, store it and redirect to dashboard
+    if (token) {
+      setIsLoading(true);
+      localStorage.setItem('auth_token', token);
+      navigate('/dashboard', { replace: true });
+      return;
+    }
+
+    // If there's an error param, just show the error (already handled by errorMessage)
+    if (errorParam) {
+      return;
+    }
+
+    // Otherwise, fetch the Strava auth URL
     const fetchAuthUrl = async () => {
       const response = await authService.login(window.location.origin);
 
@@ -26,7 +44,7 @@ export const LoginPage = () => {
     };
 
     void fetchAuthUrl();
-  }, []);
+  }, [searchParams, navigate]);
 
   const handleLogin = () => {
     if (authUrl) {
