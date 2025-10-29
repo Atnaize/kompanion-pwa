@@ -3,16 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout';
 import { GlassCard, Button, Avatar } from '@components/ui';
 import { useAuthStore } from '@store/authStore';
+import { useToastStore } from '@store/toastStore';
 import { authService } from '@api/services';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const { success } = useToastStore();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleLogout = async () => {
     await logout();
+    success('Logged out successfully');
     navigate('/login');
   };
 
@@ -26,11 +29,10 @@ export const ProfilePage = () => {
 
     try {
       await authService.deleteAccount();
+      success('Account deleted successfully');
       navigate('/login');
     } catch (error) {
-      console.error('Delete account error:', error);
-      alert('Failed to delete account. Please try again.');
-    } finally {
+      // Error toast is automatically shown by API client
       setIsDeleting(false);
       setShowDeleteConfirm(false);
     }
@@ -103,7 +105,7 @@ export const ProfilePage = () => {
 
                 {!showDeleteConfirm ? (
                   <Button
-                    variant="ghost"
+                    variant="secondary"
                     className="mt-4 text-red-600 hover:bg-red-50"
                     onClick={handleDeleteAccount}
                   >
@@ -122,7 +124,7 @@ export const ProfilePage = () => {
                       <br />• All quest history
                     </p>
                     <div className="flex gap-3">
-                      <Button variant="ghost" size="sm" onClick={() => setShowDeleteConfirm(false)}>
+                      <Button variant="secondary" size="sm" onClick={() => setShowDeleteConfirm(false)}>
                         Cancel
                       </Button>
                       <Button

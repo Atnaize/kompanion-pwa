@@ -1,24 +1,22 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
-import { GlassCard, Button, StatTile, Toast, WelcomeCard, QuestSummaryCard } from '@components/ui';
+import { GlassCard, Button, StatTile, WelcomeCard, QuestSummaryCard } from '@components/ui';
 import { activitiesService, statsService, questsService } from '@api/services';
 import { useAuthStore } from '@store/authStore';
+import { useToastStore } from '@store/toastStore';
 import { formatDistance, formatElevation, formatRelativeTime } from '@utils/format';
 
 export const DashboardPage = () => {
   const { user, setUser } = useAuthStore();
   const queryClient = useQueryClient();
+  const { success, error } = useToastStore();
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncProgress, setSyncProgress] = useState<{
     type: 'fetching' | 'saving' | 'complete' | 'error';
     current?: number;
     total?: number;
     message?: string;
-  } | null>(null);
-  const [toastMessage, setToastMessage] = useState<{
-    message: string;
-    type: 'success' | 'info' | 'error';
   } | null>(null);
 
   const {
@@ -80,21 +78,18 @@ export const DashboardPage = () => {
       }
 
       // Show success toast
-      setToastMessage({
-        message:
-          syncedCount > 0
-            ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced! 🏃`
-            : 'All activities up to date ✓',
-        type: 'success',
-      });
+      const message =
+        syncedCount > 0
+          ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced! 🏃`
+          : 'All activities up to date';
+      success(message);
 
       // Clear progress
       setSyncProgress(null);
-    } catch {
-      setToastMessage({
-        message: 'Failed to sync activities. Please try again.',
-        type: 'error',
-      });
+    } catch (err) {
+      console.error('Sync error:', err);
+      console.log('Showing sync error toast');
+      error('Failed to sync activities. Please try again.');
       setSyncProgress(null);
     } finally {
       setIsSyncing(false);
@@ -193,14 +188,6 @@ export const DashboardPage = () => {
           </>
         )}
       </div>
-
-      {toastMessage && (
-        <Toast
-          message={toastMessage.message}
-          type={toastMessage.type}
-          onClose={() => setToastMessage(null)}
-        />
-      )}
     </Layout>
   );
 };

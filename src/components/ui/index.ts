@@ -4,6 +4,7 @@ export * from './StatTile';
 export * from './ProgressRing';
 export * from './BadgeCard';
 export * from './Toast';
+export * from './ToastContainer';
 export * from './WelcomeCard';
 export * from './QuestSummaryCard';
 export * from './Avatar';

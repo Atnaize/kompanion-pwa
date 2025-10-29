@@ -1,4 +1,5 @@
 import type { ApiResponse } from '@app-types/index';
+import { useToastStore } from '@store/toastStore';
 
 class ApiClient {
   private baseURL = import.meta.env.VITE_API_URL || '/api';
@@ -26,10 +27,32 @@ class ApiClient {
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ message: response.statusText }));
-      throw new Error(error.message || 'Request failed');
+      const errorMessage = error.message || 'Request failed';
+
+      // Don't show toasts for authentication errors (they'll redirect to login)
+      if (response.status !== 401 && response.status !== 403) {
+        // Show user-friendly error messages
+        const friendlyMessage = this.getFriendlyErrorMessage(response.status, errorMessage);
+        useToastStore.getState().error(friendlyMessage);
+      }
+
+      throw new Error(errorMessage);
     }
 
     return response.json();
+  }
+
+  private getFriendlyErrorMessage(status: number, message: string): string {
+    // Map common HTTP status codes to user-friendly messages
+    const statusMessages: Record<number, string> = {
+      400: 'Invalid request. Please check your input.',
+      404: 'Resource not found.',
+      500: 'Server error. Please try again later.',
+      503: 'Service unavailable. Please try again later.',
+    };
+
+    // Return status-specific message or the original message
+    return statusMessages[status] || message || 'Something went wrong. Please try again.';
   }
 
   async get<T>(url: string): Promise<ApiResponse<T>> {

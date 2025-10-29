@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@store/authStore';
 import { ErrorBoundary } from '@components/ErrorBoundary';
+import { ToastContainer } from '@components/ui';
 import {
   LoginPage,
   DashboardPage,
@@ -9,7 +10,6 @@ import {
   QuestsPage,
   StatsPage,
   ComponentsPage,
-  SettingsPage,
   ProfilePage,
   AboutPage,
   NotFoundPage,
@@ -45,6 +45,7 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
@@ -77,14 +78,6 @@ export const App = () => {
             element={
               <ProtectedRoute>
                 <StatsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <SettingsPage />
               </ProtectedRoute>
             }
           />

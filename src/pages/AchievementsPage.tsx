@@ -29,10 +29,7 @@ export const AchievementsPage = () => {
       // Invalidate and refetch achievements
       queryClient.invalidateQueries({ queryKey: ['achievements'] });
     },
-    onError: (error) => {
-      console.error('Failed to redeem achievement:', error);
-      alert(error instanceof Error ? error.message : 'Failed to redeem achievement');
-    },
+    // onError is not needed - API client automatically shows error toasts
   });
 
   const unlocked = achievements?.filter((a) => a.unlockedAt) || [];
