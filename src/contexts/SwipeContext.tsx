@@ -34,6 +34,7 @@ export const SwipeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSwipe = () => {
   const context = useContext(SwipeContext);
   if (context === undefined) {

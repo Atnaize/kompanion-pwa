@@ -31,7 +31,7 @@ export const ProfilePage = () => {
       await authService.deleteAccount();
       success('Account deleted successfully');
       navigate('/login');
-    } catch (error) {
+    } catch {
       // Error toast is automatically shown by API client
       setIsDeleting(false);
       setShowDeleteConfirm(false);
