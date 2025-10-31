@@ -15,10 +15,7 @@ export const AchievementsPage = () => {
   const [unlockedAchievement, setUnlockedAchievement] = useState<Achievement | null>(null);
   const queryClient = useQueryClient();
 
-  const {
-    data: achievements = [],
-    isLoading,
-  } = useQuery({
+  const { data: achievements = [], isLoading } = useQuery({
     queryKey: ['achievements'],
     queryFn: async () => {
       const response = await achievementsService.list();

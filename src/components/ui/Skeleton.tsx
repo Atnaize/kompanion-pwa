@@ -7,12 +7,7 @@ interface SkeletonProps {
   height?: string;
 }
 
-export const Skeleton = ({
-  className,
-  variant = 'rectangular',
-  width,
-  height,
-}: SkeletonProps) => {
+export const Skeleton = ({ className, variant = 'rectangular', width, height }: SkeletonProps) => {
   return (
     <div
       className={clsx(
@@ -20,7 +15,7 @@ export const Skeleton = ({
         {
           'rounded-full': variant === 'circular',
           'rounded-md': variant === 'rectangular',
-          'rounded h-4': variant === 'text',
+          'h-4 rounded': variant === 'text',
         },
         className
       )}

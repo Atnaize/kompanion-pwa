@@ -30,7 +30,10 @@ export const ComponentsPage = () => {
           <GlassCard className="p-6">
             <h4 className="mb-4 font-bold text-gray-900">Manual Toasts</h4>
             <div className="mb-6 flex flex-wrap gap-3">
-              <Button variant="primary" onClick={() => success('Operation completed successfully!')}>
+              <Button
+                variant="primary"
+                onClick={() => success('Operation completed successfully!')}
+              >
                 Success Toast
               </Button>
               <Button

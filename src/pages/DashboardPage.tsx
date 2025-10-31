@@ -29,10 +29,7 @@ export const DashboardPage = () => {
     message?: string;
   } | null>(null);
 
-  const {
-    data: activities = [],
-    isLoading: activitiesLoading,
-  } = useQuery({
+  const { data: activities = [], isLoading: activitiesLoading } = useQuery({
     queryKey: ['activities'],
     queryFn: async () => {
       const response = await activitiesService.list();
@@ -40,10 +37,7 @@ export const DashboardPage = () => {
     },
   });
 
-  const {
-    data: stats,
-    isLoading: statsLoading,
-  } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['stats'],
     queryFn: async () => {
       const response = await statsService.getUserStats();

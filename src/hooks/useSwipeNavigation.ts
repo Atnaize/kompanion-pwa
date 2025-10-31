@@ -115,8 +115,8 @@ export const useSwipeNavigation = () => {
       // Check if this is a valid horizontal swipe
       if (
         Math.abs(deltaX) < SWIPE_THRESHOLD || // Not enough horizontal movement
-        deltaY > SWIPE_MAX_VERTICAL ||        // Too much vertical movement
-        deltaTime > SWIPE_MAX_TIME             // Too slow
+        deltaY > SWIPE_MAX_VERTICAL || // Too much vertical movement
+        deltaTime > SWIPE_MAX_TIME // Too slow
       ) {
         return;
       }

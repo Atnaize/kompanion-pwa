@@ -5,11 +5,11 @@ export const AboutPage = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-gray-900 text-center">
-          About{" "}
+        <h2 className="text-center text-2xl font-bold text-gray-900">
+          About{' '}
           <span className="relative inline-block">
             Kompanion
-            <span className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-strava-orange to-transparent"></span>
+            <span className="absolute bottom-0 left-0 h-[3px] w-full bg-gradient-to-r from-transparent via-strava-orange to-transparent"></span>
           </span>
         </h2>
 
@@ -29,11 +29,9 @@ export const AboutPage = () => {
                 </a>
               </p>
 
-              <div className="border-t border-gray-200 pt-6 mt-6 text-sm text-gray-500"></div>
+              <div className="mt-6 border-t border-gray-200 pt-6 text-sm text-gray-500"></div>
 
-              <p className="mt-4 text-sm">
-                Made with ❤️ for you
-              </p>
+              <p className="mt-4 text-sm">Made with ❤️ for you</p>
             </div>
           </GlassCard>
         </section>

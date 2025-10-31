@@ -15,10 +15,10 @@ interface HapticPatterns {
 }
 
 const PATTERNS: HapticPatterns = {
-  light: 10,                        // Quick tap (sync complete)
-  medium: [20, 10, 20],             // Double tap (achievement, quest complete)
-  strong: [30, 10, 30, 10, 30],     // Triple tap (level up)
-  error: [10, 50, 10],              // Error pattern
+  light: 10, // Quick tap (sync complete)
+  medium: [20, 10, 20], // Double tap (achievement, quest complete)
+  strong: [30, 10, 30, 10, 30], // Triple tap (level up)
+  error: [10, 50, 10], // Error pattern
 };
 
 class HapticService {

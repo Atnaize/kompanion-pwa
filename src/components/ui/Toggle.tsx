@@ -48,9 +48,10 @@ export const Toggle = ({
         'focus:outline-none focus:ring-2 focus:ring-strava-orange focus:ring-offset-2',
         sizeClasses[size].track,
         {
-          'bg-gradient-to-r from-strava-orange to-strava-orange-dark shadow-md': enabled && !disabled,
-          'bg-gray-200 border border-gray-300 shadow-sm': !enabled && !disabled,
-          'bg-gray-200/50 border border-gray-300/50 opacity-60 cursor-not-allowed': disabled,
+          'bg-gradient-to-r from-strava-orange to-strava-orange-dark shadow-md':
+            enabled && !disabled,
+          'border border-gray-300 bg-gray-200 shadow-sm': !enabled && !disabled,
+          'cursor-not-allowed border border-gray-300/50 bg-gray-200/50 opacity-60': disabled,
           'cursor-pointer': !disabled,
         }
       )}

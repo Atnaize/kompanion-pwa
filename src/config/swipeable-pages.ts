@@ -29,9 +29,10 @@ export function getNextSwipePage(currentPath: string, direction: 'left' | 'right
     return null; // Current page is not swipeable
   }
 
-  const targetOrder = direction === 'left'
-    ? currentPage.order + 1  // Swipe left = next page
-    : currentPage.order - 1; // Swipe right = previous page
+  const targetOrder =
+    direction === 'left'
+      ? currentPage.order + 1 // Swipe left = next page
+      : currentPage.order - 1; // Swipe right = previous page
 
   const targetPage = SWIPEABLE_PAGES.find((p) => p.order === targetOrder);
 

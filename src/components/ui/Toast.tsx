@@ -50,13 +50,11 @@ export const Toast = ({ message, type = 'info', duration = 3000, onClose }: Toas
       className={clsx(
         'flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 p-4 shadow-lg backdrop-blur-md',
         'transform transition-all duration-300 ease-out',
-        isExiting
-          ? 'opacity-0 -translate-y-8 scale-95'
-          : 'opacity-100 translate-y-0 scale-100'
+        isExiting ? '-translate-y-8 scale-95 opacity-0' : 'translate-y-0 scale-100 opacity-100'
       )}
       role="alert"
       style={{
-        animation: isExiting ? 'none' : 'slideInDown 0.3s ease-out'
+        animation: isExiting ? 'none' : 'slideInDown 0.3s ease-out',
       }}
     >
       <div
@@ -76,7 +74,7 @@ export const Toast = ({ message, type = 'info', duration = 3000, onClose }: Toas
             onClose?.();
           }, 200);
         }}
-        className="flex-shrink-0 text-xl leading-none text-gray-400 hover:text-gray-600 transition-colors"
+        className="flex-shrink-0 text-xl leading-none text-gray-400 transition-colors hover:text-gray-600"
         aria-label="Close"
       >
         ×

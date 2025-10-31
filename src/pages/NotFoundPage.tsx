@@ -17,9 +17,7 @@ export const NotFoundPage = () => {
         <div className="mb-8 rounded-2xl bg-white p-8 shadow-xl">
           <div className="mb-6 text-6xl">🗺️</div>
 
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">
-            Page Not Found
-          </h1>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">Page Not Found</h1>
 
           <p className="mb-6 text-gray-600">
             Looks like you've ventured off the trail. The page you're looking for doesn't exist.
@@ -33,9 +31,7 @@ export const NotFoundPage = () => {
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">
-          Need help? I can't do much, sorry!
-        </p>
+        <p className="text-sm text-gray-500">Need help? I can't do much, sorry!</p>
       </div>
     </div>
   );

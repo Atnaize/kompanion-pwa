@@ -124,7 +124,11 @@ export const ProfilePage = () => {
                       <br />• All quest history
                     </p>
                     <div className="flex gap-3">
-                      <Button variant="secondary" size="sm" onClick={() => setShowDeleteConfirm(false)}>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => setShowDeleteConfirm(false)}
+                      >
                         Cancel
                       </Button>
                       <Button
