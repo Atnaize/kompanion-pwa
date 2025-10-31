@@ -18,13 +18,15 @@ export const LoginPage = () => {
   const errorMessage = errorCode ? ERROR_MESSAGES[errorCode] || 'An error occurred' : null;
 
   useEffect(() => {
-    const token = searchParams.get('token');
+    const accessToken = searchParams.get('accessToken');
+    const refreshToken = searchParams.get('refreshToken');
     const errorParam = searchParams.get('error');
 
-    // If we have a token from OAuth callback, store it and redirect to dashboard
-    if (token) {
+    // If we have tokens from OAuth callback, store them and redirect to dashboard
+    if (accessToken && refreshToken) {
       setIsLoading(true);
-      localStorage.setItem('auth_token', token);
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('refresh_token', refreshToken);
       navigate('/dashboard', { replace: true });
       return;
     }

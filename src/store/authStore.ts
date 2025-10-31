@@ -20,9 +20,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       set({ isLoading: true });
 
-      // Check if token exists in localStorage
-      const token = localStorage.getItem('auth_token');
-      if (!token) {
+      // Check if access token exists in localStorage
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
         set({
           user: null,
           isAuthenticated: false,
@@ -40,8 +40,9 @@ export const useAuthStore = create<AuthState>((set) => ({
           isLoading: false,
         });
       } else {
-        // Token is invalid, clear it
-        localStorage.removeItem('auth_token');
+        // Token is invalid, clear both tokens
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         set({
           user: null,
           isAuthenticated: false,
@@ -49,8 +50,9 @@ export const useAuthStore = create<AuthState>((set) => ({
         });
       }
     } catch {
-      // Error calling API, clear token
-      localStorage.removeItem('auth_token');
+      // Error calling API, clear both tokens
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       set({
         user: null,
         isAuthenticated: false,
@@ -60,8 +62,26 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: async () => {
-    // Clear token from localStorage (no API call needed)
-    localStorage.removeItem('auth_token');
+    const refreshToken = localStorage.getItem('refresh_token');
+
+    // Call logout endpoint to revoke refresh token
+    if (refreshToken) {
+      try {
+        await fetch(`${import.meta.env.VITE_API_URL || '/api'}/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refreshToken }),
+        });
+      } catch {
+        // Ignore errors - we're logging out anyway
+      }
+    }
+
+    // Clear tokens from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     set({
       user: null,
       isAuthenticated: false,
