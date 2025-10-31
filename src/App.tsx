@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@store/authStore';
 import { ErrorBoundary } from '@components/ErrorBoundary';
 import { ToastContainer } from '@components/ui';
+import { SwipeProvider } from '@contexts/SwipeContext';
 import {
   LoginPage,
   DashboardPage,
@@ -46,10 +47,11 @@ export const App = () => {
 
   return (
     <ErrorBoundary>
-      <ToastContainer />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
+      <SwipeProvider>
+        <ToastContainer />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
           <Route
             path="/dashboard"
             element={
@@ -118,6 +120,7 @@ export const App = () => {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
+      </SwipeProvider>
     </ErrorBoundary>
   );
 };
