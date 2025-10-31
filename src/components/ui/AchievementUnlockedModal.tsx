@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { useSwipe } from '@contexts/SwipeContext';
 import type { Achievement } from '@app-types/index';
 
 interface AchievementUnlockedModalProps {
@@ -27,12 +26,8 @@ export const AchievementUnlockedModal = ({
   onClose,
 }: AchievementUnlockedModalProps) => {
   const [showContent, setShowContent] = useState(false);
-  const { blockSwipe, unblockSwipe } = useSwipe();
 
   useEffect(() => {
-    // Block swipe navigation while modal is open
-    blockSwipe();
-
     // Show content after a brief delay
     const contentTimer = setTimeout(() => setShowContent(true), 100);
 
@@ -83,9 +78,8 @@ export const AchievementUnlockedModal = ({
       clearTimeout(contentTimer);
       clearTimeout(cleanup);
       confettiElements.forEach((el) => el.remove());
-      unblockSwipe();
     };
-  }, [blockSwipe, unblockSwipe]);
+  }, []);
 
   return (
     <div

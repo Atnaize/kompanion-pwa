@@ -25,9 +25,7 @@
       "@api/*": ["api/*"],
       "@store/*": ["store/*"],
       "@app-types/*": ["types/*"],
-      "@assets/*": ["assets/*"],
-      "@contexts/*": ["contexts/*"],
-      "@config/*": ["config/*"]
+      "@assets/*": ["assets/*"]
     }
   },
   "include": ["src"],
