@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
-import { BadgeCard, AchievementUnlockedModal } from '@components/ui';
+import {
+  BadgeCard,
+  AchievementUnlockedModal,
+  AchievementCardSkeleton,
+  NoAchievementsEmpty,
+} from '@components/ui';
 import { achievementsService } from '@api/services';
+import { hapticService } from '@utils/haptic';
 import type { Achievement } from '@app-types/index';
 
 export const AchievementsPage = () => {
@@ -25,6 +31,7 @@ export const AchievementsPage = () => {
     onSuccess: (response) => {
       if (response.data) {
         setUnlockedAchievement(response.data);
+        hapticService.achievementUnlocked();
       }
       // Invalidate and refetch achievements
       queryClient.invalidateQueries({ queryKey: ['achievements'] });
@@ -58,7 +65,16 @@ export const AchievementsPage = () => {
         </div>
 
         {isLoading ? (
-          <div className="py-12 text-center text-gray-600">Loading achievements...</div>
+          <div className="grid grid-cols-2 gap-3">
+            <AchievementCardSkeleton />
+            <AchievementCardSkeleton />
+            <AchievementCardSkeleton />
+            <AchievementCardSkeleton />
+            <AchievementCardSkeleton />
+            <AchievementCardSkeleton />
+          </div>
+        ) : achievements.length === 0 ? (
+          <NoAchievementsEmpty />
         ) : (
           <>
             {unlocked.length > 0 && (

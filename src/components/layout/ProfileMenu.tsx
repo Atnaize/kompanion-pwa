@@ -79,6 +79,16 @@ export const ProfileMenu = () => {
             >
               <span className="font-medium text-gray-900">Profile</span>
             </Link>
+            <Link
+              to="/settings"
+              onClick={() => setIsOpen(false)}
+              className={clsx(
+                'flex items-center gap-3 px-4 py-3 text-sm transition-colors',
+                'hover:bg-gray-100'
+              )}
+            >
+              <span className="font-medium text-gray-900">Settings</span>
+            </Link>
             <button
               onClick={handleLogout}
               className={clsx(

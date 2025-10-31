@@ -11,6 +11,7 @@ import {
   StatsPage,
   ComponentsPage,
   ProfilePage,
+  SettingsPage,
   AboutPage,
   NotFoundPage,
 } from '@pages/index';
@@ -86,6 +87,14 @@ export const App = () => {
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             }
           />

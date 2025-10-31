@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
-import { GlassCard } from '@components/ui';
+import { GlassCard, QuestCardSkeleton, NoQuestsEmpty } from '@components/ui';
 import { questsService } from '@api/services';
 
 export const QuestsPage = () => {
@@ -24,7 +24,11 @@ export const QuestsPage = () => {
         </div>
 
         {isLoading ? (
-          <div className="py-12 text-center text-gray-600">Loading quests...</div>
+          <div className="space-y-3">
+            <QuestCardSkeleton />
+            <QuestCardSkeleton />
+            <QuestCardSkeleton />
+          </div>
         ) : (
           <>
             {activeQuests.length > 0 && (
@@ -129,11 +133,7 @@ export const QuestsPage = () => {
               </section>
             )}
 
-            {activeQuests.length === 0 && completedQuests.length === 0 && (
-              <div className="py-12 text-center">
-                <p className="text-gray-600">No quests available right now. Check back later!</p>
-              </div>
-            )}
+            {activeQuests.length === 0 && completedQuests.length === 0 && <NoQuestsEmpty />}
           </>
         )}
       </div>

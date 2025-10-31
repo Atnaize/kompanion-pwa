@@ -1,10 +1,20 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
-import { GlassCard, Button, StatTile, WelcomeCard, QuestSummaryCard } from '@components/ui';
+import {
+  GlassCard,
+  Button,
+  StatTile,
+  WelcomeCard,
+  QuestSummaryCard,
+  StatTileSkeleton,
+  ActivityCardSkeleton,
+  NoActivitiesEmpty,
+} from '@components/ui';
 import { activitiesService, statsService, questsService } from '@api/services';
 import { useAuthStore } from '@store/authStore';
 import { useToastStore } from '@store/toastStore';
+import { hapticService } from '@utils/haptic';
 import { formatDistance, formatElevation, formatRelativeTime } from '@utils/format';
 
 export const DashboardPage = () => {
@@ -83,6 +93,7 @@ export const DashboardPage = () => {
           ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced! 🏃`
           : 'All activities up to date';
       success(message);
+      hapticService.syncCompleted();
 
       // Clear progress
       setSyncProgress(null);
@@ -115,7 +126,12 @@ export const DashboardPage = () => {
             <section>
               <h2 className="mb-4 text-xl font-bold text-gray-900">Quick Stats</h2>
               {statsLoading ? (
-                <div className="py-8 text-center text-gray-600">Loading stats...</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <StatTileSkeleton />
+                  <StatTileSkeleton />
+                  <StatTileSkeleton />
+                  <StatTileSkeleton />
+                </div>
               ) : (
                 <div className="grid grid-cols-2 gap-3">
                   <StatTile
@@ -153,14 +169,15 @@ export const DashboardPage = () => {
               </div>
 
               {activitiesLoading ? (
-                <div className="py-8 text-center text-gray-600">Loading activities...</div>
+                <div className="space-y-3">
+                  <ActivityCardSkeleton />
+                  <ActivityCardSkeleton />
+                  <ActivityCardSkeleton />
+                  <ActivityCardSkeleton />
+                  <ActivityCardSkeleton />
+                </div>
               ) : recentActivities.length === 0 ? (
-                <GlassCard className="p-6 text-center">
-                  <p className="mb-4 text-gray-600">No activities yet. Sync your Strava data!</p>
-                  <Button onClick={handleSync} disabled={isSyncing}>
-                    {isSyncing ? 'Syncing...' : 'Sync Activities'}
-                  </Button>
-                </GlassCard>
+                <NoActivitiesEmpty onSync={handleSync} />
               ) : (
                 <div className="space-y-3">
                   {recentActivities.map((activity) => (

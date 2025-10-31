@@ -5,5 +5,6 @@ export * from './QuestsPage';
 export * from './StatsPage';
 export * from './ComponentsPage';
 export * from './ProfilePage';
+export * from './SettingsPage';
 export * from './AboutPage';
 export * from './NotFoundPage';

@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout';
-import { GlassCard, StatTile, ProgressRing } from '@components/ui';
+import { GlassCard, StatTile, ProgressRing, StatTileSkeleton, EmptyState } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 
 export const StatsPage = () => {
+  const navigate = useNavigate();
   const { data: stats, isLoading } = useQuery({
     queryKey: ['stats'],
     queryFn: async () => {
@@ -16,7 +18,20 @@ export const StatsPage = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="py-12 text-center text-gray-600">Loading stats...</div>
+        <div className="space-y-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Your Stats</h2>
+            <p className="text-gray-600">Loading your performance data...</p>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+          </div>
+        </div>
       </Layout>
     );
   }
@@ -24,7 +39,15 @@ export const StatsPage = () => {
   if (!stats) {
     return (
       <Layout>
-        <div className="py-12 text-center text-gray-600">No stats available</div>
+        <EmptyState
+          icon="📊"
+          title="No Stats Available"
+          description="Start by syncing your activities on the Dashboard to see your performance statistics."
+          action={{
+            label: 'Go to Dashboard',
+            onClick: () => navigate('/dashboard'),
+          }}
+        />
       </Layout>
     );
   }
