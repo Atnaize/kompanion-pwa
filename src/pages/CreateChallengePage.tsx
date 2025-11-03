@@ -93,11 +93,12 @@ export const CreateChallengePage = () => {
     try {
       const response = await friendsService.search(searchQuery);
       if (response.success && response.data) {
-        setFriends(response.data);
+        const friendsData = response.data;
+        setFriends(friendsData);
         // Update cache with new friends
         setAllFriendsCache((prev) => {
           const updated = new Map(prev);
-          response.data.forEach((friend: Friend) => {
+          friendsData.forEach((friend: Friend) => {
             updated.set(friend.id, friend);
           });
           return updated;

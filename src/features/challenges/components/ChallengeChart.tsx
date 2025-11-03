@@ -1,5 +1,13 @@
 import React from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+  PieLabelRenderProps,
+} from 'recharts';
 import type { Challenge, ChallengeParticipant } from '@types';
 import { GlassCard } from '@components/ui';
 
@@ -64,8 +72,9 @@ export const ChallengeChart: React.FC<ChallengeChartProps> = ({ challenge }) => 
   const totalValue = pieData.reduce((sum, entry) => sum + entry.value, 0);
 
   // Custom label renderer for pie slices
-  const renderLabel = (entry: { value: number }) => {
-    const percent = ((entry.value / totalValue) * 100).toFixed(0);
+  const renderLabel = (props: PieLabelRenderProps) => {
+    const value = props.value as number;
+    const percent = ((value / totalValue) * 100).toFixed(0);
     return `${percent}%`;
   };
 
@@ -128,7 +137,7 @@ export const ChallengeChart: React.FC<ChallengeChartProps> = ({ challenge }) => 
             fill="#8884d8"
             dataKey="value"
           >
-            {pieData.map((entry, index) => (
+            {pieData.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
@@ -136,14 +145,14 @@ export const ChallengeChart: React.FC<ChallengeChartProps> = ({ challenge }) => 
           <Legend
             wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
             iconType="circle"
-            formatter={(
-              _value,
-              entry: { payload: { name: string; value: number; unit: string } }
-            ) => (
-              <span style={{ color: '#374151' }}>
-                {entry.payload.name} ({entry.payload.value} {entry.payload.unit})
-              </span>
-            )}
+            formatter={(_value, entry) => {
+              const payload = entry.payload as { name: string; value: number; unit: string };
+              return (
+                <span style={{ color: '#374151' }}>
+                  {payload.name} ({payload.value} {payload.unit})
+                </span>
+              );
+            }}
           />
         </PieChart>
       </ResponsiveContainer>
