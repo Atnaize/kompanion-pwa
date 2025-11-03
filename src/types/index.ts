@@ -14,6 +14,21 @@ export interface SyncResult {
   isIncremental: boolean;
 }
 
+export interface SegmentEffort {
+  id: number;
+  elapsed_time: number;
+  moving_time: number;
+  distance: number;
+  pr_rank: number | null;
+  segment: {
+    id: number;
+    name: string;
+    activity_type: string;
+    distance: number;
+    average_grade: number;
+  };
+}
+
 export interface Activity {
   id: number;
   name: string;
@@ -29,6 +44,15 @@ export interface Activity {
   max_speed: number;
   average_heartrate?: number;
   max_heartrate?: number;
+  average_watts?: number;
+  max_watts?: number;
+  elev_high?: number;
+  elev_low?: number;
+  pr_count: number;
+  kudos_count: number;
+  comment_count: number;
+  achievement_count: number;
+  segment_efforts?: SegmentEffort[];
 }
 
 export interface Stats {

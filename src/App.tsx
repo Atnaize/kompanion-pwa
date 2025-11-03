@@ -6,6 +6,9 @@ import { ToastContainer } from '@components/ui';
 import {
   LoginPage,
   DashboardPage,
+  ActivitiesPage,
+  ActivityDetailPage,
+  PersonalRecordsPage,
   AchievementsPage,
   StatsPage,
   ChallengesPage,
@@ -58,6 +61,30 @@ export const App = () => {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/activities"
+            element={
+              <ProtectedRoute>
+                <ActivitiesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/activities/:id"
+            element={
+              <ProtectedRoute>
+                <ActivityDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/personal-records"
+            element={
+              <ProtectedRoute>
+                <PersonalRecordsPage />
               </ProtectedRoute>
             }
           />

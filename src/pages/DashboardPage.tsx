@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
 import {
@@ -17,6 +18,7 @@ import { hapticService } from '@utils/haptic';
 import { formatDistance, formatElevation, formatRelativeTime } from '@utils/format';
 
 export const DashboardPage = () => {
+  const navigate = useNavigate();
   const { user, setUser } = useAuthStore();
   const queryClient = useQueryClient();
   const { success, error } = useToastStore();
@@ -94,6 +96,10 @@ export const DashboardPage = () => {
   const recentActivities = activities?.slice(0, 5) || [];
   const isFirstTimeUser = !user?.lastSyncedAt;
 
+  // Calculate PR stats
+  const prActivities = activities.filter((a) => a.pr_count > 0);
+  const totalPRs = prActivities.reduce((sum, a) => sum + a.pr_count, 0);
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -136,6 +142,35 @@ export const DashboardPage = () => {
               )}
             </section>
 
+            {/* Personal Records Card */}
+            {totalPRs > 0 && (
+              <section>
+                <GlassCard
+                  className="cursor-pointer p-6 transition-all hover:scale-[1.01] hover:shadow-lg"
+                  onClick={() => navigate('/personal-records')}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">🏆</span>
+                        <h3 className="text-lg font-bold text-gray-900">Personal Records</h3>
+                      </div>
+                      <p className="mt-1 text-sm text-gray-600">
+                        You have {totalPRs} personal record{totalPRs > 1 ? 's' : ''} across{' '}
+                        {prActivities.length} activit{prActivities.length === 1 ? 'y' : 'ies'}
+                      </p>
+                    </div>
+                    <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 text-3xl font-bold text-white shadow-lg">
+                      {totalPRs}
+                    </div>
+                  </div>
+                  <Button variant="secondary" size="sm" className="mt-4 w-full">
+                    View All PRs →
+                  </Button>
+                </GlassCard>
+              </section>
+            )}
+
             {/* Recent Activities */}
             <section>
               <div className="mb-4 flex items-center justify-between">
@@ -158,7 +193,11 @@ export const DashboardPage = () => {
               ) : (
                 <div className="space-y-3">
                   {recentActivities.map((activity) => (
-                    <GlassCard key={activity.id} className="p-4">
+                    <GlassCard
+                      key={activity.id}
+                      className="cursor-pointer p-4 transition-all hover:scale-[1.02] hover:shadow-lg"
+                      onClick={() => navigate(`/activities/${activity.id}`)}
+                    >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <h3 className="font-bold text-gray-900">{activity.name}</h3>
