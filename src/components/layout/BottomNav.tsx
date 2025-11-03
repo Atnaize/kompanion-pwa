@@ -19,7 +19,7 @@ interface TabBadges {
 
 const navItems: NavItem[] = [
   { path: '/dashboard', label: 'Home', icon: '🏠' },
-  { path: '/quests', label: 'Quests', icon: '🎯', requiresData: true },
+  { path: '/challenges', label: 'Challenges', icon: '🎯', requiresData: true },
   { path: '/achievements', label: 'Badges', icon: '🏆', requiresData: true },
   { path: '/stats', label: 'Stats', icon: '📊', requiresData: true },
 ];

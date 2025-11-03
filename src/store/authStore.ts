@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { User } from '@app-types/index';
+import type { User } from '@types';
 import { authService } from '@api/services';
 
 interface AuthState {
@@ -79,13 +79,19 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
     }
 
-    // Clear tokens from localStorage
+    // Clear ALL auth-related tokens from localStorage
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+
+    // Clear auth state
     set({
       user: null,
       isAuthenticated: false,
+      isLoading: false,
     });
+
+    // Force navigation to login page
+    window.location.href = '/login';
   },
 
   setUser: (user) => {

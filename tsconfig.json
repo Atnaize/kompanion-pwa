@@ -24,7 +24,7 @@
       "@utils/*": ["utils/*"],
       "@api/*": ["api/*"],
       "@store/*": ["store/*"],
-      "@app-types/*": ["types/*"],
+      "@types": ["types"],
       "@assets/*": ["assets/*"]
     }
   },

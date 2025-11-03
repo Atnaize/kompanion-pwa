@@ -25,7 +25,8 @@ export const formatSpeed = (metersPerSecond: number): string => {
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  return new Intl.DateTimeFormat('fr-BE', {
+  // Use browser's locale for automatic localization
+  return new Intl.DateTimeFormat(navigator.language, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -51,4 +52,24 @@ export const formatRelativeTime = (dateString: string): string => {
   }
 
   return formatDate(dateString);
+};
+
+/**
+ * Format a Date object to YYYY-MM-DD string in local timezone
+ * Used for HTML date inputs
+ */
+export const formatDateToInput = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+/**
+ * Convert a date string from HTML date input (YYYY-MM-DD) to Date object
+ * at start of day in local timezone
+ */
+export const parseInputDate = (dateString: string, endOfDay = false): Date => {
+  const time = endOfDay ? 'T23:59:59' : 'T00:00:00';
+  return new Date(dateString + time);
 };

@@ -52,8 +52,8 @@ export const ProfilePage = () => {
             <div className="mb-6 flex items-center gap-4">
               <Avatar
                 src={user.profile}
-                alt={user.firstname}
-                fallbackText={`${user.firstname} ${user.lastname}`}
+                firstname={user.firstname}
+                lastname={user.lastname}
                 size="lg"
                 className="border-4"
               />

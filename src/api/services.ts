@@ -1,5 +1,19 @@
 import { apiClient } from './client';
-import type { User, Activity, Stats, Achievement, Quest, SyncResult } from '@app-types/index';
+import type {
+  User,
+  Activity,
+  Stats,
+  Achievement,
+  SyncResult,
+  Challenge,
+  ChallengeProgress,
+  ChallengeEvent,
+  Friend,
+  ChallengeTargets,
+  ChallengeType,
+  CompetitiveGoal,
+  ChallengeParticipant,
+} from '@types';
 
 export const authService = {
   login: (redirectUri?: string) => {
@@ -23,7 +37,7 @@ export const activitiesService = {
   ): Promise<void> => {
     return new Promise((resolve, reject) => {
       const baseURL = apiClient.getBaseURL();
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('access_token');
 
       if (!token) {
         reject(new Error('Not authenticated'));
@@ -66,6 +80,65 @@ export const achievementsService = {
     apiClient.post<Achievement>(`/achievements/${achievementId}/redeem`),
 };
 
-export const questsService = {
-  list: () => apiClient.get<Quest[]>('/quests'),
+export const challengesService = {
+  // Challenge CRUD
+  list: (filters?: { status?: string; type?: ChallengeType }) => {
+    const params = new URLSearchParams();
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.type) params.append('type', filters.type);
+    const query = params.toString();
+    return apiClient.get<Challenge[]>(`/challenges${query ? `?${query}` : ''}`);
+  },
+  getById: (id: string) => apiClient.get<Challenge>(`/challenges/${id}`),
+  create: (data: {
+    name: string;
+    description?: string;
+    type: ChallengeType;
+    startDate: string;
+    endDate: string;
+    targets: ChallengeTargets;
+    competitiveGoal?: CompetitiveGoal;
+    invitedUserIds?: number[];
+  }) => apiClient.post<Challenge>('/challenges', data),
+  update: (
+    id: string,
+    data: {
+      name?: string;
+      description?: string;
+      startDate?: string;
+      endDate?: string;
+      targets?: ChallengeTargets;
+    }
+  ) => apiClient.patch<Challenge>(`/challenges/${id}`, data),
+  delete: (id: string) => apiClient.delete(`/challenges/${id}`),
+  start: (id: string) => apiClient.post<Challenge>(`/challenges/${id}/start`),
+  cancel: (id: string) => apiClient.post<Challenge>(`/challenges/${id}/cancel`),
+  getProgress: (id: string) => apiClient.get<ChallengeProgress>(`/challenges/${id}/progress`),
+
+  // Invitations
+  getPendingInvitations: () => apiClient.get<ChallengeParticipant[]>('/challenges/invitations'),
+  invite: (id: string, userIds: number[]) =>
+    apiClient.post(`/challenges/${id}/invite`, { userIds }),
+  accept: (id: string) => apiClient.post<ChallengeParticipant>(`/challenges/${id}/accept`),
+  decline: (id: string) => apiClient.post(`/challenges/${id}/decline`),
+  leave: (id: string) => apiClient.post(`/challenges/${id}/leave`),
+
+  // Events (polling)
+  getEvents: (since?: string) => {
+    const params = since ? `?since=${encodeURIComponent(since)}` : '';
+    return apiClient.get<{ events: ChallengeEvent[]; latestTimestamp: string | null }>(
+      `/challenges/events${params}`
+    );
+  },
+  getChallengeEvents: (id: string, since?: string) => {
+    const params = since ? `?since=${encodeURIComponent(since)}` : '';
+    return apiClient.get<{ events: ChallengeEvent[]; latestTimestamp: string | null }>(
+      `/challenges/${id}/events${params}`
+    );
+  },
+};
+
+export const friendsService = {
+  search: (query: string) =>
+    apiClient.get<Friend[]>(`/friends/search?q=${encodeURIComponent(query)}`),
 };

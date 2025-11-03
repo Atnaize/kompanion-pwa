@@ -78,22 +78,3 @@ export const AchievementCardSkeleton = () => {
 };
 
 // Skeleton for quest card
-export const QuestCardSkeleton = () => {
-  return (
-    <div className="rounded-2xl border border-white/20 bg-white/80 p-5 shadow-lg backdrop-blur-md">
-      <div className="space-y-4">
-        <div className="flex items-start justify-between">
-          <div className="flex-1 space-y-2">
-            <Skeleton width="60%" height="20px" />
-            <Skeleton width="90%" height="16px" />
-          </div>
-          <Skeleton variant="rectangular" width="70px" height="24px" className="rounded-full" />
-        </div>
-        <div className="space-y-2">
-          <Skeleton width="100%" height="16px" />
-          <Skeleton width="100%" height="8px" className="rounded-full" />
-        </div>
-      </div>
-    </div>
-  );
-};

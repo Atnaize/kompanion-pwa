@@ -54,16 +54,6 @@ export const NoAchievementsEmpty = () => {
   );
 };
 
-export const NoQuestsEmpty = () => {
-  return (
-    <EmptyState
-      icon="🎯"
-      title="No Active Quests"
-      description="New quests will appear here. Check back soon for new challenges!"
-    />
-  );
-};
-
 export const NoStatsEmpty = ({ onSync }: { onSync: () => void }) => {
   return (
     <EmptyState

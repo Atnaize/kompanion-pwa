@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout';
-import { GlassCard, StatTile, ProgressRing, StatTileSkeleton, EmptyState } from '@components/ui';
+import { GlassCard, StatTile, StatTileSkeleton, EmptyState } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 
@@ -59,21 +59,8 @@ export const StatsPage = () => {
       <div className="space-y-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Your Stats</h2>
-          <p className="text-gray-600">
-            Level {stats.level} • {stats.xp} XP
-          </p>
+          <p className="text-gray-600">Track your progress and achievements</p>
         </div>
-
-        {/* Level Progress */}
-        <GlassCard className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="mb-2 text-lg font-bold text-gray-900">Level Progress</h3>
-              <p className="text-sm text-gray-600">{stats.xp % 1000} / 1000 XP to next level</p>
-            </div>
-            <ProgressRing progress={(stats.xp % 1000) / 10} size={100} />
-          </div>
-        </GlassCard>
 
         {/* Overall Stats */}
         <section>

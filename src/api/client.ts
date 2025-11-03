@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@app-types/index';
+import type { ApiResponse } from '@types';
 import { useToastStore } from '@store/toastStore';
 
 class ApiClient {
@@ -102,10 +102,11 @@ class ApiClient {
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ message: response.statusText }));
-      const errorMessage = error.message || 'Request failed';
+      const errorMessage = error.error || error.message || 'Request failed';
 
       // Don't show toasts for authentication errors (they'll redirect to login)
-      if (response.status !== 401 && response.status !== 403) {
+      // Also don't show toasts for 400 errors - let the calling code handle them
+      if (response.status !== 401 && response.status !== 403 && response.status !== 400) {
         // Show user-friendly error messages
         const friendlyMessage = this.getFriendlyErrorMessage(response.status, errorMessage);
         useToastStore.getState().error(friendlyMessage);
@@ -137,6 +138,13 @@ class ApiClient {
   async post<T>(url: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(url, {
       method: 'POST',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async patch<T>(url: string, data?: unknown): Promise<ApiResponse<T>> {
+    return this.request<T>(url, {
+      method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
     });
   }

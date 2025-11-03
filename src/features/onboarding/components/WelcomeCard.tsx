@@ -1,5 +1,4 @@
-import { GlassCard } from './GlassCard';
-import { Button } from './Button';
+import { GlassCard, Button } from '@components/ui';
 
 export interface WelcomeCardProps {
   onSync: () => void;

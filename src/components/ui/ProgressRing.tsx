@@ -17,6 +17,9 @@ export const ProgressRing = ({
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (progress / 100) * circumference;
 
+  // Calculate font size proportional to ring size (roughly 20% of size)
+  const fontSize = Math.max(12, size * 0.2);
+
   return (
     <svg width={size} height={size} className="-rotate-90 transform">
       <circle
@@ -44,8 +47,8 @@ export const ProgressRing = ({
         y={size / 2}
         textAnchor="middle"
         dominantBaseline="middle"
-        className="rotate-90 transform fill-gray-900 text-2xl font-bold"
-        style={{ transformOrigin: 'center' }}
+        className="rotate-90 transform fill-gray-900 font-bold"
+        style={{ transformOrigin: 'center', fontSize: `${fontSize}px` }}
       >
         {Math.round(progress)}%
       </text>

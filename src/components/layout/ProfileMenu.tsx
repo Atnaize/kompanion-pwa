@@ -40,11 +40,7 @@ export const ProfileMenu = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-3 transition-opacity hover:opacity-80"
       >
-        <Avatar
-          src={user.profile}
-          alt={user.firstname}
-          fallbackText={`${user.firstname} ${user.lastname || ''}`}
-        />
+        <Avatar src={user.profile} firstname={user.firstname} lastname={user.lastname} />
       </button>
 
       {isOpen && (
@@ -54,8 +50,8 @@ export const ProfileMenu = () => {
             <div className="flex items-center gap-3">
               <Avatar
                 src={user.profile}
-                alt={user.firstname}
-                fallbackText={`${user.firstname} ${user.lastname || ''}`}
+                firstname={user.firstname}
+                lastname={user.lastname}
                 size="md"
               />
               <div className="flex-1">

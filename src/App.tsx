@@ -7,12 +7,15 @@ import {
   LoginPage,
   DashboardPage,
   AchievementsPage,
-  QuestsPage,
   StatsPage,
+  ChallengesPage,
+  ChallengeDetailPage,
+  CreateChallengePage,
   ComponentsPage,
   ProfilePage,
   SettingsPage,
   AboutPage,
+  AdminPage,
   NotFoundPage,
 } from '@pages/index';
 
@@ -67,18 +70,34 @@ export const App = () => {
             }
           />
           <Route
-            path="/quests"
-            element={
-              <ProtectedRoute>
-                <QuestsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/stats"
             element={
               <ProtectedRoute>
                 <StatsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenges"
+            element={
+              <ProtectedRoute>
+                <ChallengesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenges/create"
+            element={
+              <ProtectedRoute>
+                <CreateChallengePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/challenges/:id"
+            element={
+              <ProtectedRoute>
+                <ChallengeDetailPage />
               </ProtectedRoute>
             }
           />
@@ -103,6 +122,14 @@ export const App = () => {
             element={
               <ProtectedRoute>
                 <AboutPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminPage />
               </ProtectedRoute>
             }
           />

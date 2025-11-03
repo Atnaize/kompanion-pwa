@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import type { Achievement } from '@app-types/index';
+import type { Achievement } from '@types';
 
 interface AchievementUnlockedModalProps {
   achievement: Achievement;

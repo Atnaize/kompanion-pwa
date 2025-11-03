@@ -9,7 +9,7 @@ import {
 } from '@components/ui';
 import { achievementsService } from '@api/services';
 import { hapticService } from '@utils/haptic';
-import type { Achievement } from '@app-types/index';
+import type { Achievement } from '@types';
 
 export const AchievementsPage = () => {
   const [unlockedAchievement, setUnlockedAchievement] = useState<Achievement | null>(null);

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { achievementsService } from '@api/services';
-import type { Achievement } from '@app-types/index';
+import type { Achievement } from '@types';
 
 interface TabBadge {
   count: number;

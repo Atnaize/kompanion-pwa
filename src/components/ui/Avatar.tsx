@@ -3,13 +3,14 @@ import clsx from 'clsx';
 
 export interface AvatarProps {
   src?: string;
-  alt: string;
-  fallbackText?: string;
+  firstname?: string;
+  lastname?: string;
+  alt?: string;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export const Avatar = ({ src, alt, fallbackText, size = 'md', className }: AvatarProps) => {
+export const Avatar = ({ src, firstname, lastname, alt, size = 'md', className }: AvatarProps) => {
   const [imageError, setImageError] = useState(false);
 
   const sizeClasses = {
@@ -18,14 +19,18 @@ export const Avatar = ({ src, alt, fallbackText, size = 'md', className }: Avata
     lg: 'h-16 w-16 text-base',
   };
 
-  const initials = fallbackText
-    ? fallbackText
+  // Auto-generate alt text from name if not provided
+  const altText = alt || [firstname, lastname].filter(Boolean).join(' ') || 'User';
+
+  // Derive initials from firstname/lastname, fallback to alt text
+  const initials = firstname
+    ? `${firstname[0]}${lastname?.[0] || ''}`.toUpperCase()
+    : altText
         .split(' ')
         .map((word) => word[0])
         .join('')
         .toUpperCase()
-        .slice(0, 2)
-    : alt[0]?.toUpperCase() || '?';
+        .slice(0, 2) || '?';
 
   return (
     <div
@@ -38,7 +43,7 @@ export const Avatar = ({ src, alt, fallbackText, size = 'md', className }: Avata
       {!imageError && src ? (
         <img
           src={src}
-          alt={alt}
+          alt={altText}
           className="h-full w-full object-cover"
           onError={() => setImageError(true)}
         />

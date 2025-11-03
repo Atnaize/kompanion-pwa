@@ -67,34 +67,105 @@ export interface Achievement {
   isSecret?: boolean;
 }
 
-export interface Quest {
-  id: string;
-  name: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  type: 'weekly' | 'monthly' | 'special';
-  objectives: QuestObjective[];
-  rewards: {
-    xp: number;
-    achievements?: string[];
-  };
-  status: 'active' | 'completed' | 'expired';
-}
-
-export interface QuestObjective {
-  id: string;
-  description: string;
-  type: 'distance' | 'elevation' | 'activities' | 'time';
-  target: number;
-  current: number;
-  activityType?: string;
-  completed: boolean;
-}
-
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
   message?: string;
+}
+
+// Challenge System Types
+export type ChallengeType = 'collaborative' | 'competitive';
+export type ChallengeStatus = 'draft' | 'active' | 'completed' | 'failed' | 'cancelled';
+export type ParticipantStatus = 'invited' | 'accepted' | 'declined' | 'left';
+export type CompetitiveGoal = 'most' | 'least' | 'exact';
+export type ChallengeEventType =
+  | 'created'
+  | 'started'
+  | 'activity_added'
+  | 'milestone_reached'
+  | 'lead_change'
+  | 'completed'
+  | 'failed'
+  | 'cancelled';
+
+export interface ChallengeTargets {
+  distance?: number; // meters
+  elevation?: number; // meters
+  activities?: number; // number of activities
+  activityType?: string;
+}
+
+export interface ChallengeParticipant {
+  id: number;
+  challengeId: string;
+  userId: number;
+  status: ParticipantStatus;
+  invitedAt: string;
+  acceptedAt?: string;
+  totalDistance: number;
+  totalElevation: number;
+  activityCount: number;
+  lastActivityAt?: string;
+  user: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    profile: string;
+    profileMedium?: string;
+  };
+  challenge?: Challenge;
+}
+
+export interface Challenge {
+  id: string;
+  creatorId: number;
+  name: string;
+  description?: string;
+  type: ChallengeType;
+  status: ChallengeStatus;
+  startDate: string;
+  endDate: string;
+  targets: ChallengeTargets;
+  competitiveGoal?: CompetitiveGoal;
+  createdAt: string;
+  updatedAt: string;
+  creator?: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    profile: string;
+  };
+  participants?: ChallengeParticipant[];
+}
+
+export interface ChallengeEvent {
+  id: string;
+  challengeId: string;
+  userId?: number;
+  type: ChallengeEventType;
+  data: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface ChallengeProgress {
+  totalProgress: {
+    distance: number;
+    elevation: number;
+    activityCount: number;
+  };
+  targetProgress: {
+    distance?: number;
+    elevation?: number;
+  };
+  isComplete: boolean;
+}
+
+export interface Friend {
+  id: number;
+  stravaId: number;
+  firstname: string;
+  lastname: string;
+  profile: string;
+  profileMedium: string;
 }

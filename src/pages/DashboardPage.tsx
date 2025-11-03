@@ -5,13 +5,12 @@ import {
   GlassCard,
   Button,
   StatTile,
-  WelcomeCard,
-  QuestSummaryCard,
   StatTileSkeleton,
   ActivityCardSkeleton,
   NoActivitiesEmpty,
 } from '@components/ui';
-import { activitiesService, statsService, questsService } from '@api/services';
+import { WelcomeCard } from '@features/onboarding';
+import { activitiesService, statsService } from '@api/services';
 import { useAuthStore } from '@store/authStore';
 import { useToastStore } from '@store/toastStore';
 import { hapticService } from '@utils/haptic';
@@ -45,14 +44,6 @@ export const DashboardPage = () => {
     },
   });
 
-  const { data: quests = [] } = useQuery({
-    queryKey: ['quests'],
-    queryFn: async () => {
-      const response = await questsService.list();
-      return response.data || [];
-    },
-  });
-
   const handleSync = async () => {
     if (isSyncing) return;
 
@@ -73,7 +64,6 @@ export const DashboardPage = () => {
       // Refresh data - invalidate all queries to refetch fresh data
       await queryClient.invalidateQueries({ queryKey: ['activities'] });
       await queryClient.invalidateQueries({ queryKey: ['stats'] });
-      await queryClient.invalidateQueries({ queryKey: ['quests'] });
       await queryClient.invalidateQueries({ queryKey: ['achievements'] });
 
       // Update user with lastSyncedAt
@@ -102,8 +92,6 @@ export const DashboardPage = () => {
   };
 
   const recentActivities = activities?.slice(0, 5) || [];
-  const activeQuests = quests?.filter((q) => q.status === 'active') || [];
-
   const isFirstTimeUser = !user?.lastSyncedAt;
 
   return (
@@ -146,11 +134,6 @@ export const DashboardPage = () => {
                   <StatTile icon="🔥" label="Streak" value={`${stats?.currentStreak || 0} days`} />
                 </div>
               )}
-            </section>
-
-            {/* Quest Summary */}
-            <section>
-              <QuestSummaryCard activeQuestsCount={activeQuests.length} />
             </section>
 
             {/* Recent Activities */}
