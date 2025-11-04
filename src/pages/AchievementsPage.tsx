@@ -38,6 +38,14 @@ export const AchievementsPage = () => {
 
   const unlocked = achievements?.filter((a) => a.unlockedAt) || [];
   const locked = achievements?.filter((a) => !a.unlockedAt) || [];
+
+  // Sort locked achievements by progress percentage (descending)
+  const lockedSorted = locked.sort((a, b) => {
+    const aProgress = a.progress?.percentage || 0;
+    const bProgress = b.progress?.percentage || 0;
+    return bProgress - aProgress;
+  });
+
   const redeemableCount = locked.filter((a) => a.isRedeemable).length;
 
   const handleRedeem = (achievement: Achievement) => {
@@ -85,11 +93,13 @@ export const AchievementsPage = () => {
               </section>
             )}
 
-            {locked.length > 0 && (
+            {lockedSorted.length > 0 && (
               <section>
-                <h3 className="mb-4 text-lg font-bold text-gray-900">Locked</h3>
+                <h3 className="mb-4 text-lg font-bold text-gray-900">
+                  In Progress
+                </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {locked.map((achievement) => (
+                  {lockedSorted.map((achievement) => (
                     <BadgeCard
                       key={achievement.id}
                       {...achievement}

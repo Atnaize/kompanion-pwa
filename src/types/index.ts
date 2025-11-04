@@ -89,6 +89,11 @@ export interface Achievement {
   unlockedAt?: string;
   isRedeemable?: boolean;
   isSecret?: boolean;
+  progress?: {
+    currentValue: number;
+    targetValue: number;
+    percentage: number;
+  };
 }
 
 export interface ApiResponse<T = unknown> {

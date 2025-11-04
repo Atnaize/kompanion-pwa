@@ -3,6 +3,7 @@ export * from './Button';
 export * from './StatTile';
 export * from './ProgressRing';
 export * from './BadgeCard';
+export * from './AchievementProgressBar';
 export * from './Toast';
 export * from './ToastContainer';
 export * from './Avatar';

@@ -1,4 +1,5 @@
 import { GlassCard } from './GlassCard';
+import { AchievementProgressBar } from './AchievementProgressBar';
 import clsx from 'clsx';
 
 interface BadgeCardProps {
@@ -6,8 +7,18 @@ interface BadgeCardProps {
   name: string;
   description: string;
   rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  requirement: {
+    type: 'distance' | 'elevation' | 'activities' | 'speed' | 'streak';
+    value: number;
+    activityType?: string;
+  };
   unlocked?: boolean;
   redeemable?: boolean;
+  progress?: {
+    currentValue: number;
+    targetValue: number;
+    percentage: number;
+  };
   onRedeem?: () => void;
 }
 
@@ -23,17 +34,21 @@ export const BadgeCard = ({
   name,
   description,
   rarity,
+  requirement,
   unlocked = false,
   redeemable = false,
+  progress,
   onRedeem,
 }: BadgeCardProps) => {
   const isSecretLocked = icon === '❓';
+  const hasProgress = !unlocked && !isSecretLocked && progress && progress.percentage > 0;
 
   return (
     <GlassCard
       className={clsx(
         'relative p-4 transition-all duration-300',
-        !unlocked && !redeemable && 'opacity-50 grayscale',
+        !unlocked && !hasProgress && !redeemable && 'opacity-50 grayscale',
+        hasProgress && 'opacity-80',
         redeemable &&
           'cursor-pointer opacity-100 shadow-lg shadow-strava-orange/20 ring-2 ring-strava-orange grayscale-0 hover:scale-105'
       )}
@@ -80,6 +95,17 @@ export const BadgeCard = ({
           >
             {rarity}
           </span>
+
+          {/* Progress bar for locked non-secret achievements */}
+          {hasProgress && (
+            <AchievementProgressBar
+              percentage={progress.percentage}
+              currentValue={progress.currentValue}
+              targetValue={progress.targetValue}
+              requirementType={requirement.type}
+              rarity={rarity}
+            />
+          )}
         </div>
       </div>
     </GlassCard>

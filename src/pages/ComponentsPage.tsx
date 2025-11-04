@@ -151,6 +151,7 @@ export const ComponentsPage = () => {
               name="First Steps"
               description="Complete your first activity"
               rarity="common"
+              requirement={{ type: 'activities', value: 1 }}
               unlocked
             />
             <BadgeCard
@@ -158,14 +159,22 @@ export const ComponentsPage = () => {
               name="Century Cyclist"
               description="Ride 100km"
               rarity="rare"
+              requirement={{ type: 'distance', value: 100000 }}
               unlocked
             />
-            <BadgeCard icon="⛰️" name="Mountain Climber" description="Climb 5000m" rarity="epic" />
+            <BadgeCard
+              icon="⛰️"
+              name="Mountain Climber"
+              description="Climb 5000m"
+              rarity="epic"
+              requirement={{ type: 'elevation', value: 5000 }}
+            />
             <BadgeCard
               icon="🏆"
               name="Legend"
               description="Complete 1000 activities"
               rarity="legendary"
+              requirement={{ type: 'activities', value: 1000 }}
             />
           </div>
         </section>
