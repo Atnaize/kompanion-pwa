@@ -34,10 +34,74 @@ export const ActivityDetailPage = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="space-y-4">
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-64" />
-          <Skeleton className="h-48" />
+        <div className="space-y-6">
+          {/* Header Skeleton */}
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              {/* Back Button */}
+              <Skeleton className="mb-4 h-10 w-24" />
+
+              {/* Activity Header with Icon */}
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-16 w-16 rounded-lg" />
+                <div className="flex-1 space-y-2">
+                  <Skeleton className="h-8 w-80" />
+                  <Skeleton className="h-5 w-56" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Metrics Card */}
+          <GlassCard className="p-6">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-5 w-24" />
+                  <Skeleton className="h-9 w-28" />
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+
+          {/* Performance Card Skeleton */}
+          <GlassCard className="p-6">
+            <Skeleton className="mb-6 h-7 w-36" />
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="space-y-2">
+                  <Skeleton className="h-5 w-32" />
+                  <Skeleton className="h-8 w-24" />
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+
+          {/* Details Card Skeleton */}
+          <GlassCard className="p-6">
+            <Skeleton className="mb-6 h-7 w-28" />
+            <div className="grid grid-cols-2 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i}>
+                  <Skeleton className="h-5 w-full" />
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+
+          {/* Engagement Card Skeleton */}
+          <GlassCard className="p-6">
+            <Skeleton className="mb-6 h-7 w-36" />
+            <div className="flex flex-wrap gap-8">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <Skeleton className="h-10 w-10 rounded-full" />
+                  <Skeleton className="h-7 w-16" />
+                  <Skeleton className="h-5 w-20" />
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
       </Layout>
     );
@@ -258,7 +322,6 @@ export const ActivityDetailPage = () => {
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-xl">🏆</span>
                         <div className="min-w-0 flex-1">
                           <h3 className="truncate font-bold text-gray-900">
                             {effort.segment.name}

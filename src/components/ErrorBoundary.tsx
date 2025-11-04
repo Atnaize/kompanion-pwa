@@ -47,7 +47,7 @@ export class ErrorBoundary extends Component<Props, State> {
               onClick={() => window.location.reload()}
               className="w-full rounded-lg bg-strava-orange py-3 font-semibold text-white transition-colors hover:bg-strava-orange-dark"
             >
-              Reload Page
+              Reload
             </button>
           </div>
         </div>

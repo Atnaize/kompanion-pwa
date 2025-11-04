@@ -72,6 +72,78 @@ export const activitiesService = {
 
 export const statsService = {
   getUserStats: () => apiClient.get<Stats>('/stats'),
+  getProgressData: (params: {
+    metric: 'distance' | 'elevation' | 'count' | 'time';
+    period: 'week' | 'month' | 'year' | 'all';
+    groupBy: 'day' | 'week' | 'month';
+  }) => {
+    const query = new URLSearchParams({
+      metric: params.metric,
+      period: params.period,
+      groupBy: params.groupBy,
+    }).toString();
+    return apiClient.get<Array<{ date: string; value: number }>>(`/stats/progress?${query}`);
+  },
+  comparePeriods: (period: 'week' | 'month' | 'year') => {
+    const query = new URLSearchParams({ period }).toString();
+    return apiClient.get<{
+      current: {
+        distance: number;
+        elevation: number;
+        time: number;
+        count: number;
+      };
+      previous: {
+        distance: number;
+        elevation: number;
+        time: number;
+        count: number;
+      };
+      changes: {
+        distance: number;
+        elevation: number;
+        time: number;
+        count: number;
+      };
+    }>(`/stats/compare?${query}`);
+  },
+  compareCustomRanges: (params: {
+    currentStart: string;
+    currentEnd: string;
+    previousStart: string;
+    previousEnd: string;
+  }) => {
+    const query = new URLSearchParams({
+      currentStart: params.currentStart,
+      currentEnd: params.currentEnd,
+      previousStart: params.previousStart,
+      previousEnd: params.previousEnd,
+    }).toString();
+    return apiClient.get<{
+      current: {
+        distance: number;
+        elevation: number;
+        time: number;
+        count: number;
+      };
+      previous: {
+        distance: number;
+        elevation: number;
+        time: number;
+        count: number;
+      };
+      changes: {
+        distance: number;
+        elevation: number;
+        time: number;
+        count: number;
+      };
+    }>(`/stats/compare-custom?${query}`);
+  },
+  getHeatmapData: (metric: 'count' | 'distance' = 'count') => {
+    const query = new URLSearchParams({ metric }).toString();
+    return apiClient.get<Array<{ date: string; value: number }>>(`/stats/heatmap?${query}`);
+  },
 };
 
 export const achievementsService = {
