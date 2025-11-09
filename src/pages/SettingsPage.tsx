@@ -53,7 +53,7 @@ export const SettingsPage = () => {
     try {
       await updatePreferences({ [key]: value });
       success('Preference updated');
-    } catch (err) {
+    } catch {
       error('Failed to update preference');
     }
   };
@@ -105,7 +105,7 @@ export const SettingsPage = () => {
                     enabled={preferences.challengeInvites}
                     onChange={(value) => handlePreferenceToggle('challengeInvites', value)}
                     label="Challenge Invitations"
-                    description="Get notified when you&apos;re invited to a challenge"
+                    description="Get notified when you're invited to a challenge"
                   />
                   <Toggle
                     enabled={preferences.challengeProgress}

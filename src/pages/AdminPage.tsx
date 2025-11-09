@@ -367,8 +367,8 @@ export const AdminPage = () => {
               <GlassCard className="p-4">
                 <h2 className="mb-3 text-lg font-semibold text-gray-900">Challenge Sync</h2>
                 <p className="mb-4 text-sm text-gray-600">
-                  Manually sync all your active challenges with current activities. This will add any
-                  missing activities to your challenges and update progress.
+                  Manually sync all your active challenges with current activities. This will add
+                  any missing activities to your challenges and update progress.
                 </p>
                 <Button
                   onClick={syncChallenges}
@@ -380,8 +380,8 @@ export const AdminPage = () => {
                 </Button>
                 <div className="mt-3 rounded-lg bg-blue-50 p-3">
                   <p className="text-xs text-blue-800">
-                    <strong>When to use:</strong> Use this if your challenges are missing activities or
-                    showing incorrect progress. This will recalculate everything.
+                    <strong>When to use:</strong> Use this if your challenges are missing activities
+                    or showing incorrect progress. This will recalculate everything.
                   </p>
                 </div>
               </GlassCard>
@@ -390,8 +390,8 @@ export const AdminPage = () => {
               <GlassCard className="p-4">
                 <h2 className="mb-3 text-lg font-semibold text-gray-900">Webhook Testing</h2>
                 <p className="mb-4 text-sm text-gray-600">
-                  Test the complete webhook flow: delete activities, clear stats, then simulate webhooks
-                  to see real progress updates.
+                  Test the complete webhook flow: delete activities, clear stats, then simulate
+                  webhooks to see real progress updates.
                 </p>
 
                 <div className="space-y-3">
@@ -451,9 +451,9 @@ export const AdminPage = () => {
 
                   <div className="rounded-lg bg-blue-50 p-3">
                     <p className="text-xs text-blue-800">
-                      <strong>How it works:</strong> Load → Delete (clears all stats/progress) → Simulate
-                      webhooks (as if activities are new from Strava). You&apos;ll see real progress
-                      updates!
+                      <strong>How it works:</strong> Load → Delete (clears all stats/progress) →
+                      Simulate webhooks (as if activities are new from Strava). You&apos;ll see real
+                      progress updates!
                     </p>
                   </div>
                 </div>
@@ -466,8 +466,8 @@ export const AdminPage = () => {
             <GlassCard className="p-4">
               <h2 className="mb-3 text-lg font-semibold text-gray-900">Push Notifications</h2>
               <p className="mb-4 text-sm text-gray-600">
-                Send a test push notification to your device. Make sure you have enabled notifications in
-                Settings first.
+                Send a test push notification to your device. Make sure you have enabled
+                notifications in Settings first.
               </p>
               <Button
                 onClick={sendTestNotification}
@@ -479,9 +479,9 @@ export const AdminPage = () => {
               </Button>
               <div className="mt-3 rounded-lg bg-blue-50 p-3">
                 <p className="text-xs text-blue-800">
-                  <strong>Note:</strong> You must enable push notifications in Settings before testing.
-                  If you don&apos;t receive a notification, check your browser permissions and
-                  notification preferences.
+                  <strong>Note:</strong> You must enable push notifications in Settings before
+                  testing. If you don&apos;t receive a notification, check your browser permissions
+                  and notification preferences.
                 </p>
               </div>
             </GlassCard>
@@ -533,13 +533,17 @@ export const AdminPage = () => {
                             <span className="font-medium text-gray-900">{name}</span>
                             <span
                               className={`rounded-full px-2 py-1 text-xs font-medium ${
-                                result.success ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                result.success
+                                  ? 'bg-green-100 text-green-700'
+                                  : 'bg-red-100 text-red-700'
                               }`}
                             >
                               {result.success ? 'Success' : 'Failed'}
                             </span>
                           </div>
-                          {result.error && <p className="text-xs text-red-600">Error: {result.error}</p>}
+                          {result.error && (
+                            <p className="text-xs text-red-600">Error: {result.error}</p>
+                          )}
                           {dataStr && (
                             <details className="text-xs">
                               <summary className="cursor-pointer text-gray-600">View Data</summary>

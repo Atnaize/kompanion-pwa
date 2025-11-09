@@ -1,3 +1,5 @@
+/* eslint-env serviceworker */
+/* global self, clients, console, URL */
 // Push notification handler
 // This file is included by the service worker
 

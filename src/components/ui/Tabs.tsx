@@ -57,7 +57,7 @@ export const Tab = ({ value, label, count, className }: TabProps) => {
     <button
       onClick={() => onChange(value)}
       className={clsx(
-        'shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all whitespace-nowrap',
+        'shrink-0 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all',
         isActive
           ? 'bg-gradient-to-br from-strava-orange to-orange-600 text-white shadow-lg'
           : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80',
