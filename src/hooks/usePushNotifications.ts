@@ -38,10 +38,10 @@ export const usePushNotifications = () => {
 
   const loadPreferences = async () => {
     try {
-      const response = await apiClient.get<{ data: NotificationPreferences }>(
-        '/notifications/preferences'
-      );
-      setPreferences(response.data);
+      const response = await apiClient.get<NotificationPreferences>('/notifications/preferences');
+      if (response.data) {
+        setPreferences(response.data);
+      }
     } catch (error) {
       console.error('Error loading notification preferences:', error);
     }
@@ -61,16 +61,19 @@ export const usePushNotifications = () => {
       }
 
       // Get VAPID public key from server
-      const vapidResponse = await apiClient.get<{ data: { publicKey: string } }>(
+      const vapidResponse = await apiClient.get<{ publicKey: string }>(
         '/notifications/vapid-public-key'
       );
+      if (!vapidResponse.data?.publicKey) {
+        throw new Error('Failed to get VAPID public key');
+      }
       const vapidPublicKey = vapidResponse.data.publicKey;
 
       // Subscribe to push notifications
       const registration = await navigator.serviceWorker.ready;
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource,
       });
 
       // Send subscription to server
@@ -118,11 +121,13 @@ export const usePushNotifications = () => {
 
   const updatePreferences = async (updates: Partial<NotificationPreferences>): Promise<void> => {
     try {
-      const response = await apiClient.put<{ data: NotificationPreferences }>(
+      const response = await apiClient.put<NotificationPreferences>(
         '/notifications/preferences',
         updates
       );
-      setPreferences(response.data);
+      if (response.data) {
+        setPreferences(response.data);
+      }
     } catch (error) {
       console.error('Error updating notification preferences:', error);
       throw error;

@@ -49,7 +49,10 @@ export const SettingsPage = () => {
     }
   };
 
-  const handlePreferenceToggle = async (key: keyof typeof preferences, value: boolean) => {
+  const handlePreferenceToggle = async (
+    key: 'activityWebhooks' | 'challengeInvites' | 'challengeProgress' | 'challengeReminders',
+    value: boolean
+  ) => {
     try {
       await updatePreferences({ [key]: value });
       success('Preference updated');
