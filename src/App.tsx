@@ -3,6 +3,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from '@store/authStore';
 import { ErrorBoundary } from '@components/ErrorBoundary';
 import { ToastContainer } from '@components/ui';
+import { UpdateNotification } from '@components/pwa/UpdateNotification';
+import { InstallPrompt } from '@components/pwa/InstallPrompt';
+import { usePwa } from '@hooks/usePwa';
+import { useServiceWorkerRegistration } from '@utils/registerServiceWorker';
+import { useOnlineStatus } from '@hooks/useOnlineStatus';
 import {
   LoginPage,
   DashboardPage,
@@ -45,6 +50,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 export const App = () => {
   const { fetchUser } = useAuthStore();
+  const isOnline = useOnlineStatus();
+
+  // Initialize PWA features
+  usePwa();
+  useServiceWorkerRegistration();
 
   useEffect(() => {
     void fetchUser();
@@ -53,6 +63,16 @@ export const App = () => {
   return (
     <ErrorBoundary>
       <ToastContainer />
+      <UpdateNotification />
+      <InstallPrompt />
+
+      {/* Offline indicator */}
+      {!isOnline && (
+        <div className="fixed left-0 right-0 top-0 z-50 bg-yellow-500 px-4 py-2 text-center text-sm font-semibold text-white">
+          📡 You&apos;re offline - some features may be limited
+        </div>
+      )}
+
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />

@@ -70,7 +70,9 @@ export default tseslint.config(
   {
     ignores: [
       'dist/',
+      'dev-dist/',
       'node_modules/',
+      'scripts/',
       'vite.config.ts',
       'postcss.config.js',
       'tailwind.config.js',
