@@ -47,10 +47,7 @@ export const AchievementProgressBar = ({
       </div>
       <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
         <div
-          className={clsx(
-            'h-full rounded-full transition-all duration-500',
-            rarityColors[rarity]
-          )}
+          className={clsx('h-full rounded-full transition-all duration-500', rarityColors[rarity])}
           style={{ width: `${percentage}%` }}
         />
       </div>

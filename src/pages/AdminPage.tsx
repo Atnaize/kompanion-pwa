@@ -2,8 +2,18 @@ import { useState, useEffect } from 'react';
 import { Layout } from '@components/layout/Layout';
 import { GlassCard, Button } from '@components/ui';
 import { apiClient } from '@api/client';
+import { useToastStore } from '@store/toastStore';
+
+interface Activity {
+  id: number;
+  name: string;
+  type: string;
+  startDateLocal: string;
+  distance: number;
+}
 
 export const AdminPage = () => {
+  const { success, error: showError } = useToastStore();
   const [tokenInfo, setTokenInfo] = useState<{
     tokenExpiresAt?: number;
     expiresIn?: string;
@@ -13,10 +23,30 @@ export const AdminPage = () => {
   const [testResults, setTestResults] = useState<{
     [key: string]: { success: boolean; data?: unknown; error?: string };
   }>({});
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [selectedActivityId, setSelectedActivityId] = useState<number | null>(null);
+  const [webhookLoading, setWebhookLoading] = useState(false);
+  const [lastWebhookTest, setLastWebhookTest] = useState<Date | null>(null);
+  const [challengeSyncLoading, setChallengeSyncLoading] = useState(false);
 
   useEffect(() => {
     checkTokenInfo();
+    fetchActivities();
   }, []);
+
+  const fetchActivities = async () => {
+    try {
+      const response = await apiClient.get<Activity[]>('/activities');
+      if (response.success && response.data) {
+        setActivities(response.data.slice(0, 10)); // Get last 10 activities
+        if (response.data.length > 0) {
+          setSelectedActivityId(response.data[0].id);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+    }
+  };
 
   const checkTokenInfo = async () => {
     setLoading(true);
@@ -150,6 +180,55 @@ export const AdminPage = () => {
     }
   };
 
+  const testWebhook = async () => {
+    if (!selectedActivityId) {
+      showError('Please select an activity');
+      return;
+    }
+
+    setWebhookLoading(true);
+    try {
+      const response = await apiClient.post<{ activityId: number; processed: boolean }>(
+        '/webhooks/test',
+        { activityId: selectedActivityId }
+      );
+
+      if (response.success) {
+        setLastWebhookTest(new Date());
+        success('Webhook processed successfully! Stats and achievement progress recalculated.');
+        // Refetch activities to show the latest data
+        await fetchActivities();
+      } else {
+        showError(response.error || 'Failed to process webhook');
+      }
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setWebhookLoading(false);
+    }
+  };
+
+  const syncChallenges = async () => {
+    setChallengeSyncLoading(true);
+    try {
+      const response = await apiClient.post<{ synced: number; activitiesAdded: number }>(
+        '/challenges/sync'
+      );
+
+      if (response.success && response.data) {
+        success(
+          `Synced ${response.data.synced} challenge(s)! Added ${response.data.activitiesAdded} activity(ies).`
+        );
+      } else {
+        showError(response.error || 'Failed to sync challenges');
+      }
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setChallengeSyncLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="space-y-4">
@@ -205,6 +284,96 @@ export const AdminPage = () => {
             <Button onClick={refreshToken} variant="secondary" disabled={loading}>
               Force JWT Refresh
             </Button>
+          </div>
+        </GlassCard>
+
+        {/* Challenge Sync */}
+        <GlassCard className="p-4">
+          <h2 className="mb-3 text-lg font-semibold text-gray-900">Challenge Sync</h2>
+          <p className="mb-4 text-sm text-gray-600">
+            Manually sync all your active challenges with current activities. This will add any
+            missing activities to your challenges and update progress.
+          </p>
+          <Button
+            onClick={syncChallenges}
+            variant="primary"
+            className="w-full"
+            disabled={challengeSyncLoading}
+          >
+            {challengeSyncLoading ? 'Syncing...' : 'Sync Active Challenges'}
+          </Button>
+          <div className="mt-3 rounded-lg bg-blue-50 p-3">
+            <p className="text-xs text-blue-800">
+              <strong>When to use:</strong> Use this if your challenges are missing activities or
+              showing incorrect progress. This will recalculate everything.
+            </p>
+          </div>
+        </GlassCard>
+
+        {/* Webhook Testing */}
+        <GlassCard className="p-4">
+          <h2 className="mb-3 text-lg font-semibold text-gray-900">Webhook Simulation</h2>
+          <p className="mb-4 text-sm text-gray-600">
+            Test the webhook flow locally by simulating a Strava activity webhook event. This will
+            trigger stats recalculation and achievement progress updates.
+          </p>
+          <div className="space-y-3">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Select Activity
+              </label>
+              <select
+                value={selectedActivityId || ''}
+                onChange={(e) => setSelectedActivityId(Number(e.target.value))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-strava-orange focus:outline-none focus:ring-2 focus:ring-strava-orange/20"
+                disabled={webhookLoading || activities.length === 0}
+              >
+                {activities.length === 0 && <option>No activities found</option>}
+                {activities.map((activity) => {
+                  const date = new Date(activity.startDateLocal);
+                  const formattedDate = isNaN(date.getTime())
+                    ? 'Unknown date'
+                    : date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      });
+                  return (
+                    <option key={activity.id} value={activity.id}>
+                      {activity.name} ({activity.type}) - {formattedDate}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <Button
+              onClick={testWebhook}
+              variant="primary"
+              className="w-full"
+              disabled={webhookLoading || !selectedActivityId}
+            >
+              {webhookLoading ? 'Processing...' : 'Trigger Webhook Event'}
+            </Button>
+            {lastWebhookTest && (
+              <div className="text-center text-xs text-gray-500">
+                Last test: {lastWebhookTest.toLocaleTimeString()}
+              </div>
+            )}
+            <div className="rounded-lg bg-blue-50 p-3">
+              <p className="text-xs text-blue-800">
+                <strong>Note:</strong> This simulates a webhook event for an existing activity.
+                Since the activity is already in your database, stats will be recalculated but
+                won&apos;t change. To see actual progress updates, navigate to your achievements
+                page after triggering the webhook - the &quot;Last Updated&quot; timestamp should
+                change.
+              </p>
+            </div>
+            <div className="rounded-lg bg-yellow-50 p-3">
+              <p className="text-xs text-yellow-800">
+                <strong>Tip:</strong> To test with real progress changes, add a new activity on
+                Strava and it will automatically sync via the real webhook (no testing needed).
+              </p>
+            </div>
           </div>
         </GlassCard>
 

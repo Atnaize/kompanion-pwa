@@ -95,9 +95,7 @@ export const AchievementsPage = () => {
 
             {lockedSorted.length > 0 && (
               <section>
-                <h3 className="mb-4 text-lg font-bold text-gray-900">
-                  In Progress
-                </h3>
+                <h3 className="mb-4 text-lg font-bold text-gray-900">In Progress</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {lockedSorted.map((achievement) => (
                     <BadgeCard
