@@ -149,6 +149,13 @@ class ApiClient {
     });
   }
 
+  async put<T>(url: string, data?: unknown): Promise<ApiResponse<T>> {
+    return this.request<T>(url, {
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
   async delete<T>(url: string): Promise<ApiResponse<T>> {
     return this.request<T>(url, { method: 'DELETE' });
   }

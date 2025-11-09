@@ -37,7 +37,9 @@ interface TabListProps {
 }
 
 export const TabList = ({ children, className }: TabListProps) => {
-  return <div className={clsx('flex gap-2', className)}>{children}</div>;
+  return (
+    <div className={clsx('no-scrollbar flex gap-2 overflow-x-auto', className)}>{children}</div>
+  );
 };
 
 interface TabProps {
@@ -55,7 +57,7 @@ export const Tab = ({ value, label, count, className }: TabProps) => {
     <button
       onClick={() => onChange(value)}
       className={clsx(
-        'flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all',
+        'shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all whitespace-nowrap',
         isActive
           ? 'bg-gradient-to-br from-strava-orange to-orange-600 text-white shadow-lg'
           : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80',

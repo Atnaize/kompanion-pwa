@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Layout } from '@components/layout/Layout';
-import { GlassCard, Button } from '@components/ui';
+import { GlassCard, Button, Tabs, TabList, Tab, TabPanel } from '@components/ui';
 import { apiClient } from '@api/client';
 import { useToastStore } from '@store/toastStore';
 
@@ -14,6 +14,7 @@ interface Activity {
 
 export const AdminPage = () => {
   const { success, error: showError } = useToastStore();
+  const [activeTab, setActiveTab] = useState('tokens');
   const [tokenInfo, setTokenInfo] = useState<{
     tokenExpiresAt?: number;
     expiresIn?: string;
@@ -23,34 +24,16 @@ export const AdminPage = () => {
   const [testResults, setTestResults] = useState<{
     [key: string]: { success: boolean; data?: unknown; error?: string };
   }>({});
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [selectedActivityId, setSelectedActivityId] = useState<number | null>(null);
-  const [webhookLoading, setWebhookLoading] = useState(false);
-  const [lastWebhookTest, setLastWebhookTest] = useState<Date | null>(null);
   const [challengeSyncLoading, setChallengeSyncLoading] = useState(false);
   const [testActivities, setTestActivities] = useState<Activity[]>([]);
   const [activitiesDeleted, setActivitiesDeleted] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [simulateLoading, setSimulateLoading] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   useEffect(() => {
     checkTokenInfo();
-    fetchActivities();
   }, []);
-
-  const fetchActivities = async () => {
-    try {
-      const response = await apiClient.get<Activity[]>('/activities');
-      if (response.success && response.data) {
-        setActivities(response.data.slice(0, 10)); // Get last 10 activities
-        if (response.data.length > 0) {
-          setSelectedActivityId(response.data[0].id);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching activities:', error);
-    }
-  };
 
   const checkTokenInfo = async () => {
     setLoading(true);
@@ -184,34 +167,6 @@ export const AdminPage = () => {
     }
   };
 
-  const testWebhook = async () => {
-    if (!selectedActivityId) {
-      showError('Please select an activity');
-      return;
-    }
-
-    setWebhookLoading(true);
-    try {
-      const response = await apiClient.post<{ activityId: number; processed: boolean }>(
-        '/webhooks/test',
-        { activityId: selectedActivityId }
-      );
-
-      if (response.success) {
-        setLastWebhookTest(new Date());
-        success('Webhook processed successfully! Stats and achievement progress recalculated.');
-        // Refetch activities to show the latest data
-        await fetchActivities();
-      } else {
-        showError(response.error || 'Failed to process webhook');
-      }
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Unknown error');
-    } finally {
-      setWebhookLoading(false);
-    }
-  };
-
   const syncChallenges = async () => {
     setChallengeSyncLoading(true);
     try {
@@ -319,6 +274,23 @@ export const AdminPage = () => {
     }
   };
 
+  const sendTestNotification = async () => {
+    setNotificationLoading(true);
+    try {
+      const response = await apiClient.post<{ message: string }>('/notifications/test');
+
+      if (response.success) {
+        success('Test notification sent! Check your device.');
+      } else {
+        showError(response.error || 'Failed to send test notification');
+      }
+    } catch (error) {
+      showError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setNotificationLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="space-y-4">
@@ -327,302 +299,285 @@ export const AdminPage = () => {
           <p className="text-sm text-gray-600">Debug token and API issues</p>
         </div>
 
-        {/* Token Info */}
-        <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Token Information</h2>
-          <div className="space-y-2">
-            {tokenInfo ? (
-              <>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Expires at:</span>
-                  <span className="font-medium text-gray-900">
-                    {new Date((tokenInfo.tokenExpiresAt || 0) * 1000).toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Expires in:</span>
-                  <span
-                    className={`font-medium ${tokenInfo.isExpired ? 'text-red-600' : 'text-green-600'}`}
-                  >
-                    {tokenInfo.expiresIn}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Status:</span>
-                  <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${
-                      tokenInfo.isExpired
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-green-100 text-green-700'
-                    }`}
-                  >
-                    {tokenInfo.isExpired ? 'Expired' : 'Valid'}
-                  </span>
-                </div>
-              </>
-            ) : (
-              <p className="text-sm text-gray-500">Loading...</p>
-            )}
-          </div>
-          <div className="mt-4 flex flex-col gap-2">
-            <Button onClick={checkTokenInfo} variant="secondary" disabled={loading}>
-              Refresh Info
-            </Button>
-            <Button onClick={refreshStravaToken} disabled={loading}>
-              Force Strava Token Refresh
-            </Button>
-            <Button onClick={refreshToken} variant="secondary" disabled={loading}>
-              Force JWT Refresh
-            </Button>
-          </div>
-        </GlassCard>
+        <Tabs value={activeTab} onChange={setActiveTab}>
+          <TabList className="mb-6">
+            <Tab value="tokens" label="Tokens" />
+            <Tab value="testing" label="Testing" />
+            <Tab value="notifications" label="Notifications" />
+            <Tab value="api" label="API Tests" />
+            <Tab value="storage" label="Storage" />
+          </TabList>
 
-        {/* Challenge Sync */}
-        <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Challenge Sync</h2>
-          <p className="mb-4 text-sm text-gray-600">
-            Manually sync all your active challenges with current activities. This will add any
-            missing activities to your challenges and update progress.
-          </p>
-          <Button
-            onClick={syncChallenges}
-            variant="primary"
-            className="w-full"
-            disabled={challengeSyncLoading}
-          >
-            {challengeSyncLoading ? 'Syncing...' : 'Sync Active Challenges'}
-          </Button>
-          <div className="mt-3 rounded-lg bg-blue-50 p-3">
-            <p className="text-xs text-blue-800">
-              <strong>When to use:</strong> Use this if your challenges are missing activities or
-              showing incorrect progress. This will recalculate everything.
-            </p>
-          </div>
-        </GlassCard>
-
-        {/* Improved Webhook Testing */}
-        <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Webhook Testing (Improved)</h2>
-          <p className="mb-4 text-sm text-gray-600">
-            Test the complete webhook flow: delete activities, clear stats, then simulate webhooks
-            to see real progress updates.
-          </p>
-
-          <div className="space-y-3">
-            {/* Step 1: Load activities */}
-            <div>
-              <Button
-                onClick={loadTestActivities}
-                variant="secondary"
-                className="w-full"
-                disabled={deleteLoading || simulateLoading}
-              >
-                Step 1: Load Last 5 Activities
-              </Button>
-              {testActivities.length > 0 && (
-                <div className="mt-2 rounded bg-gray-50 p-2 text-xs">
-                  <strong>Loaded {testActivities.length} activities:</strong>
-                  <ul className="ml-4 mt-1 list-disc">
-                    {testActivities.map((activity) => (
-                      <li key={activity.id}>
-                        {activity.name} ({activity.type})
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Step 2: Delete activities */}
-            <div>
-              <Button
-                onClick={deleteTestActivities}
-                variant="secondary"
-                className="w-full"
-                disabled={testActivities.length === 0 || deleteLoading || activitiesDeleted}
-              >
-                {deleteLoading
-                  ? 'Deleting...'
-                  : activitiesDeleted
-                    ? '✓ Deleted & Cleared'
-                    : 'Step 2: Delete & Clear Stats'}
-              </Button>
-            </div>
-
-            {/* Step 3: Simulate webhooks */}
-            <div>
-              <Button
-                onClick={simulateWebhooks}
-                variant="primary"
-                className="w-full"
-                disabled={!activitiesDeleted || simulateLoading}
-              >
-                {simulateLoading
-                  ? 'Simulating Webhooks...'
-                  : 'Step 3: Simulate Webhooks (Process All)'}
-              </Button>
-            </div>
-
-            <div className="rounded-lg bg-blue-50 p-3">
-              <p className="text-xs text-blue-800">
-                <strong>How it works:</strong> Load → Delete (clears all stats/progress) → Simulate
-                webhooks (as if activities are new from Strava). You&apos;ll see real progress
-                updates!
-              </p>
-            </div>
-          </div>
-        </GlassCard>
-
-        {/* Simple Webhook Testing */}
-        <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Quick Webhook Test (Legacy)</h2>
-          <p className="mb-4 text-sm text-gray-600">
-            Test webhook for a single existing activity (won&apos;t show progress changes).
-          </p>
-          <div className="space-y-3">
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Select Activity
-              </label>
-              <select
-                value={selectedActivityId || ''}
-                onChange={(e) => setSelectedActivityId(Number(e.target.value))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 focus:border-strava-orange focus:outline-none focus:ring-2 focus:ring-strava-orange/20"
-                disabled={webhookLoading || activities.length === 0}
-              >
-                {activities.length === 0 && <option>No activities found</option>}
-                {activities.map((activity) => {
-                  const date = new Date(activity.startDateLocal);
-                  const formattedDate = isNaN(date.getTime())
-                    ? 'Unknown date'
-                    : date.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      });
-                  return (
-                    <option key={activity.id} value={activity.id}>
-                      {activity.name} ({activity.type}) - {formattedDate}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-            <Button
-              onClick={testWebhook}
-              variant="primary"
-              className="w-full"
-              disabled={webhookLoading || !selectedActivityId}
-            >
-              {webhookLoading ? 'Processing...' : 'Trigger Webhook Event'}
-            </Button>
-            {lastWebhookTest && (
-              <div className="text-center text-xs text-gray-500">
-                Last test: {lastWebhookTest.toLocaleTimeString()}
-              </div>
-            )}
-            <div className="rounded-lg bg-blue-50 p-3">
-              <p className="text-xs text-blue-800">
-                <strong>Note:</strong> This simulates a webhook event for an existing activity.
-                Since the activity is already in your database, stats will be recalculated but
-                won&apos;t change. To see actual progress updates, navigate to your achievements
-                page after triggering the webhook - the &quot;Last Updated&quot; timestamp should
-                change.
-              </p>
-            </div>
-            <div className="rounded-lg bg-yellow-50 p-3">
-              <p className="text-xs text-yellow-800">
-                <strong>Tip:</strong> To test with real progress changes, add a new activity on
-                Strava and it will automatically sync via the real webhook (no testing needed).
-              </p>
-            </div>
-          </div>
-        </GlassCard>
-
-        {/* API Tests */}
-        <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">API Endpoint Tests</h2>
-          <div className="space-y-2">
-            <Button
-              onClick={() => testEndpoint('Get Me', '/auth/me')}
-              variant="secondary"
-              className="w-full"
-              disabled={loading}
-            >
-              Test GET /auth/me
-            </Button>
-            <Button
-              onClick={() => testEndpoint('Get Debug', '/auth/debug')}
-              variant="secondary"
-              className="w-full"
-              disabled={loading}
-            >
-              Test GET /auth/debug
-            </Button>
-            <Button
-              onClick={() => testEndpoint('Get Stats', '/stats')}
-              variant="secondary"
-              className="w-full"
-              disabled={loading}
-            >
-              Test GET /stats
-            </Button>
-          </div>
-        </GlassCard>
-
-        {/* Test Results */}
-        {Object.keys(testResults).length > 0 && (
-          <GlassCard className="p-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">Test Results</h2>
-            <div className="space-y-3">
-              {Object.entries(testResults).map(([name, result]) => {
-                const dataStr = result.data ? JSON.stringify(result.data, null, 2) : '';
-                return (
-                  <div key={name} className="rounded-lg bg-white/30 p-3">
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="font-medium text-gray-900">{name}</span>
-                      <span
-                        className={`rounded-full px-2 py-1 text-xs font-medium ${
-                          result.success ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                        }`}
-                      >
-                        {result.success ? 'Success' : 'Failed'}
+          {/* Tokens Tab */}
+          <TabPanel value="tokens">
+            <GlassCard className="p-4">
+              <h2 className="mb-3 text-lg font-semibold text-gray-900">Token Information</h2>
+              <div className="space-y-2">
+                {tokenInfo ? (
+                  <>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Expires at:</span>
+                      <span className="font-medium text-gray-900">
+                        {new Date((tokenInfo.tokenExpiresAt || 0) * 1000).toLocaleString()}
                       </span>
                     </div>
-                    {result.error && <p className="text-xs text-red-600">Error: {result.error}</p>}
-                    {dataStr && (
-                      <details className="text-xs">
-                        <summary className="cursor-pointer text-gray-600">View Data</summary>
-                        <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-gray-900">
-                          {dataStr}
-                        </pre>
-                      </details>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Expires in:</span>
+                      <span
+                        className={`font-medium ${tokenInfo.isExpired ? 'text-red-600' : 'text-green-600'}`}
+                      >
+                        {tokenInfo.expiresIn}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Status:</span>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          tokenInfo.isExpired
+                            ? 'bg-red-100 text-red-700'
+                            : 'bg-green-100 text-green-700'
+                        }`}
+                      >
+                        {tokenInfo.isExpired ? 'Expired' : 'Valid'}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-500">Loading...</p>
+                )}
+              </div>
+              <div className="mt-4 flex flex-col gap-2">
+                <Button onClick={checkTokenInfo} variant="secondary" disabled={loading}>
+                  Refresh Info
+                </Button>
+                <Button onClick={refreshStravaToken} disabled={loading}>
+                  Force Strava Token Refresh
+                </Button>
+                <Button onClick={refreshToken} variant="secondary" disabled={loading}>
+                  Force JWT Refresh
+                </Button>
+              </div>
+            </GlassCard>
+          </TabPanel>
+
+          {/* Testing Tab */}
+          <TabPanel value="testing">
+            <div className="space-y-4">
+              {/* Challenge Sync */}
+              <GlassCard className="p-4">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900">Challenge Sync</h2>
+                <p className="mb-4 text-sm text-gray-600">
+                  Manually sync all your active challenges with current activities. This will add any
+                  missing activities to your challenges and update progress.
+                </p>
+                <Button
+                  onClick={syncChallenges}
+                  variant="primary"
+                  className="w-full"
+                  disabled={challengeSyncLoading}
+                >
+                  {challengeSyncLoading ? 'Syncing...' : 'Sync Active Challenges'}
+                </Button>
+                <div className="mt-3 rounded-lg bg-blue-50 p-3">
+                  <p className="text-xs text-blue-800">
+                    <strong>When to use:</strong> Use this if your challenges are missing activities or
+                    showing incorrect progress. This will recalculate everything.
+                  </p>
+                </div>
+              </GlassCard>
+
+              {/* Improved Webhook Testing */}
+              <GlassCard className="p-4">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900">Webhook Testing</h2>
+                <p className="mb-4 text-sm text-gray-600">
+                  Test the complete webhook flow: delete activities, clear stats, then simulate webhooks
+                  to see real progress updates.
+                </p>
+
+                <div className="space-y-3">
+                  {/* Step 1: Load activities */}
+                  <div>
+                    <Button
+                      onClick={loadTestActivities}
+                      variant="secondary"
+                      className="w-full"
+                      disabled={deleteLoading || simulateLoading}
+                    >
+                      Step 1: Load Last 5 Activities
+                    </Button>
+                    {testActivities.length > 0 && (
+                      <div className="mt-2 rounded bg-gray-50 p-2 text-xs">
+                        <strong>Loaded {testActivities.length} activities:</strong>
+                        <ul className="ml-4 mt-1 list-disc">
+                          {testActivities.map((activity) => (
+                            <li key={activity.id}>
+                              {activity.name} ({activity.type})
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                   </div>
-                );
-              })}
-            </div>
-          </GlassCard>
-        )}
 
-        {/* Local Storage */}
-        <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Local Storage</h2>
-          <div className="space-y-2 text-sm">
-            <div>
-              <span className="font-medium text-gray-600">Access Token:</span>
-              <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs">
-                {localStorage.getItem('access_token')?.substring(0, 50)}...
-              </p>
+                  {/* Step 2: Delete activities */}
+                  <div>
+                    <Button
+                      onClick={deleteTestActivities}
+                      variant="secondary"
+                      className="w-full"
+                      disabled={testActivities.length === 0 || deleteLoading || activitiesDeleted}
+                    >
+                      {deleteLoading
+                        ? 'Deleting...'
+                        : activitiesDeleted
+                          ? '✓ Deleted & Cleared'
+                          : 'Step 2: Delete & Clear Stats'}
+                    </Button>
+                  </div>
+
+                  {/* Step 3: Simulate webhooks */}
+                  <div>
+                    <Button
+                      onClick={simulateWebhooks}
+                      variant="primary"
+                      className="w-full"
+                      disabled={!activitiesDeleted || simulateLoading}
+                    >
+                      {simulateLoading
+                        ? 'Simulating Webhooks...'
+                        : 'Step 3: Simulate Webhooks (Process All)'}
+                    </Button>
+                  </div>
+
+                  <div className="rounded-lg bg-blue-50 p-3">
+                    <p className="text-xs text-blue-800">
+                      <strong>How it works:</strong> Load → Delete (clears all stats/progress) → Simulate
+                      webhooks (as if activities are new from Strava). You&apos;ll see real progress
+                      updates!
+                    </p>
+                  </div>
+                </div>
+              </GlassCard>
             </div>
-            <div>
-              <span className="font-medium text-gray-600">Refresh Token:</span>
-              <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs">
-                {localStorage.getItem('refresh_token')?.substring(0, 50)}...
+          </TabPanel>
+
+          {/* Notifications Tab */}
+          <TabPanel value="notifications">
+            <GlassCard className="p-4">
+              <h2 className="mb-3 text-lg font-semibold text-gray-900">Push Notifications</h2>
+              <p className="mb-4 text-sm text-gray-600">
+                Send a test push notification to your device. Make sure you have enabled notifications in
+                Settings first.
               </p>
+              <Button
+                onClick={sendTestNotification}
+                variant="primary"
+                className="w-full"
+                disabled={notificationLoading}
+              >
+                {notificationLoading ? 'Sending...' : 'Send Test Notification'}
+              </Button>
+              <div className="mt-3 rounded-lg bg-blue-50 p-3">
+                <p className="text-xs text-blue-800">
+                  <strong>Note:</strong> You must enable push notifications in Settings before testing.
+                  If you don&apos;t receive a notification, check your browser permissions and
+                  notification preferences.
+                </p>
+              </div>
+            </GlassCard>
+          </TabPanel>
+
+          {/* API Tests Tab */}
+          <TabPanel value="api">
+            <div className="space-y-4">
+              <GlassCard className="p-4">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900">API Endpoint Tests</h2>
+                <div className="space-y-2">
+                  <Button
+                    onClick={() => testEndpoint('Get Me', '/auth/me')}
+                    variant="secondary"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    Test GET /auth/me
+                  </Button>
+                  <Button
+                    onClick={() => testEndpoint('Get Debug', '/auth/debug')}
+                    variant="secondary"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    Test GET /auth/debug
+                  </Button>
+                  <Button
+                    onClick={() => testEndpoint('Get Stats', '/stats')}
+                    variant="secondary"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    Test GET /stats
+                  </Button>
+                </div>
+              </GlassCard>
+
+              {/* Test Results */}
+              {Object.keys(testResults).length > 0 && (
+                <GlassCard className="p-4">
+                  <h2 className="mb-3 text-lg font-semibold text-gray-900">Test Results</h2>
+                  <div className="space-y-3">
+                    {Object.entries(testResults).map(([name, result]) => {
+                      const dataStr = result.data ? JSON.stringify(result.data, null, 2) : '';
+                      return (
+                        <div key={name} className="rounded-lg bg-white/30 p-3">
+                          <div className="mb-2 flex items-center justify-between">
+                            <span className="font-medium text-gray-900">{name}</span>
+                            <span
+                              className={`rounded-full px-2 py-1 text-xs font-medium ${
+                                result.success ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                              }`}
+                            >
+                              {result.success ? 'Success' : 'Failed'}
+                            </span>
+                          </div>
+                          {result.error && <p className="text-xs text-red-600">Error: {result.error}</p>}
+                          {dataStr && (
+                            <details className="text-xs">
+                              <summary className="cursor-pointer text-gray-600">View Data</summary>
+                              <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-gray-900">
+                                {dataStr}
+                              </pre>
+                            </details>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </GlassCard>
+              )}
             </div>
-          </div>
-        </GlassCard>
+          </TabPanel>
+
+          {/* Storage Tab */}
+          <TabPanel value="storage">
+            <GlassCard className="p-4">
+              <h2 className="mb-3 text-lg font-semibold text-gray-900">Local Storage</h2>
+              <div className="space-y-2 text-sm">
+                <div>
+                  <span className="font-medium text-gray-600">Access Token:</span>
+                  <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs">
+                    {localStorage.getItem('access_token')?.substring(0, 50)}...
+                  </p>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Refresh Token:</span>
+                  <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs">
+                    {localStorage.getItem('refresh_token')?.substring(0, 50)}...
+                  </p>
+                </div>
+              </div>
+            </GlassCard>
+          </TabPanel>
+        </Tabs>
       </div>
     </Layout>
   );
