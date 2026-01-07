@@ -3,7 +3,6 @@ import { apiClient } from '@api/client';
 import { useAuthStore } from '@store/authStore';
 
 interface NotificationPreferences {
-  activityWebhooks: boolean;
   challengeInvites: boolean;
   challengeProgress: boolean;
   challengeReminders: boolean;

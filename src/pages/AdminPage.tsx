@@ -4,14 +4,6 @@ import { GlassCard, Button, Tabs, TabList, Tab, TabPanel } from '@components/ui'
 import { apiClient } from '@api/client';
 import { useToastStore } from '@store/toastStore';
 
-interface Activity {
-  id: number;
-  name: string;
-  type: string;
-  startDateLocal: string;
-  distance: number;
-}
-
 export const AdminPage = () => {
   const { success, error: showError } = useToastStore();
   const [activeTab, setActiveTab] = useState('tokens');
@@ -25,10 +17,6 @@ export const AdminPage = () => {
     [key: string]: { success: boolean; data?: unknown; error?: string };
   }>({});
   const [challengeSyncLoading, setChallengeSyncLoading] = useState(false);
-  const [testActivities, setTestActivities] = useState<Activity[]>([]);
-  const [activitiesDeleted, setActivitiesDeleted] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [simulateLoading, setSimulateLoading] = useState(false);
   const [notificationLoading, setNotificationLoading] = useState(false);
 
   useEffect(() => {
@@ -188,92 +176,6 @@ export const AdminPage = () => {
     }
   };
 
-  const loadTestActivities = async () => {
-    try {
-      const response = await apiClient.get<Activity[]>('/activities');
-      if (response.success && response.data) {
-        const last5 = response.data.slice(0, 5);
-        setTestActivities(last5);
-        setActivitiesDeleted(false);
-      }
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Unknown error');
-    }
-  };
-
-  const deleteTestActivities = async () => {
-    if (testActivities.length === 0) {
-      showError('No activities loaded');
-      return;
-    }
-
-    setDeleteLoading(true);
-    try {
-      const activityIds = testActivities.map((a) => a.id);
-      const response = await apiClient.post<{
-        deleted: number;
-        challengeActivitiesRemoved: number;
-        challengesUpdated: number;
-      }>('/activities/test/delete', {
-        activityIds,
-      });
-
-      if (response.success && response.data) {
-        success(
-          `Deleted ${response.data.deleted} activities! Removed ${response.data.challengeActivitiesRemoved} challenge activities from ${response.data.challengesUpdated} challenge(s). Stats cleared.`
-        );
-        setActivitiesDeleted(true);
-      } else {
-        showError(response.error || 'Failed to delete activities');
-      }
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Unknown error');
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
-
-  const simulateWebhooks = async () => {
-    if (!activitiesDeleted || testActivities.length === 0) {
-      showError('Delete activities first');
-      return;
-    }
-
-    setSimulateLoading(true);
-    let processed = 0;
-
-    try {
-      for (const activity of testActivities) {
-        const response = await apiClient.post<{ activityId: number; processed: boolean }>(
-          '/webhooks/test',
-          { activityId: activity.id }
-        );
-
-        if (response.success) {
-          processed++;
-          success(`Processed ${activity.name} (${processed}/${testActivities.length})`);
-        } else {
-          showError(`Failed to process ${activity.name}: ${response.error}`);
-        }
-
-        // Small delay between webhooks to see each one
-        await new Promise((resolve) => setTimeout(resolve, 500));
-      }
-
-      success(
-        `All done! Processed ${processed} webhooks. Check your stats, achievements, and challenges.`
-      );
-
-      // Reset test state
-      setTestActivities([]);
-      setActivitiesDeleted(false);
-    } catch (error) {
-      showError(error instanceof Error ? error.message : 'Unknown error');
-    } finally {
-      setSimulateLoading(false);
-    }
-  };
-
   const sendTestNotification = async () => {
     setNotificationLoading(true);
     try {
@@ -383,79 +285,6 @@ export const AdminPage = () => {
                     <strong>When to use:</strong> Use this if your challenges are missing activities
                     or showing incorrect progress. This will recalculate everything.
                   </p>
-                </div>
-              </GlassCard>
-
-              {/* Improved Webhook Testing */}
-              <GlassCard className="p-4">
-                <h2 className="mb-3 text-lg font-semibold text-gray-900">Webhook Testing</h2>
-                <p className="mb-4 text-sm text-gray-600">
-                  Test the complete webhook flow: delete activities, clear stats, then simulate
-                  webhooks to see real progress updates.
-                </p>
-
-                <div className="space-y-3">
-                  {/* Step 1: Load activities */}
-                  <div>
-                    <Button
-                      onClick={loadTestActivities}
-                      variant="secondary"
-                      className="w-full"
-                      disabled={deleteLoading || simulateLoading}
-                    >
-                      Step 1: Load Last 5 Activities
-                    </Button>
-                    {testActivities.length > 0 && (
-                      <div className="mt-2 rounded bg-gray-50 p-2 text-xs">
-                        <strong>Loaded {testActivities.length} activities:</strong>
-                        <ul className="ml-4 mt-1 list-disc">
-                          {testActivities.map((activity) => (
-                            <li key={activity.id}>
-                              {activity.name} ({activity.type})
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Step 2: Delete activities */}
-                  <div>
-                    <Button
-                      onClick={deleteTestActivities}
-                      variant="secondary"
-                      className="w-full"
-                      disabled={testActivities.length === 0 || deleteLoading || activitiesDeleted}
-                    >
-                      {deleteLoading
-                        ? 'Deleting...'
-                        : activitiesDeleted
-                          ? '✓ Deleted & Cleared'
-                          : 'Step 2: Delete & Clear Stats'}
-                    </Button>
-                  </div>
-
-                  {/* Step 3: Simulate webhooks */}
-                  <div>
-                    <Button
-                      onClick={simulateWebhooks}
-                      variant="primary"
-                      className="w-full"
-                      disabled={!activitiesDeleted || simulateLoading}
-                    >
-                      {simulateLoading
-                        ? 'Simulating Webhooks...'
-                        : 'Step 3: Simulate Webhooks (Process All)'}
-                    </Button>
-                  </div>
-
-                  <div className="rounded-lg bg-blue-50 p-3">
-                    <p className="text-xs text-blue-800">
-                      <strong>How it works:</strong> Load → Delete (clears all stats/progress) →
-                      Simulate webhooks (as if activities are new from Strava). You&apos;ll see real
-                      progress updates!
-                    </p>
-                  </div>
                 </div>
               </GlassCard>
             </div>

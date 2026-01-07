@@ -50,7 +50,7 @@ export const SettingsPage = () => {
   };
 
   const handlePreferenceToggle = async (
-    key: 'activityWebhooks' | 'challengeInvites' | 'challengeProgress' | 'challengeReminders',
+    key: 'challengeInvites' | 'challengeProgress' | 'challengeReminders',
     value: boolean
   ) => {
     try {
@@ -98,12 +98,6 @@ export const SettingsPage = () => {
               <GlassCard className="p-5">
                 <h4 className="mb-4 font-semibold text-gray-900">Notification Preferences</h4>
                 <div className="space-y-4">
-                  <Toggle
-                    enabled={preferences.activityWebhooks}
-                    onChange={(value) => handlePreferenceToggle('activityWebhooks', value)}
-                    label="Activity Syncs"
-                    description="Get notified when new activities are synced from Strava"
-                  />
                   <Toggle
                     enabled={preferences.challengeInvites}
                     onChange={(value) => handlePreferenceToggle('challengeInvites', value)}
