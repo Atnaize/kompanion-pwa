@@ -7,23 +7,20 @@ import { queryClient } from './lib/queryClient';
 import './index.css';
 
 // Register service worker
-const updateSW = registerSW({
+registerSW({
   onNeedRefresh() {
-    console.log('[PWA] New content available, please refresh');
+    // New content available
   },
   onOfflineReady() {
-    console.log('[PWA] App ready to work offline');
+    // App ready to work offline
   },
-  onRegistered(registration) {
-    console.log('[PWA] Service Worker registered:', registration);
+  onRegistered() {
+    // Service Worker registered
   },
   onRegisterError(error) {
-    console.error('[PWA] Service Worker registration failed:', error);
+    console.error('Service Worker registration failed:', error);
   },
 });
-
-// Expose updateSW globally for debugging
-(window as any).updateSW = updateSW;
 
 const root = document.getElementById('root');
 
