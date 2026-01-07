@@ -13,3 +13,4 @@ export * from './EmptyState';
 export * from './Toggle';
 export * from './ConfirmModal';
 export * from './Tabs';
+export * from './TimePeriodSelector';

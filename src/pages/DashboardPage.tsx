@@ -9,7 +9,9 @@ import {
   StatTileSkeleton,
   ActivityCardSkeleton,
   NoActivitiesEmpty,
+  TimePeriodSelector,
 } from '@components/ui';
+import type { TimePeriod } from '@components/ui';
 import { WelcomeCard } from '@features/onboarding';
 import { activitiesService, statsService } from '@api/services';
 import { useAuthStore } from '@store/authStore';
@@ -29,6 +31,7 @@ export const DashboardPage = () => {
     total?: number;
     message?: string;
   } | null>(null);
+  const [statsPeriod, setStatsPeriod] = useState<TimePeriod>('week');
 
   const { data: activities = [], isLoading: activitiesLoading } = useQuery({
     queryKey: ['activities'],
@@ -39,9 +42,11 @@ export const DashboardPage = () => {
   });
 
   const { data: stats, isLoading: statsLoading } = useQuery({
-    queryKey: ['stats'],
+    queryKey: ['stats', statsPeriod],
     queryFn: async () => {
-      const response = await statsService.getUserStats();
+      const response = await statsService.getUserStats(
+        statsPeriod === 'overall' ? undefined : statsPeriod
+      );
       return response.data!;
     },
   });
@@ -112,7 +117,14 @@ export const DashboardPage = () => {
           <>
             {/* Quick Stats */}
             <section>
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Quick Stats</h2>
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900">Quick Stats</h2>
+                <TimePeriodSelector
+                  value={statsPeriod}
+                  onChange={setStatsPeriod}
+                  storageKey="dashboard-stats-period"
+                />
+              </div>
               {statsLoading ? (
                 <div className="grid grid-cols-2 gap-3">
                   <StatTileSkeleton />

@@ -4,6 +4,7 @@ import type { BeforeInstallPromptEvent } from '../types/pwa';
 interface PwaState {
   isInstallable: boolean;
   isInstalled: boolean;
+  isIos: boolean;
   deferredPrompt: BeforeInstallPromptEvent | null;
   needsRefresh: boolean;
   offlineReady: boolean;
@@ -18,6 +19,7 @@ interface PwaState {
 export const usePwaStore = create<PwaState>((set, get) => ({
   isInstallable: false,
   isInstalled: false,
+  isIos: false,
   deferredPrompt: null,
   needsRefresh: false,
   offlineReady: false,

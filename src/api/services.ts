@@ -71,7 +71,10 @@ export const activitiesService = {
 };
 
 export const statsService = {
-  getUserStats: () => apiClient.get<Stats>('/stats'),
+  getUserStats: (period?: 'week' | 'month' | 'year') => {
+    const query = period ? `?period=${period}` : '';
+    return apiClient.get<Stats>(`/stats${query}`);
+  },
   getProgressData: (params: {
     metric: 'distance' | 'elevation' | 'count' | 'time';
     period: 'week' | 'month' | 'year' | 'all';
