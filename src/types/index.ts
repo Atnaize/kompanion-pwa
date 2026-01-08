@@ -6,6 +6,7 @@ export interface User {
   lastname: string;
   profile: string;
   lastSyncedAt?: string;
+  isAdmin: boolean;
 }
 
 export interface SyncResult {

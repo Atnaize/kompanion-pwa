@@ -85,6 +85,30 @@ export const ProfileMenu = () => {
             >
               <span className="font-medium text-gray-900">Settings</span>
             </Link>
+
+            {/* Admin Menu - Only visible to admin users */}
+            {user.isAdmin && (
+              <>
+                <div className="my-2 border-t border-violet-200/50"></div>
+                <Link
+                  to="/admin"
+                  onClick={() => setIsOpen(false)}
+                  className={clsx(
+                    'group relative flex items-center gap-3 px-4 py-3 text-sm transition-all duration-200',
+                    'overflow-hidden rounded-lg',
+                    'hover:bg-gradient-to-r hover:from-violet-500/10 hover:via-purple-500/10 hover:to-fuchsia-500/10',
+                    'hover:shadow-sm'
+                  )}
+                >
+                  <span className="relative z-10 font-semibold bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
+                    Admin Panel
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-500/5 via-purple-500/5 to-fuchsia-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
+                </Link>
+              </>
+            )}
+
+            <div className="my-2 border-t border-gray-200"></div>
             <button
               onClick={handleLogout}
               className={clsx(
