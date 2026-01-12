@@ -78,9 +78,7 @@ export const LoginPage = () => {
       <div className="hidden w-1/2 bg-gradient-to-br from-strava-orange via-strava-orange-light to-orange-400 lg:flex lg:flex-col lg:justify-center lg:px-16">
         <div className="max-w-xl">
           <h1 className="mb-6 text-6xl font-bold text-white">Kompanion</h1>
-          <p className="mb-12 text-2xl text-white/90">
-            Turn your workouts into epic quests
-          </p>
+          <p className="mb-12 text-2xl text-white/90">Turn your workouts into epic quests</p>
 
           <div className="space-y-8">
             {features.map((feature) => (
@@ -114,7 +112,9 @@ export const LoginPage = () => {
           <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10">
             <div className="mb-8 text-center">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">Get Started</h2>
-              <p className="text-gray-600">Connect your Strava account to unlock achievements and track your progress</p>
+              <p className="text-gray-600">
+                Connect your Strava account to unlock achievements and track your progress
+              </p>
             </div>
 
             {errorMessage && (

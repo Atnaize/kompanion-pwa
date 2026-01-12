@@ -100,7 +100,7 @@ export const ProfileMenu = () => {
                     'hover:shadow-sm'
                   )}
                 >
-                  <span className="relative z-10 font-semibold bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
+                  <span className="relative z-10 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text font-semibold text-transparent">
                     Admin Panel
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-500/5 via-purple-500/5 to-fuchsia-500/5 opacity-0 transition-opacity group-hover:opacity-100" />

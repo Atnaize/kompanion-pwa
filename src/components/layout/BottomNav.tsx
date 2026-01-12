@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
+import { useAuthStore } from '@store/authStore';
 
 interface NavItem {
   path: string;
   label: string;
   icon: string;
   requiresData?: boolean;
+  requiresAdmin?: boolean;
 }
 
 interface TabBadge {
@@ -23,6 +25,7 @@ const navItems: NavItem[] = [
   { path: '/challenges', label: 'Challenges', icon: '🎯', requiresData: true },
   { path: '/achievements', label: 'Badges', icon: '🏆', requiresData: true },
   { path: '/stats', label: 'Stats', icon: '📊', requiresData: true },
+  { path: '/admin/training', label: 'Training', icon: '📅', requiresAdmin: true },
 ];
 
 interface BottomNavProps {
@@ -32,8 +35,19 @@ interface BottomNavProps {
 
 export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps) => {
   const location = useLocation();
+  const { user } = useAuthStore();
 
-  const visibleItems = hideDataTabs ? navItems.filter((item) => !item.requiresData) : navItems;
+  const visibleItems = navItems.filter((item) => {
+    // Hide data tabs if specified
+    if (hideDataTabs && item.requiresData) {
+      return false;
+    }
+    // Hide admin-only items if user is not admin
+    if (item.requiresAdmin && !user?.isAdmin) {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40">

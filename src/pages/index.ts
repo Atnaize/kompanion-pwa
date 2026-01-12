@@ -13,4 +13,5 @@ export * from './ProfilePage';
 export * from './SettingsPage';
 export * from './AboutPage';
 export * from './AdminPage';
+export * from './TrainingProgramPage';
 export * from './NotFoundPage';
