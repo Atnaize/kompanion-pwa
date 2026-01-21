@@ -69,7 +69,8 @@ class ApiClient {
     });
 
     // Handle 401 - try to refresh token
-    if (response.status === 401 && retry && !url.includes('/auth/')) {
+    // Exclude only refresh/login endpoints to prevent infinite loops, but allow /auth/me to retry
+    if (response.status === 401 && retry && !url.includes('/auth/refresh') && !url.includes('/auth/login')) {
       // If already refreshing, wait for that promise
       if (this.isRefreshing && this.refreshPromise) {
         const refreshed = await this.refreshPromise;
