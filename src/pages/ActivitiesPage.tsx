@@ -38,16 +38,19 @@ export const ActivitiesPage = () => {
 
     try {
       let syncedCount = 0;
+      let challengeActivitiesAdded = 0;
 
       await activitiesService.syncWithProgress((progressData) => {
         if (progressData.type === 'complete') {
           syncedCount = progressData.total || 0;
+          challengeActivitiesAdded = progressData.challengeActivitiesAdded || 0;
         }
       });
 
       // Refresh data
       await queryClient.invalidateQueries({ queryKey: ['activities'] });
       await queryClient.invalidateQueries({ queryKey: ['stats'] });
+      await queryClient.invalidateQueries({ queryKey: ['challenges'] });
 
       // Update user with lastSyncedAt
       if (user) {
@@ -55,10 +58,16 @@ export const ActivitiesPage = () => {
       }
 
       // Show success toast
-      const message =
-        syncedCount > 0
-          ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced! 🏃`
-          : 'All activities up to date';
+      let message = syncedCount > 0
+        ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced!`
+        : 'All activities up to date';
+
+      if (challengeActivitiesAdded > 0) {
+        message += ` ${challengeActivitiesAdded} added to challenges 🏆`;
+      } else if (syncedCount > 0) {
+        message += ' 🏃';
+      }
+
       success(message);
       hapticService.syncCompleted();
     } catch (err) {

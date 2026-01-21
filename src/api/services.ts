@@ -33,6 +33,8 @@ export const activitiesService = {
       current?: number;
       total?: number;
       message?: string;
+      challengesSynced?: number;
+      challengeActivitiesAdded?: number;
     }) => void
   ): Promise<void> => {
     return new Promise((resolve, reject) => {

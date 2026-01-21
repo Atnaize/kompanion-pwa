@@ -13,6 +13,8 @@ export interface SyncResult {
   synced: number;
   total: number;
   isIncremental: boolean;
+  challengesSynced: number;
+  challengeActivitiesAdded: number;
 }
 
 export interface SegmentEffort {
