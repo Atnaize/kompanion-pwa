@@ -58,9 +58,10 @@ export const ActivitiesPage = () => {
       }
 
       // Show success toast
-      let message = syncedCount > 0
-        ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced!`
-        : 'All activities up to date';
+      let message =
+        syncedCount > 0
+          ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced!`
+          : 'All activities up to date';
 
       if (challengeActivitiesAdded > 0) {
         message += ` ${challengeActivitiesAdded} added to challenges 🏆`;

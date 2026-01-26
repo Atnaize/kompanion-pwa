@@ -2,6 +2,22 @@ import React, { useState, useEffect } from 'react';
 import type { Friend } from '@types';
 import { GlassCard, Skeleton, Avatar } from '@components/ui';
 
+/**
+ * Normalizes a string for search (accent/diacritic insensitive)
+ * "Mégane" → "megane", "Müller" → "muller"
+ */
+function normalizeForSearch(str: string): string {
+  return str
+    .replace(/æ/gi, 'ae')
+    .replace(/œ/gi, 'oe')
+    .replace(/ß/g, 'ss')
+    .replace(/ø/gi, 'o')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
 interface FriendSelectorProps {
   selectedFriendIds: number[];
   onSelectionChange: (friendIds: number[]) => void;
@@ -42,11 +58,11 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
       return;
     }
 
-    const query = activeSearchQuery.toLowerCase();
+    const query = normalizeForSearch(activeSearchQuery);
     const filtered = friends.filter(
       (friend) =>
-        friend.firstname.toLowerCase().includes(query) ||
-        friend.lastname.toLowerCase().includes(query)
+        normalizeForSearch(friend.firstname).includes(query) ||
+        normalizeForSearch(friend.lastname).includes(query)
     );
     setFilteredFriends(filtered);
   }, [activeSearchQuery, friends]);
