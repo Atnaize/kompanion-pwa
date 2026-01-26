@@ -1,16 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
   <rect width="512" height="512" fill="#FF4B00"/>
-  <text
-    x="50%"
-    y="50%"
-    font-family="Arial, sans-serif"
-    font-size="64"
-    font-weight="bold"
+
+  <!-- Soft glow -->
+  <ellipse cx="256" cy="256" rx="160" ry="160" fill="url(#glow)"/>
+
+  <!-- Stardust particles - within safe zone (~51px padding) -->
+  <!-- Top left -->
+  <circle cx="70" cy="90" r="4" fill="white" opacity="0.5"/>
+  <circle cx="95" cy="70" r="3" fill="white" opacity="0.55"/>
+  <!-- Top right -->
+  <circle cx="430" cy="85" r="4" fill="white" opacity="0.5"/>
+  <circle cx="410" cy="105" r="3" fill="white" opacity="0.5"/>
+  <!-- Bottom left -->
+  <circle cx="75" cy="420" r="4" fill="white" opacity="0.5"/>
+  <circle cx="100" cy="440" r="3" fill="white" opacity="0.55"/>
+  <!-- Bottom right -->
+  <circle cx="435" cy="425" r="4" fill="white" opacity="0.5"/>
+  <circle cx="415" cy="405" r="3" fill="white" opacity="0.5"/>
+  <!-- Left side -->
+  <circle cx="60" cy="200" r="4" fill="white" opacity="0.55"/>
+  <circle cx="70" cy="280" r="5" fill="white" opacity="0.45"/>
+  <circle cx="65" cy="350" r="3" fill="white" opacity="0.5"/>
+  <!-- Right side -->
+  <circle cx="450" cy="210" r="4" fill="white" opacity="0.5"/>
+  <circle cx="445" cy="290" r="5" fill="white" opacity="0.45"/>
+  <circle cx="455" cy="360" r="3" fill="white" opacity="0.55"/>
+
+  <!-- Sparkle stars -->
+  <path d="M85 170 L89 166 L93 170 L89 174 Z" fill="white" opacity="0.6"/>
+  <path d="M420 175 L424 171 L428 175 L424 179 Z" fill="white" opacity="0.6"/>
+  <path d="M90 340 L94 336 L98 340 L94 344 Z" fill="white" opacity="0.55"/>
+  <path d="M415 335 L419 331 L423 335 L419 339 Z" fill="white" opacity="0.55"/>
+
+  <!-- Centered K (scaled for safe zone) -->
+  <path
+    d="M165 95 L165 417 L232 417 L232 285 L335 417 L415 417 L280 256 L400 95 L318 95 L232 210 L232 95 Z"
     fill="white"
-    text-anchor="middle"
-    dominant-baseline="middle"
-  >
-    K
-  </text>
+  />
 </svg>

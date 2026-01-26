@@ -1,16 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-  <rect width="180" height="180" fill="#FF4B00"/>
-  <text
-    x="50%"
-    y="50%"
-    font-family="Arial, sans-serif"
-    font-size="22.5"
-    font-weight="bold"
+<svg width="180" height="180" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="#FF4B00"/>
+
+  <!-- Soft glow behind K -->
+  <ellipse cx="256" cy="256" rx="200" ry="200" fill="url(#glow)"/>
+
+  <!-- Stardust particles - all around -->
+  <circle cx="45" cy="80" r="4" fill="white" opacity="0.5"/>
+  <circle cx="80" cy="45" r="3" fill="white" opacity="0.6"/>
+  <circle cx="60" cy="130" r="5" fill="white" opacity="0.4"/>
+  <circle cx="450" cy="70" r="4" fill="white" opacity="0.55"/>
+  <circle cx="420" cy="110" r="3" fill="white" opacity="0.5"/>
+  <circle cx="470" cy="140" r="5" fill="white" opacity="0.4"/>
+  <circle cx="50" cy="420" r="4" fill="white" opacity="0.5"/>
+  <circle cx="85" cy="460" r="3" fill="white" opacity="0.6"/>
+  <circle cx="40" cy="380" r="5" fill="white" opacity="0.45"/>
+  <circle cx="460" cy="440" r="4" fill="white" opacity="0.5"/>
+  <circle cx="430" cy="400" r="3" fill="white" opacity="0.55"/>
+  <circle cx="470" cy="360" r="5" fill="white" opacity="0.4"/>
+  <circle cx="35" cy="200" r="4" fill="white" opacity="0.6"/>
+  <circle cx="55" cy="280" r="6" fill="white" opacity="0.5"/>
+  <circle cx="40" cy="340" r="3" fill="white" opacity="0.55"/>
+  <circle cx="475" cy="220" r="4" fill="white" opacity="0.5"/>
+  <circle cx="460" cy="290" r="5" fill="white" opacity="0.45"/>
+  <circle cx="480" cy="320" r="3" fill="white" opacity="0.6"/>
+  <circle cx="180" cy="40" r="3" fill="white" opacity="0.5"/>
+  <circle cx="320" cy="50" r="4" fill="white" opacity="0.45"/>
+  <circle cx="200" cy="470" r="4" fill="white" opacity="0.5"/>
+  <circle cx="340" cy="465" r="3" fill="white" opacity="0.55"/>
+
+  <!-- Sparkle stars -->
+  <path d="M70 180 L75 175 L80 180 L75 185 Z" fill="white" opacity="0.7"/>
+  <path d="M440 180 L445 175 L450 180 L445 185 Z" fill="white" opacity="0.65"/>
+  <path d="M65 350 L70 345 L75 350 L70 355 Z" fill="white" opacity="0.6"/>
+  <path d="M445 350 L450 345 L455 350 L450 355 Z" fill="white" opacity="0.6"/>
+  <path d="M140 60 L144 56 L148 60 L144 64 Z" fill="white" opacity="0.55"/>
+  <path d="M380 455 L384 451 L388 455 L384 459 Z" fill="white" opacity="0.5"/>
+
+  <!-- Centered K -->
+  <path
+    d="M145 70 L145 442 L220 442 L220 296 L335 442 L427 442 L277 256 L412 70 L317 70 L220 203 L220 70 Z"
     fill="white"
-    text-anchor="middle"
-    dominant-baseline="middle"
-  >
-    K
-  </text>
+  />
 </svg>

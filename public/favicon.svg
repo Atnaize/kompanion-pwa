@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" fill="#FF4B00"/>
-  <text
-    x="50%"
-    y="50%"
-    font-family="Arial, sans-serif"
-    font-size="4"
-    font-weight="bold"
+<svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="#FF4B00"/>
+
+  <!-- Soft glow -->
+  <ellipse cx="256" cy="256" rx="200" ry="200" fill="url(#glow)"/>
+
+  <!-- Simplified particles - all around -->
+  <circle cx="50" cy="100" r="14" fill="white" opacity="0.5"/>
+  <circle cx="460" cy="100" r="14" fill="white" opacity="0.5"/>
+  <circle cx="50" cy="410" r="14" fill="white" opacity="0.5"/>
+  <circle cx="460" cy="410" r="14" fill="white" opacity="0.5"/>
+
+  <!-- Centered K -->
+  <path
+    d="M145 70 L145 442 L220 442 L220 296 L335 442 L427 442 L277 256 L412 70 L317 70 L220 203 L220 70 Z"
     fill="white"
-    text-anchor="middle"
-    dominant-baseline="middle"
-  >
-    K
-  </text>
+  />
 </svg>
