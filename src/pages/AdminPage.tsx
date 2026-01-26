@@ -3,6 +3,7 @@ import { Layout } from '@components/layout/Layout';
 import { GlassCard, Button, Tabs, TabList, Tab, TabPanel } from '@components/ui';
 import { apiClient } from '@api/client';
 import { useToastStore } from '@store/toastStore';
+import { usePushNotifications } from '@hooks/usePushNotifications';
 
 export const AdminPage = () => {
   const { success, error: showError } = useToastStore();
@@ -18,10 +19,54 @@ export const AdminPage = () => {
   }>({});
   const [challengeSyncLoading, setChallengeSyncLoading] = useState(false);
   const [notificationLoading, setNotificationLoading] = useState(false);
+  const [notificationDebug, setNotificationDebug] = useState<{
+    permission: NotificationPermission | 'unsupported';
+    swReady: boolean;
+    swController: boolean;
+    pushSubscription: string | null;
+  } | null>(null);
+
+  const { isSupported, isSubscribed, subscribe } = usePushNotifications();
 
   useEffect(() => {
     checkTokenInfo();
+    checkNotificationDebug();
   }, []);
+
+  const checkNotificationDebug = async () => {
+    const debug: {
+      permission: NotificationPermission | 'unsupported';
+      swReady: boolean;
+      swController: boolean;
+      pushSubscription: string | null;
+    } = {
+      permission: 'unsupported',
+      swReady: false,
+      swController: false,
+      pushSubscription: null,
+    };
+
+    if ('Notification' in window) {
+      debug.permission = Notification.permission;
+    }
+
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        debug.swReady = true;
+        debug.swController = !!navigator.serviceWorker.controller;
+
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+          debug.pushSubscription = subscription.endpoint.substring(0, 60) + '...';
+        }
+      } catch (error) {
+        console.error('Error checking SW:', error);
+      }
+    }
+
+    setNotificationDebug(debug);
+  };
 
   const checkTokenInfo = async () => {
     setLoading(true);
@@ -292,28 +337,133 @@ export const AdminPage = () => {
 
           {/* Notifications Tab */}
           <TabPanel value="notifications">
-            <GlassCard className="p-4">
-              <h2 className="mb-3 text-lg font-semibold text-gray-900">Push Notifications</h2>
-              <p className="mb-4 text-sm text-gray-600">
-                Send a test push notification to your device. Make sure you have enabled
-                notifications in Settings first.
-              </p>
-              <Button
-                onClick={sendTestNotification}
-                variant="primary"
-                className="w-full"
-                disabled={notificationLoading}
-              >
-                {notificationLoading ? 'Sending...' : 'Send Test Notification'}
-              </Button>
-              <div className="mt-3 rounded-lg bg-blue-50 p-3">
-                <p className="text-xs text-blue-800">
-                  <strong>Note:</strong> You must enable push notifications in Settings before
-                  testing. If you don&apos;t receive a notification, check your browser permissions
-                  and notification preferences.
+            <div className="space-y-4">
+              {/* Debug Info */}
+              <GlassCard className="p-4">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900">
+                  Notification Debug Info
+                </h2>
+                {notificationDebug ? (
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Browser Support:</span>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          isSupported ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {isSupported ? 'Supported' : 'Not Supported'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Permission:</span>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          notificationDebug.permission === 'granted'
+                            ? 'bg-green-100 text-green-700'
+                            : notificationDebug.permission === 'denied'
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-yellow-100 text-yellow-700'
+                        }`}
+                      >
+                        {notificationDebug.permission}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Service Worker Ready:</span>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          notificationDebug.swReady
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {notificationDebug.swReady ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">SW Controller Active:</span>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          notificationDebug.swController
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
+                        }`}
+                      >
+                        {notificationDebug.swController ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Push Subscribed:</span>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-medium ${
+                          isSubscribed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {isSubscribed ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    {notificationDebug.pushSubscription && (
+                      <div className="mt-2">
+                        <span className="text-gray-600">Endpoint:</span>
+                        <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs">
+                          {notificationDebug.pushSubscription}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500">Loading...</p>
+                )}
+                <div className="mt-4 flex gap-2">
+                  <Button onClick={checkNotificationDebug} variant="secondary" size="sm">
+                    Refresh
+                  </Button>
+                  {!isSubscribed && isSupported && (
+                    <Button
+                      onClick={async () => {
+                        try {
+                          await subscribe();
+                          success('Push notifications enabled!');
+                          await checkNotificationDebug();
+                        } catch (err) {
+                          showError(err instanceof Error ? err.message : 'Failed to subscribe');
+                        }
+                      }}
+                      variant="primary"
+                      size="sm"
+                    >
+                      Enable Push
+                    </Button>
+                  )}
+                </div>
+              </GlassCard>
+
+              {/* Send Test */}
+              <GlassCard className="p-4">
+                <h2 className="mb-3 text-lg font-semibold text-gray-900">Send Test Notification</h2>
+                <p className="mb-4 text-sm text-gray-600">
+                  Send a test push notification to your device. All debug checks above should show
+                  green for this to work.
                 </p>
-              </div>
-            </GlassCard>
+                <Button
+                  onClick={sendTestNotification}
+                  variant="primary"
+                  className="w-full"
+                  disabled={notificationLoading || !isSubscribed}
+                >
+                  {notificationLoading ? 'Sending...' : 'Send Test Notification'}
+                </Button>
+                {!isSubscribed && (
+                  <div className="mt-3 rounded-lg bg-yellow-50 p-3">
+                    <p className="text-xs text-yellow-800">
+                      <strong>Warning:</strong> Push notifications are not enabled. Click
+                      &quot;Enable Push&quot; above or enable in Settings first.
+                    </p>
+                  </div>
+                )}
+              </GlassCard>
+            </div>
           </TabPanel>
 
           {/* API Tests Tab */}
