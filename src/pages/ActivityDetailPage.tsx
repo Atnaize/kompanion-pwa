@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import { GlassCard, Button, Skeleton } from '@components/ui';
 import { activitiesService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration, formatDate } from '@utils/format';
 
 export const ActivityDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [showAllSegments, setShowAllSegments] = useState(false);
@@ -149,7 +151,7 @@ export const ActivityDetailPage = () => {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <Button variant="secondary" size="sm" onClick={() => navigate(-1)} className="mb-4">
-              ← Back
+              {t('common.back')}
             </Button>
             <div className="flex items-center gap-3">
               <span className="text-4xl">{activityTypeEmoji(activity.type)}</span>
@@ -167,27 +169,27 @@ export const ActivityDetailPage = () => {
         <GlassCard className="p-6">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             <div>
-              <p className="text-sm text-gray-600">Distance</p>
+              <p className="text-sm text-gray-600">{t('common.distance')}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {formatDistance(activity.distance)}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Duration</p>
+              <p className="text-sm text-gray-600">{t('common.duration')}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {formatDuration(activity.moving_time)}
               </p>
             </div>
             {hasElevation && (
               <div>
-                <p className="text-sm text-gray-600">Elevation</p>
+                <p className="text-sm text-gray-600">{t('common.elevation')}</p>
                 <p className="text-2xl font-bold text-gray-900">
                   {formatElevation(activity.total_elevation_gain)}
                 </p>
               </div>
             )}
             <div>
-              <p className="text-sm text-gray-600">Avg Speed</p>
+              <p className="text-sm text-gray-600">{t('common.avgSpeed')}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {(activity.average_speed * 3.6).toFixed(1)} km/h
               </p>
@@ -198,18 +200,18 @@ export const ActivityDetailPage = () => {
         {/* Additional Metrics */}
         {(hasHeartRate || hasPower) && (
           <GlassCard className="p-6">
-            <h2 className="mb-4 text-lg font-semibold text-gray-900">Performance</h2>
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('activityDetail.performance')}</h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
               {hasHeartRate && (
                 <>
                   <div>
-                    <p className="text-sm text-gray-600">Avg Heart Rate</p>
+                    <p className="text-sm text-gray-600">{t('activityDetail.avgHeartRate')}</p>
                     <p className="text-xl font-bold text-gray-900">
                       {Math.round(activity.average_heartrate!)} bpm
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Max Heart Rate</p>
+                    <p className="text-sm text-gray-600">{t('activityDetail.maxHeartRate')}</p>
                     <p className="text-xl font-bold text-gray-900">
                       {Math.round(activity.max_heartrate!)} bpm
                     </p>
@@ -219,13 +221,13 @@ export const ActivityDetailPage = () => {
               {hasPower && (
                 <>
                   <div>
-                    <p className="text-sm text-gray-600">Avg Power</p>
+                    <p className="text-sm text-gray-600">{t('activityDetail.avgPower')}</p>
                     <p className="text-xl font-bold text-gray-900">
                       {Math.round(activity.average_watts!)} W
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Max Power</p>
+                    <p className="text-sm text-gray-600">{t('activityDetail.maxPower')}</p>
                     <p className="text-xl font-bold text-gray-900">
                       {Math.round(activity.max_watts!)} W
                     </p>
@@ -238,22 +240,22 @@ export const ActivityDetailPage = () => {
 
         {/* Activity Details */}
         <GlassCard className="p-6">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">Details</h2>
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('activityDetail.details')}</h2>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-600">Elapsed Time:</span>
+              <span className="text-gray-600">{t('activityDetail.elapsedTime')}</span>
               <span className="ml-2 font-medium text-gray-900">
                 {formatDuration(activity.elapsed_time)}
               </span>
             </div>
             <div>
-              <span className="text-gray-600">Moving Time:</span>
+              <span className="text-gray-600">{t('activityDetail.movingTime')}</span>
               <span className="ml-2 font-medium text-gray-900">
                 {formatDuration(activity.moving_time)}
               </span>
             </div>
             <div>
-              <span className="text-gray-600">Max Speed:</span>
+              <span className="text-gray-600">{t('activityDetail.maxSpeed')}</span>
               <span className="ml-2 font-medium text-gray-900">
                 {(activity.max_speed * 3.6).toFixed(1)} km/h
               </span>
@@ -261,13 +263,13 @@ export const ActivityDetailPage = () => {
             {hasElevation && activity.elev_high && activity.elev_low && (
               <>
                 <div>
-                  <span className="text-gray-600">Highest Point:</span>
+                  <span className="text-gray-600">{t('activityDetail.highestPoint')}</span>
                   <span className="ml-2 font-medium text-gray-900">
                     {Math.round(activity.elev_high)} m
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-600">Lowest Point:</span>
+                  <span className="text-gray-600">{t('activityDetail.lowestPoint')}</span>
                   <span className="ml-2 font-medium text-gray-900">
                     {Math.round(activity.elev_low)} m
                   </span>
@@ -277,7 +279,7 @@ export const ActivityDetailPage = () => {
             {activity.pr_count > 0 && (
               <div className="col-span-2">
                 <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 px-3 py-1 text-sm font-medium text-white">
-                  🏆 {activity.pr_count} Personal Record{activity.pr_count > 1 ? 's' : ''}
+                  🏆 {t('activityDetail.personalRecord', { count: activity.pr_count })}
                 </span>
               </div>
             )}
@@ -286,17 +288,17 @@ export const ActivityDetailPage = () => {
 
         {/* Interaction Stats */}
         <GlassCard className="p-6">
-          <h2 className="mb-4 text-lg font-semibold text-gray-900">Engagement</h2>
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('activityDetail.engagement')}</h2>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-2">
               <span className="text-2xl">👍</span>
               <span className="text-lg font-medium text-gray-900">{activity.kudos_count}</span>
-              <span className="text-sm text-gray-600">Kudos</span>
+              <span className="text-sm text-gray-600">{t('activityDetail.kudos')}</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-2xl">💬</span>
               <span className="text-lg font-medium text-gray-900">{activity.comment_count}</span>
-              <span className="text-sm text-gray-600">Comments</span>
+              <span className="text-sm text-gray-600">{t('activityDetail.comments')}</span>
             </div>
           </div>
         </GlassCard>
@@ -305,7 +307,7 @@ export const ActivityDetailPage = () => {
         {activity.segment_efforts && activity.segment_efforts.length > 0 && (
           <GlassCard className="p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Personal Records on Segments</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{t('activityDetail.segmentPrs')}</h2>
               <span className="rounded-full bg-gradient-to-r from-orange-400 to-orange-600 px-3 py-1 text-sm font-bold text-white">
                 {activity.segment_efforts.filter((e) => e.pr_rank !== null).length} PRs
               </span>
@@ -345,10 +347,10 @@ export const ActivityDetailPage = () => {
                       </div>
                       <p className="mt-1 text-center text-xs text-gray-600">
                         {effort.pr_rank === 1
-                          ? '1st PR'
+                          ? t('activityDetail.prRank1')
                           : effort.pr_rank === 2
-                            ? '2nd PR'
-                            : '3rd PR'}
+                            ? t('activityDetail.prRank2')
+                            : t('activityDetail.prRank3')}
                       </p>
                     </div>
                   </div>
@@ -363,8 +365,8 @@ export const ActivityDetailPage = () => {
                 onClick={() => setShowAllSegments(!showAllSegments)}
               >
                 {showAllSegments
-                  ? 'Show Less'
-                  : `Show All ${activity.segment_efforts.filter((e) => e.pr_rank !== null).length} PRs`}
+                  ? t('activityDetail.showLess')
+                  : t('activityDetail.showAllPrs', { count: activity.segment_efforts.filter((e) => e.pr_rank !== null).length })}
               </Button>
             )}
           </GlassCard>

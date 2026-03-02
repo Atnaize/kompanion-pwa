@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { useAuthStore } from '@store/authStore';
 
@@ -20,11 +21,11 @@ interface TabBadges {
 }
 
 const navItems: NavItem[] = [
-  { path: '/dashboard', label: 'Home', icon: '🏠' },
-  { path: '/activities', label: 'Activities', icon: '🏃', requiresData: true },
-  { path: '/challenges', label: 'Challenges', icon: '🎯', requiresData: true },
-  { path: '/achievements', label: 'Badges', icon: '🏆', requiresData: true },
-  { path: '/stats', label: 'Stats', icon: '📊', requiresData: true },
+  { path: '/dashboard', label: 'nav.home', icon: '🏠' },
+  { path: '/activities', label: 'nav.activities', icon: '🏃', requiresData: true },
+  { path: '/challenges', label: 'nav.challenges', icon: '🎯', requiresData: true },
+  { path: '/achievements', label: 'nav.badges', icon: '🏆', requiresData: true },
+  { path: '/stats', label: 'nav.stats', icon: '📊', requiresData: true },
 ];
 
 interface BottomNavProps {
@@ -35,6 +36,7 @@ interface BottomNavProps {
 export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps) => {
   const location = useLocation();
   const { user } = useAuthStore();
+  const { t } = useTranslation();
 
   const visibleItems = navItems.filter((item) => {
     // Hide data tabs if specified
@@ -71,7 +73,7 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
                   )}
                 >
                   <span className="mb-1 text-2xl">{item.icon}</span>
-                  <span className="text-xs font-medium">{item.label}</span>
+                  <span className="text-xs font-medium">{t(item.label)}</span>
                   {isActive && (
                     <div className="absolute bottom-0 left-1/2 h-1 w-12 -translate-x-1/2 rounded-t-full bg-strava-orange" />
                   )}

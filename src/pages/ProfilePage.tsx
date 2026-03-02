@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import { GlassCard, Button, Avatar } from '@components/ui';
 import { useAuthStore } from '@store/authStore';
@@ -7,6 +8,7 @@ import { useToastStore } from '@store/toastStore';
 import { authService } from '@api/services';
 
 export const ProfilePage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
   const { success } = useToastStore();
@@ -15,7 +17,7 @@ export const ProfilePage = () => {
 
   const handleLogout = async () => {
     await logout();
-    success('Logged out successfully');
+    success(t('profile.logout.success'));
     navigate('/login');
   };
 
@@ -29,7 +31,7 @@ export const ProfilePage = () => {
 
     try {
       await authService.deleteAccount();
-      success('Account deleted successfully');
+      success(t('profile.deleteAccount.success'));
       navigate('/login');
     } catch {
       // Error toast is automatically shown by API client
@@ -47,7 +49,7 @@ export const ProfilePage = () => {
       <div className="space-y-6">
         {/* Profile Section */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Profile</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('profile.title')}</h3>
           <GlassCard className="p-6">
             <div className="mb-6 flex items-center gap-4">
               <Avatar
@@ -61,17 +63,17 @@ export const ProfilePage = () => {
                 <h4 className="text-xl font-bold text-gray-900">
                   {user.firstname} {user.lastname}
                 </h4>
-                <p className="mt-1 text-sm text-gray-500">Strava ID: {user.stravaId}</p>
+                <p className="mt-1 text-sm text-gray-500">{t('profileMenu.stravaId', { id: user.stravaId })}</p>
               </div>
             </div>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-gray-200 py-2">
-                <span className="text-sm text-gray-600">Account Type</span>
-                <span className="font-medium text-gray-900">Strava Connected</span>
+                <span className="text-sm text-gray-600">{t('profile.accountType')}</span>
+                <span className="font-medium text-gray-900">{t('profile.stravaConnected')}</span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-gray-600">User ID</span>
+                <span className="text-sm text-gray-600">{t('profile.userId')}</span>
                 <span className="font-medium text-gray-900">{user.userId}</span>
               </div>
             </div>
@@ -80,17 +82,17 @@ export const ProfilePage = () => {
 
         {/* Account Actions */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Account Actions</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('profile.accountActions')}</h3>
           <div className="space-y-3">
             {/* Logout */}
             <GlassCard className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-gray-900">Logout</h4>
-                  <p className="text-sm text-gray-600">Sign out of your account</p>
+                  <h4 className="font-bold text-gray-900">{t('profile.logout.title')}</h4>
+                  <p className="text-sm text-gray-600">{t('profile.logout.description')}</p>
                 </div>
                 <Button variant="secondary" onClick={handleLogout}>
-                  Logout
+                  {t('profile.logout.button')}
                 </Button>
               </div>
             </GlassCard>
@@ -98,9 +100,9 @@ export const ProfilePage = () => {
             {/* Delete Account */}
             <GlassCard className="border-2 border-red-200 p-5">
               <div>
-                <h4 className="font-bold text-red-600">Danger Zone</h4>
+                <h4 className="font-bold text-red-600">{t('profile.deleteAccount.title')}</h4>
                 <p className="mt-1 text-sm text-gray-600">
-                  Permanently delete your Kompanion account and all associated data
+                  {t('profile.deleteAccount.description')}
                 </p>
 
                 {!showDeleteConfirm ? (
@@ -109,19 +111,19 @@ export const ProfilePage = () => {
                     className="mt-4 text-red-600 hover:bg-red-50"
                     onClick={handleDeleteAccount}
                   >
-                    Delete Account
+                    {t('profile.deleteAccount.button')}
                   </Button>
                 ) : (
                   <div className="mt-4 rounded-xl bg-red-50 p-4">
                     <p className="mb-3 text-sm font-medium text-red-900">
-                      ⚠️ Are you sure? This action cannot be undone!
+                      ⚠️ {t('profile.deleteAccount.confirmTitle')}
                     </p>
                     <p className="mb-4 text-xs text-red-700">
-                      This will permanently delete:
-                      <br />• Your Kompanion profile
-                      <br />• All synced activities
-                      <br />• All achievements and progress
-                      <br />• All quest history
+                      {t('profile.deleteAccount.confirmDescription')}
+                      <br />• {t('profile.deleteAccount.confirmItem1')}
+                      <br />• {t('profile.deleteAccount.confirmItem2')}
+                      <br />• {t('profile.deleteAccount.confirmItem3')}
+                      <br />• {t('profile.deleteAccount.confirmItem4')}
                     </p>
                     <div className="flex gap-3">
                       <Button
@@ -129,7 +131,7 @@ export const ProfilePage = () => {
                         size="sm"
                         onClick={() => setShowDeleteConfirm(false)}
                       >
-                        Cancel
+                        {t('common.cancel')}
                       </Button>
                       <Button
                         variant="primary"
@@ -138,7 +140,7 @@ export const ProfilePage = () => {
                         onClick={handleDeleteAccount}
                         disabled={isDeleting}
                       >
-                        {isDeleting ? 'Deleting...' : 'Yes, Delete Forever'}
+                        {isDeleting ? t('profile.deleteAccount.deleting') : t('profile.deleteAccount.confirmButton')}
                       </Button>
                     </div>
                   </div>

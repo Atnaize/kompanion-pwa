@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@store/authStore';
 
 export const NotFoundPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
 
@@ -17,22 +19,21 @@ export const NotFoundPage = () => {
         <div className="mb-8 rounded-2xl bg-white p-8 shadow-xl">
           <div className="mb-6 text-6xl">🗺️</div>
 
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">Page Not Found</h1>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900">{t('notFound.title')}</h1>
 
           <p className="mb-6 text-gray-600">
-            Looks like you&apos;ve ventured off the trail. The page you&apos;re looking for
-            doesn&apos;t exist.
+            {t('notFound.description')}
           </p>
 
           <button
             onClick={handleGoHome}
             className="w-full rounded-lg bg-strava-orange py-3 font-semibold text-white transition-colors hover:bg-strava-orange-dark"
           >
-            Back to {isAuthenticated ? 'Dashboard' : 'Login'}
+            {isAuthenticated ? t('notFound.backToDashboard') : t('notFound.backToLogin')}
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">Need help? I can&apos;t do much, sorry!</p>
+        <p className="text-sm text-gray-500">{t('notFound.help')}</p>
       </div>
     </div>
   );

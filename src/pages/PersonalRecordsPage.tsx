@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import { GlassCard, Skeleton, EmptyState } from '@components/ui';
 import { activitiesService } from '@api/services';
@@ -11,6 +12,7 @@ import type { Activity } from '@types';
 const ITEMS_PER_PAGE = 20;
 
 export const PersonalRecordsPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState<string>('all');
   const [displayedCount, setDisplayedCount] = useState(ITEMS_PER_PAGE);
@@ -97,10 +99,9 @@ export const PersonalRecordsPage = () => {
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Personal Records</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('personalRecords.title')}</h1>
           <p className="text-sm text-gray-600">
-            {prActivities.length} activit{prActivities.length === 1 ? 'y' : 'ies'} with {totalPRs}{' '}
-            personal record{totalPRs === 1 ? '' : 's'}
+            {t('personalRecords.summary', { count: prActivities.length, activityCount: prActivities.length, prCount: totalPRs })}
           </p>
         </div>
 
@@ -110,17 +111,17 @@ export const PersonalRecordsPage = () => {
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
               <div>
                 <div className="text-3xl font-bold text-orange-600">{totalPRs}</div>
-                <p className="text-sm text-gray-600">Total PRs</p>
+                <p className="text-sm text-gray-600">{t('personalRecords.totalPrs')}</p>
               </div>
               <div>
                 <div className="text-3xl font-bold text-orange-600">{prActivities.length}</div>
-                <p className="text-sm text-gray-600">Activities with PRs</p>
+                <p className="text-sm text-gray-600">{t('personalRecords.activitiesWithPrs')}</p>
               </div>
               <div className="col-span-2 md:col-span-1">
                 <div className="text-3xl font-bold text-orange-600">
                   {(totalPRs / prActivities.length).toFixed(1)}
                 </div>
-                <p className="text-sm text-gray-600">Avg PRs per Activity</p>
+                <p className="text-sm text-gray-600">{t('personalRecords.avgPrsPerActivity')}</p>
               </div>
             </div>
           </GlassCard>
@@ -137,7 +138,7 @@ export const PersonalRecordsPage = () => {
                   : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
               }`}
             >
-              All ({prActivities.length})
+              {t('common.all')} ({prActivities.length})
             </button>
             {activityTypes.map((type) => {
               const count = prActivities.filter((a) => a.type === type).length;
@@ -163,17 +164,17 @@ export const PersonalRecordsPage = () => {
           <EmptyState
             icon="🏆"
             title={
-              selectedType !== 'all' ? 'No PRs for this activity type' : 'No personal records yet'
+              selectedType !== 'all' ? t('personalRecords.noPrsForType') : t('personalRecords.noPrsYet')
             }
             description={
               selectedType !== 'all'
-                ? 'Try selecting a different activity type'
-                : 'Keep training and you will achieve personal records!'
+                ? t('personalRecords.tryDifferentType')
+                : t('personalRecords.keepTraining')
             }
             action={
               selectedType !== 'all'
                 ? {
-                    label: 'Show All',
+                    label: t('personalRecords.showAll'),
                     onClick: () => setSelectedType('all'),
                   }
                 : undefined
@@ -208,32 +209,32 @@ export const PersonalRecordsPage = () => {
                         </p>
                       </div>
                       <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 px-3 py-1 text-sm font-bold text-white shadow-md">
-                        {activity.pr_count} PR{activity.pr_count > 1 ? 's' : ''}
+                        {t('activities.pr', { count: activity.pr_count })}
                       </span>
                     </div>
 
                     {/* Metrics */}
                     <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                       <div>
-                        <p className="text-gray-600">Distance</p>
+                        <p className="text-gray-600">{t('common.distance')}</p>
                         <p className="font-medium text-gray-900">
                           {formatDistance(activity.distance)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-600">Duration</p>
+                        <p className="text-gray-600">{t('common.duration')}</p>
                         <p className="font-medium text-gray-900">
                           {formatDuration(activity.moving_time)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-600">Elevation</p>
+                        <p className="text-gray-600">{t('common.elevation')}</p>
                         <p className="font-medium text-gray-900">
                           {formatElevation(activity.total_elevation_gain)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-600">Avg Speed</p>
+                        <p className="text-gray-600">{t('common.avgSpeed')}</p>
                         <p className="font-medium text-gray-900">
                           {(activity.average_speed * 3.6).toFixed(1)} km/h
                         </p>
@@ -257,7 +258,7 @@ export const PersonalRecordsPage = () => {
             {/* End of List Message */}
             {!hasMore && displayedActivities.length > 0 && (
               <div className="py-8 text-center text-sm text-gray-600">
-                You&apos;ve reached the end of your personal records 🏆
+                {t('personalRecords.endOfList')}
               </div>
             )}
           </div>

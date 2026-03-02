@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import {
   AreaChart,
   Area,
@@ -18,6 +19,7 @@ type Period = 'week' | 'month' | 'year' | 'all';
 type GroupBy = 'day' | 'week' | 'month';
 
 export const ProgressCharts = () => {
+  const { t } = useTranslation();
   const [metric, setMetric] = useState<Metric>('distance');
   const [period, setPeriod] = useState<Period>('month');
   const [groupBy, setGroupBy] = useState<GroupBy>('week');
@@ -72,26 +74,26 @@ export const ProgressCharts = () => {
   const getMetricLabel = (): string => {
     switch (metric) {
       case 'distance':
-        return 'Distance';
+        return t('common.distance');
       case 'elevation':
-        return 'Elevation Gain';
+        return t('progressCharts.elevationGain');
       case 'time':
-        return 'Time';
+        return t('common.time');
       case 'count':
-        return 'Activities';
+        return t('common.activities');
     }
   };
 
   return (
     <GlassCard className="p-6">
       <div className="mb-6">
-        <h3 className="mb-2 text-lg font-bold text-gray-900">Progress Over Time</h3>
-        <p className="text-sm text-gray-600">Track your performance trends</p>
+        <h3 className="mb-2 text-lg font-bold text-gray-900">{t('progressCharts.title')}</h3>
+        <p className="text-sm text-gray-600">{t('progressCharts.subtitle')}</p>
       </div>
 
       {/* Metric Selector */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">Metric</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700">{t('common.metric')}</label>
         <div className="grid grid-cols-4 gap-2">
           {(['distance', 'elevation', 'time', 'count'] as Metric[]).map((m) => (
             <button
@@ -104,12 +106,12 @@ export const ProgressCharts = () => {
               }`}
             >
               {m === 'distance'
-                ? 'Distance'
+                ? t('common.distance')
                 : m === 'elevation'
-                  ? 'Elevation'
+                  ? t('common.elevation')
                   : m === 'time'
-                    ? 'Time'
-                    : 'Count'}
+                    ? t('common.time')
+                    : t('progressCharts.count')}
             </button>
           ))}
         </div>
@@ -117,7 +119,7 @@ export const ProgressCharts = () => {
 
       {/* Period Selector */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">Time Period</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700">{t('common.timePeriod')}</label>
         <div className="grid grid-cols-4 gap-2">
           {(['week', 'month', 'year', 'all'] as Period[]).map((p) => (
             <button
@@ -135,7 +137,13 @@ export const ProgressCharts = () => {
                   : 'bg-white/50 text-gray-700 hover:bg-white/80'
               }`}
             >
-              {p === 'week' ? 'Week' : p === 'month' ? 'Month' : p === 'year' ? 'Year' : 'All Time'}
+              {p === 'week'
+                ? t('progressCharts.week')
+                : p === 'month'
+                  ? t('progressCharts.month')
+                  : p === 'year'
+                    ? t('progressCharts.year')
+                    : t('progressCharts.allTime')}
             </button>
           ))}
         </div>
@@ -148,7 +156,7 @@ export const ProgressCharts = () => {
         <div className="flex h-64 items-center justify-center rounded-lg bg-gray-50">
           <div className="text-center">
             <p className="text-2xl">📊</p>
-            <p className="mt-2 text-sm text-gray-600">No data available for this period</p>
+            <p className="mt-2 text-sm text-gray-600">{t('progressCharts.noData')}</p>
           </div>
         </div>
       ) : (
@@ -201,7 +209,7 @@ export const ProgressCharts = () => {
           {/* Summary Stats */}
           <div className="mt-4 grid grid-cols-3 gap-3 border-t border-gray-200 pt-4 text-center">
             <div>
-              <p className="text-xs text-gray-600">Total</p>
+              <p className="text-xs text-gray-600">{t('common.total')}</p>
               <p className="font-bold text-gray-900">
                 {formatValue(
                   progressData.reduce((sum, d) => sum + d.value, 0),
@@ -210,7 +218,7 @@ export const ProgressCharts = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-600">Average</p>
+              <p className="text-xs text-gray-600">{t('common.average')}</p>
               <p className="font-bold text-gray-900">
                 {formatValue(
                   progressData.reduce((sum, d) => sum + d.value, 0) / progressData.length,
@@ -219,7 +227,7 @@ export const ProgressCharts = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-600">Peak</p>
+              <p className="text-xs text-gray-600">{t('common.peak')}</p>
               <p className="font-bold text-gray-900">
                 {formatValue(Math.max(...progressData.map((d) => d.value)), true)}
               </p>

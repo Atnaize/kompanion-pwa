@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { GlassCard } from './GlassCard';
 import { Button } from './Button';
 
@@ -31,13 +32,15 @@ export const EmptyState = ({ icon, title, description, action, children }: Empty
 
 // Specific empty states
 export const NoActivitiesEmpty = ({ onSync }: { onSync: () => void }) => {
+  const { t } = useTranslation();
+
   return (
     <EmptyState
       icon="🏃"
-      title="No Activities Yet"
-      description="Sync your Strava activities to start tracking your progress and unlocking achievements!"
+      title={t('empty.noActivities')}
+      description={t('empty.noActivitiesDesc')}
       action={{
-        label: 'Sync Activities',
+        label: t('empty.syncActivities'),
         onClick: onSync,
       }}
     />
@@ -45,23 +48,27 @@ export const NoActivitiesEmpty = ({ onSync }: { onSync: () => void }) => {
 };
 
 export const NoAchievementsEmpty = () => {
+  const { t } = useTranslation();
+
   return (
     <EmptyState
       icon="🏆"
-      title="No Achievements Unlocked"
-      description="Keep training! Complete activities to unlock your first achievement."
+      title={t('empty.noAchievements')}
+      description={t('empty.noAchievementsDesc')}
     />
   );
 };
 
 export const NoStatsEmpty = ({ onSync }: { onSync: () => void }) => {
+  const { t } = useTranslation();
+
   return (
     <EmptyState
       icon="📊"
-      title="No Stats Available"
-      description="Sync your activities to see your performance statistics and track your progress."
+      title={t('empty.noStats')}
+      description={t('empty.noStatsDesc')}
       action={{
-        label: 'Sync Activities',
+        label: t('empty.syncActivities'),
         onClick: onSync,
       }}
     />

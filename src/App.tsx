@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@store/authStore';
 import { ErrorBoundary } from '@components/ErrorBoundary';
 import { ToastContainer } from '@components/ui';
@@ -28,6 +29,7 @@ import {
 } from '@pages/index';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoading } = useAuthStore();
 
   if (isLoading) {
@@ -35,7 +37,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="text-center">
           <div className="mb-4 text-4xl">🏃‍♂️</div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -49,6 +51,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const App = () => {
+  const { t } = useTranslation();
   const { fetchUser } = useAuthStore();
   const isOnline = useOnlineStatus();
 
@@ -69,7 +72,7 @@ export const App = () => {
       {/* Offline indicator */}
       {!isOnline && (
         <div className="fixed left-0 right-0 top-0 z-50 bg-yellow-500 px-4 py-2 text-center text-sm font-semibold text-white">
-          📡 You&apos;re offline - some features may be limited
+          📡 {t('common.offline')}
         </div>
       )}
 

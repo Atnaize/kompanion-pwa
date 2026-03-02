@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { GlassCard, Skeleton } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
@@ -7,6 +8,7 @@ import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 type Period = 'week' | 'month' | 'year' | 'custom';
 
 export const PeriodComparison = () => {
+  const { t } = useTranslation();
   const [period, setPeriod] = useState<Period>('week');
 
   // Custom date range state
@@ -47,9 +49,9 @@ export const PeriodComparison = () => {
     }
 
     const labels: Record<Exclude<Period, 'custom'>, { current: string; previous: string }> = {
-      week: { current: 'This Week', previous: 'Last Week' },
-      month: { current: 'This Month', previous: 'Last Month' },
-      year: { current: 'This Year', previous: 'Last Year' },
+      week: { current: t('periodComparison.thisWeek'), previous: t('periodComparison.lastWeek') },
+      month: { current: t('periodComparison.thisMonth'), previous: t('periodComparison.lastMonth') },
+      year: { current: t('periodComparison.thisYear'), previous: t('periodComparison.lastYear') },
     };
     return isCurrent
       ? labels[period as Exclude<Period, 'custom'>].current
@@ -73,10 +75,10 @@ export const PeriodComparison = () => {
 
   const getMetricLabel = (metric: string): string => {
     const labels: Record<string, string> = {
-      distance: 'Distance',
-      elevation: 'Elevation',
-      time: 'Time',
-      count: 'Activities',
+      distance: t('common.distance'),
+      elevation: t('common.elevation'),
+      time: t('common.time'),
+      count: t('common.activities'),
     };
     return labels[metric] || metric;
   };
@@ -96,7 +98,7 @@ export const PeriodComparison = () => {
       return (
         <span className="text-sm text-gray-600">
           <span className="mr-1">→</span>
-          No change
+          {t('common.noChange')}
         </span>
       );
     }
@@ -136,8 +138,8 @@ export const PeriodComparison = () => {
     <GlassCard className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-gray-900">Period Comparison</h3>
-        <p className="text-sm text-gray-600">Compare your performance across time periods</p>
+        <h3 className="text-lg font-bold text-gray-900">{t('periodComparison.title')}</h3>
+        <p className="text-sm text-gray-600">{t('periodComparison.subtitle')}</p>
       </div>
 
       {/* Period Selector */}
@@ -152,7 +154,13 @@ export const PeriodComparison = () => {
                 : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
             }`}
           >
-            {p.charAt(0).toUpperCase() + p.slice(1)}
+            {p === 'week'
+              ? t('periodComparison.week')
+              : p === 'month'
+                ? t('periodComparison.month')
+                : p === 'year'
+                  ? t('periodComparison.year')
+                  : t('periodComparison.custom')}
           </button>
         ))}
       </div>
@@ -161,11 +169,11 @@ export const PeriodComparison = () => {
       {period === 'custom' && (
         <div className="mb-6 space-y-4 rounded-lg bg-white/50 p-4 backdrop-blur-sm">
           <div>
-            <h4 className="mb-2 text-sm font-medium text-gray-900">Current Period</h4>
+            <h4 className="mb-2 text-sm font-medium text-gray-900">{t('periodComparison.currentPeriod')}</h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label htmlFor="currentStart" className="mb-1 block text-xs text-gray-600">
-                  Start Date
+                  {t('common.startDate')}
                 </label>
                 <input
                   id="currentStart"
@@ -177,7 +185,7 @@ export const PeriodComparison = () => {
               </div>
               <div>
                 <label htmlFor="currentEnd" className="mb-1 block text-xs text-gray-600">
-                  End Date
+                  {t('common.endDate')}
                 </label>
                 <input
                   id="currentEnd"
@@ -191,11 +199,11 @@ export const PeriodComparison = () => {
           </div>
 
           <div>
-            <h4 className="mb-2 text-sm font-medium text-gray-900">Previous Period</h4>
+            <h4 className="mb-2 text-sm font-medium text-gray-900">{t('periodComparison.previousPeriod')}</h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label htmlFor="previousStart" className="mb-1 block text-xs text-gray-600">
-                  Start Date
+                  {t('common.startDate')}
                 </label>
                 <input
                   id="previousStart"
@@ -207,7 +215,7 @@ export const PeriodComparison = () => {
               </div>
               <div>
                 <label htmlFor="previousEnd" className="mb-1 block text-xs text-gray-600">
-                  End Date
+                  {t('common.endDate')}
                 </label>
                 <input
                   id="previousEnd"
@@ -225,7 +233,7 @@ export const PeriodComparison = () => {
       {/* Validation message */}
       {period === 'custom' && !isCustomValid && (
         <div className="mb-4 rounded-lg bg-orange-50 p-3 text-sm text-orange-700">
-          Please fill in all date fields to compare custom periods
+          {t('periodComparison.fillAllDates')}
         </div>
       )}
 

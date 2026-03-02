@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import {
   GlassCard,
@@ -19,6 +20,7 @@ import { PeriodComparison } from './StatsPage/PeriodComparison';
 import { HeatmapCalendar } from './StatsPage/HeatmapCalendar';
 
 export const StatsPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -35,8 +37,8 @@ export const StatsPage = () => {
       <Layout>
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Your Stats</h2>
-            <p className="text-gray-600">Loading your performance data...</p>
+            <h2 className="text-2xl font-bold text-gray-900">{t('stats.title')}</h2>
+            <p className="text-gray-600">{t('stats.loading')}</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <StatTileSkeleton />
@@ -56,10 +58,10 @@ export const StatsPage = () => {
       <Layout>
         <EmptyState
           icon="📊"
-          title="No Stats Available"
-          description="Start by syncing your activities on the Dashboard to see your performance statistics."
+          title={t('stats.noStats')}
+          description={t('stats.noStatsDesc')}
           action={{
-            label: 'Go to Dashboard',
+            label: t('stats.goToDashboard'),
             onClick: () => navigate('/dashboard'),
           }}
         />
@@ -73,17 +75,17 @@ export const StatsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Your Stats</h2>
-          <p className="text-gray-600">Track your progress and achievements</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t('stats.title')}</h2>
+          <p className="text-gray-600">{t('stats.subtitle')}</p>
         </div>
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onChange={setActiveTab}>
           <TabList className="mb-6">
-            <Tab value="overview" label="Overview" />
-            <Tab value="calendar" label="Calendar" />
-            <Tab value="charts" label="Charts" />
-            <Tab value="comparison" label="Comparison" />
+            <Tab value="overview" label={t('stats.overview')} />
+            <Tab value="calendar" label={t('stats.calendar')} />
+            <Tab value="charts" label={t('stats.charts')} />
+            <Tab value="comparison" label={t('stats.comparison')} />
           </TabList>
 
           {/* Overview Tab */}
@@ -91,51 +93,51 @@ export const StatsPage = () => {
             <div className="space-y-6">
               {/* Overall Stats */}
               <section>
-                <h3 className="mb-4 text-lg font-bold text-gray-900">Overall</h3>
+                <h3 className="mb-4 text-lg font-bold text-gray-900">{t('stats.overall')}</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <StatTile icon="🏃" label="Activities" value={stats.totalActivities.toString()} />
+                  <StatTile icon="🏃" label={t('common.activities')} value={stats.totalActivities.toString()} />
                   <StatTile
                     icon="📏"
-                    label="Distance"
+                    label={t('common.distance')}
                     value={formatDistance(stats.totalDistance)}
                   />
                   <StatTile
                     icon="⛰️"
-                    label="Elevation"
+                    label={t('common.elevation')}
                     value={formatElevation(stats.totalElevation)}
                   />
-                  <StatTile icon="⏱️" label="Time" value={formatDuration(stats.totalTime)} />
+                  <StatTile icon="⏱️" label={t('common.time')} value={formatDuration(stats.totalTime)} />
                   <StatTile
                     icon="🔥"
-                    label="Current Streak"
-                    value={`${stats.currentStreak} days`}
+                    label={t('stats.currentStreak')}
+                    value={`${stats.currentStreak} ${t('common.days')}`}
                   />
-                  <StatTile icon="🏆" label="Best Streak" value={`${stats.longestStreak} days`} />
+                  <StatTile icon="🏆" label={t('stats.bestStreak')} value={`${stats.longestStreak} ${t('common.days')}`} />
                 </div>
               </section>
 
               {/* By Activity Type */}
               {activityTypes.length > 0 && (
                 <section>
-                  <h3 className="mb-4 text-lg font-bold text-gray-900">By Activity Type</h3>
+                  <h3 className="mb-4 text-lg font-bold text-gray-900">{t('stats.byActivityType')}</h3>
                   <div className="space-y-3">
                     {activityTypes.map(([type, data]) => (
                       <GlassCard key={type} className="p-4">
                         <div className="mb-3 flex items-center justify-between">
                           <h4 className="font-bold text-gray-900">{type}</h4>
-                          <span className="text-sm text-gray-600">{data.count} activities</span>
+                          <span className="text-sm text-gray-600">{t('stats.activitiesCount', { count: data.count })}</span>
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-sm">
                           <div>
-                            <div className="text-xs text-gray-600">Distance</div>
+                            <div className="text-xs text-gray-600">{t('common.distance')}</div>
                             <div className="font-medium">{formatDistance(data.distance)}</div>
                           </div>
                           <div>
-                            <div className="text-xs text-gray-600">Elevation</div>
+                            <div className="text-xs text-gray-600">{t('common.elevation')}</div>
                             <div className="font-medium">{formatElevation(data.elevation)}</div>
                           </div>
                           <div>
-                            <div className="text-xs text-gray-600">Time</div>
+                            <div className="text-xs text-gray-600">{t('common.time')}</div>
                             <div className="font-medium">{formatDuration(data.time)}</div>
                           </div>
                         </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import type { Achievement } from '@types';
 
@@ -25,6 +26,7 @@ export const AchievementUnlockedModal = ({
   achievement,
   onClose,
 }: AchievementUnlockedModalProps) => {
+  const { t } = useTranslation();
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
@@ -132,7 +134,7 @@ export const AchievementUnlockedModal = ({
 
           <div>
             <p className="text-sm font-medium uppercase tracking-wide text-strava-orange">
-              Achievement Unlocked!
+              {t('achievements.achievementUnlocked')}
             </p>
             <h2 className="mt-2 text-2xl font-bold text-gray-900">{achievement.name}</h2>
             <p className="mt-2 text-gray-600">{achievement.description}</p>
@@ -142,7 +144,7 @@ export const AchievementUnlockedModal = ({
                 rarityText[achievement.rarity]
               )}
             >
-              {achievement.rarity} Achievement
+              {t('achievements.achievement', { rarity: achievement.rarity })}
             </span>
           </div>
 
@@ -150,7 +152,7 @@ export const AchievementUnlockedModal = ({
             onClick={onClose}
             className="mt-2 rounded-lg bg-gradient-to-r from-strava-orange to-strava-orange-dark px-8 py-3 font-medium text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
           >
-            Awesome!
+            {t('achievements.awesome')}
           </button>
         </div>
       </div>

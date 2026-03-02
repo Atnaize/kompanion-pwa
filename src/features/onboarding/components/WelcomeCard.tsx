@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { GlassCard, Button } from '@components/ui';
 
 export interface WelcomeCardProps {
@@ -12,6 +13,7 @@ export interface WelcomeCardProps {
 }
 
 export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProps) => {
+  const { t } = useTranslation();
   const isFetching = syncProgress?.type === 'fetching';
   const isSaving = syncProgress?.type === 'saving';
 
@@ -19,28 +21,28 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
     <GlassCard className="p-8 text-center">
       <div className="mb-4 text-6xl">{isSyncing ? '🔄' : '👋'}</div>
       <h2 className="mb-2 text-2xl font-bold text-gray-900">
-        {isSyncing ? 'Syncing Your Activities' : 'Welcome to Kompanion!'}
+        {isSyncing ? t('welcome.syncingTitle') : t('welcome.title')}
       </h2>
       <p className="mb-6 text-gray-600">
         {isSyncing ? (
           <>
             {isFetching && (
               <span className="font-medium text-strava-orange">
-                Fetching from Strava... {syncProgress?.current || 0} activities found
+                {t('welcome.fetchingFromStrava', { count: syncProgress?.current || 0 })}
               </span>
             )}
             {isSaving && (
               <span className="font-medium text-strava-orange">
-                Saving activities... {syncProgress?.current || 0}/{syncProgress?.total || 0}
+                {t('welcome.savingActivities', { current: syncProgress?.current || 0, total: syncProgress?.total || 0 })}
               </span>
             )}
           </>
         ) : (
-          "Let's get started by syncing your Strava activities."
+          t('welcome.description')
         )}
       </p>
       <Button onClick={onSync} disabled={isSyncing} variant="primary">
-        {isSyncing ? 'Syncing...' : 'Sync My Activities'}
+        {isSyncing ? t('common.syncing') : t('welcome.syncButton')}
       </Button>
     </GlassCard>
   );

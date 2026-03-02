@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePwaStore } from '@store/pwaStore';
 
 export const InstallPrompt = () => {
+  const { t } = useTranslation();
   const { isInstallable, showInstallPrompt, isInstalled, isIos } = usePwaStore();
   const [dismissed, setDismissed] = useState(false);
 
@@ -27,7 +29,7 @@ export const InstallPrompt = () => {
         <div className="flex items-start gap-3">
           <div className="text-2xl">📱</div>
           <div className="flex-1">
-            <h3 className="mb-1 font-semibold text-gray-800">Install Kompanion</h3>
+            <h3 className="mb-1 font-semibold text-gray-800">{t('pwa.install.title')}</h3>
             {isIos ? (
               <>
                 <p className="mb-3 text-sm text-gray-600">
@@ -41,26 +43,26 @@ export const InstallPrompt = () => {
                   onClick={handleDismiss}
                   className="w-full rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 active:scale-95"
                 >
-                  Got it
+                  {t('pwa.install.gotIt')}
                 </button>
               </>
             ) : (
               <>
                 <p className="mb-3 text-sm text-gray-600">
-                  Add to home screen for quick access and offline support
+                  {t('pwa.install.androidDescription')}
                 </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => void showInstallPrompt()}
                     className="rounded-lg bg-[#FF4B00] px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-[#E04400] active:scale-95"
                   >
-                    Install
+                    {t('pwa.install.install')}
                   </button>
                   <button
                     onClick={handleDismiss}
                     className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 active:scale-95"
                   >
-                    Not Now
+                    {t('pwa.install.notNow')}
                   </button>
                 </div>
               </>

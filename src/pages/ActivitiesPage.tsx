@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import { GlassCard, Button, Skeleton, EmptyState } from '@components/ui';
 import { activitiesService } from '@api/services';
@@ -14,6 +15,7 @@ import type { Activity } from '@types';
 const ITEMS_PER_PAGE = 20;
 
 export const ActivitiesPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, setUser } = useAuthStore();
@@ -60,11 +62,11 @@ export const ActivitiesPage = () => {
       // Show success toast
       let message =
         syncedCount > 0
-          ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced!`
-          : 'All activities up to date';
+          ? t('dashboard.syncSuccess', { count: syncedCount })
+          : t('dashboard.allUpToDate');
 
       if (challengeActivitiesAdded > 0) {
-        message += ` ${challengeActivitiesAdded} added to challenges 🏆`;
+        message += t('dashboard.challengeActivitiesAdded', { count: challengeActivitiesAdded });
       } else if (syncedCount > 0) {
         message += ' 🏃';
       }
@@ -73,7 +75,7 @@ export const ActivitiesPage = () => {
       hapticService.syncCompleted();
     } catch (err) {
       console.error('Sync error:', err);
-      error('Failed to sync activities. Please try again.');
+      error(t('dashboard.syncFailed'));
     } finally {
       setIsSyncing(false);
     }
@@ -153,14 +155,15 @@ export const ActivitiesPage = () => {
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Activities</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{t('activities.title')}</h1>
             <p className="text-sm text-gray-600">
-              {filteredActivities.length} activit{filteredActivities.length === 1 ? 'y' : 'ies'}
-              {searchQuery && ` matching "${searchQuery}"`}
+              {searchQuery
+                ? t('activities.countMatching', { count: filteredActivities.length, query: searchQuery })
+                : t('activities.count', { count: filteredActivities.length })}
             </p>
           </div>
           <Button size="sm" onClick={handleSync} disabled={isSyncing}>
-            {isSyncing ? 'Syncing...' : 'Sync'}
+            {isSyncing ? t('common.syncing') : t('common.sync')}
           </Button>
         </div>
 
@@ -168,7 +171,7 @@ export const ActivitiesPage = () => {
         <GlassCard className="p-4">
           <input
             type="text"
-            placeholder="Search activities..."
+            placeholder={t('activities.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border-0 bg-white/50 px-4 py-2 text-gray-900 placeholder-gray-500 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -185,7 +188,7 @@ export const ActivitiesPage = () => {
                 : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
             }`}
           >
-            All ({activities.length})
+            {t('common.all')} ({activities.length})
           </button>
           {activityTypes.map((type) => (
             <button
@@ -206,16 +209,16 @@ export const ActivitiesPage = () => {
         {displayedActivities.length === 0 ? (
           <EmptyState
             icon="🏃"
-            title="No activities found"
+            title={t('activities.noActivitiesFound')}
             description={
               searchQuery || selectedType !== 'all'
-                ? 'Try adjusting your filters or search query'
-                : 'Start syncing your activities to see them here'
+                ? t('activities.adjustFilters')
+                : t('activities.startSyncing')
             }
             action={
               searchQuery || selectedType !== 'all'
                 ? {
-                    label: 'Clear Filters',
+                    label: t('activities.clearFilters'),
                     onClick: () => {
                       setSearchQuery('');
                       setSelectedType('all');
@@ -249,7 +252,7 @@ export const ActivitiesPage = () => {
                       </div>
                       {activity.pr_count > 0 && (
                         <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 px-2 py-0.5 text-xs font-medium text-white">
-                          🏆 {activity.pr_count} PR{activity.pr_count > 1 ? 's' : ''}
+                          🏆 {t('activities.pr', { count: activity.pr_count })}
                         </span>
                       )}
                     </div>
@@ -257,25 +260,25 @@ export const ActivitiesPage = () => {
                     {/* Metrics */}
                     <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                       <div>
-                        <p className="text-gray-600">Distance</p>
+                        <p className="text-gray-600">{t('common.distance')}</p>
                         <p className="font-medium text-gray-900">
                           {formatDistance(activity.distance)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-600">Duration</p>
+                        <p className="text-gray-600">{t('common.duration')}</p>
                         <p className="font-medium text-gray-900">
                           {formatDuration(activity.moving_time)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-600">Elevation</p>
+                        <p className="text-gray-600">{t('common.elevation')}</p>
                         <p className="font-medium text-gray-900">
                           {formatElevation(activity.total_elevation_gain)}
                         </p>
                       </div>
                       <div>
-                        <p className="text-gray-600">Avg Speed</p>
+                        <p className="text-gray-600">{t('common.avgSpeed')}</p>
                         <p className="font-medium text-gray-900">
                           {(activity.average_speed * 3.6).toFixed(1)} km/h
                         </p>
@@ -299,7 +302,7 @@ export const ActivitiesPage = () => {
             {/* End of List Message */}
             {!hasMore && displayedActivities.length > 0 && (
               <div className="py-8 text-center text-sm text-gray-600">
-                You&apos;ve reached the end of your activities 🎉
+                {t('activities.endOfList')}
               </div>
             )}
           </div>

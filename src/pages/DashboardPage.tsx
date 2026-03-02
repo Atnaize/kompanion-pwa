@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Layout } from '@components/layout';
 import {
@@ -20,6 +21,7 @@ import { hapticService } from '@utils/haptic';
 import { formatDistance, formatElevation, formatRelativeTime } from '@utils/format';
 
 export const DashboardPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, setUser } = useAuthStore();
   const queryClient = useQueryClient();
@@ -55,7 +57,7 @@ export const DashboardPage = () => {
     if (isSyncing) return;
 
     setIsSyncing(true);
-    setSyncProgress({ type: 'fetching', current: 0, message: 'Starting sync...' });
+    setSyncProgress({ type: 'fetching', current: 0, message: t('dashboard.startingSync') });
 
     try {
       let syncedCount = 0;
@@ -84,11 +86,11 @@ export const DashboardPage = () => {
       // Show success toast
       let message =
         syncedCount > 0
-          ? `${syncedCount} activit${syncedCount === 1 ? 'y' : 'ies'} synced!`
-          : 'All activities up to date';
+          ? t('dashboard.syncSuccess', { count: syncedCount })
+          : t('dashboard.allUpToDate');
 
       if (challengeActivitiesAdded > 0) {
-        message += ` ${challengeActivitiesAdded} added to challenges 🏆`;
+        message += t('dashboard.challengeActivitiesAdded', { count: challengeActivitiesAdded });
       } else if (syncedCount > 0) {
         message += ' 🏃';
       }
@@ -101,7 +103,7 @@ export const DashboardPage = () => {
     } catch (err) {
       console.error('Sync error:', err);
       console.log('Showing sync error toast');
-      error('Failed to sync activities. Please try again.');
+      error(t('dashboard.syncFailed'));
       setSyncProgress(null);
     } finally {
       setIsSyncing(false);
@@ -128,7 +130,7 @@ export const DashboardPage = () => {
             {/* Quick Stats */}
             <section>
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Quick Stats</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.quickStats')}</h2>
                 <TimePeriodSelector
                   value={statsPeriod}
                   onChange={setStatsPeriod}
@@ -146,20 +148,20 @@ export const DashboardPage = () => {
                 <div className="grid grid-cols-2 gap-3">
                   <StatTile
                     icon="🏃"
-                    label="Activities"
+                    label={t('common.activities')}
                     value={stats?.totalActivities.toString() || '0'}
                   />
                   <StatTile
                     icon="📏"
-                    label="Distance"
+                    label={t('common.distance')}
                     value={formatDistance(stats?.totalDistance || 0)}
                   />
                   <StatTile
                     icon="⛰️"
-                    label="Elevation"
+                    label={t('common.elevation')}
                     value={formatElevation(stats?.totalElevation || 0)}
                   />
-                  <StatTile icon="🔥" label="Streak" value={`${stats?.currentStreak || 0} days`} />
+                  <StatTile icon="🔥" label={t('common.streak')} value={`${stats?.currentStreak || 0} ${t('common.days')}`} />
                 </div>
               )}
             </section>
@@ -175,11 +177,15 @@ export const DashboardPage = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">🏆</span>
-                        <h3 className="text-lg font-bold text-gray-900">Personal Records</h3>
+                        <h3 className="text-lg font-bold text-gray-900">{t('dashboard.personalRecords')}</h3>
                       </div>
                       <p className="mt-1 text-sm text-gray-600">
-                        You have {totalPRs} personal record{totalPRs > 1 ? 's' : ''} across{' '}
-                        {prActivities.length} activit{prActivities.length === 1 ? 'y' : 'ies'}
+                        {t('dashboard.prDescription', {
+                          totalPRs,
+                          recordText: t('dashboard.prRecord', { count: totalPRs }),
+                          activityCount: prActivities.length,
+                          activityText: t('dashboard.prActivity', { count: prActivities.length }),
+                        })}
                       </p>
                     </div>
                     <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 text-3xl font-bold text-white shadow-lg">
@@ -187,7 +193,7 @@ export const DashboardPage = () => {
                     </div>
                   </div>
                   <Button variant="secondary" size="sm" className="mt-4 w-full">
-                    View All PRs →
+                    {t('dashboard.viewAllPrs')}
                   </Button>
                 </GlassCard>
               </section>
@@ -196,9 +202,9 @@ export const DashboardPage = () => {
             {/* Recent Activities */}
             <section>
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Recent Activities</h2>
+                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.recentActivities')}</h2>
                 <Button size="sm" onClick={handleSync} disabled={isSyncing}>
-                  {isSyncing ? 'Syncing...' : 'Sync'}
+                  {isSyncing ? t('common.syncing') : t('common.sync')}
                 </Button>
               </div>
 

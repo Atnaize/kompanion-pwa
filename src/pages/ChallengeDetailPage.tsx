@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout/Layout';
 import { GlassCard, Button, Skeleton, ConfirmModal, Avatar } from '@components/ui';
 import { ChallengeProgress, ChallengeChart, InviteFriendsModal } from '@features/challenges';
 import { useChallengeStore } from '@store/challengeStore';
 import { useAuthStore } from '@store/authStore';
+import { useSettingsStore } from '@store/settingsStore';
 
 export const ChallengeDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const locale = useSettingsStore((s) => s.locale);
   const {
     currentChallenge,
     isLoading,
@@ -46,7 +50,7 @@ export const ChallengeDetailPage = () => {
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString(locale, {
       month: 'long',
       day: 'numeric',
       year: 'numeric',
@@ -63,14 +67,14 @@ export const ChallengeDetailPage = () => {
 
   const getStatusBadge = (status: string) => {
     if (isUpcoming) {
-      return { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Upcoming' };
+      return { bg: 'bg-purple-100', text: 'text-purple-700', label: t('challengeDetail.statusUpcoming') };
     }
 
     const badges = {
-      active: { bg: 'bg-green-100', text: 'text-green-700', label: 'Active' },
-      completed: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Completed' },
-      failed: { bg: 'bg-red-100', text: 'text-red-700', label: 'Failed' },
-      cancelled: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Cancelled' },
+      active: { bg: 'bg-green-100', text: 'text-green-700', label: t('challengeDetail.statusActive') },
+      completed: { bg: 'bg-blue-100', text: 'text-blue-700', label: t('challengeDetail.statusCompleted') },
+      failed: { bg: 'bg-red-100', text: 'text-red-700', label: t('challengeDetail.statusFailed') },
+      cancelled: { bg: 'bg-gray-100', text: 'text-gray-700', label: t('challengeDetail.statusCancelled') },
     };
 
     return (
@@ -89,7 +93,7 @@ export const ChallengeDetailPage = () => {
   };
 
   const getTypeLabel = (type: string): string => {
-    return type === 'collaborative' ? 'Collaborative Challenge' : 'Competitive Challenge';
+    return type === 'collaborative' ? t('challenges.collaborative') : t('challenges.competitive');
   };
 
   const userParticipation = currentChallenge.participants?.find((p) => p.userId === user?.userId);
@@ -158,7 +162,7 @@ export const ChallengeDetailPage = () => {
                 onClick={() => navigate('/challenges')}
                 className="text-gray-500 hover:text-gray-700"
               >
-                ← Back
+                {t('common.back')}
               </button>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-medium ${badge.bg} ${badge.text}`}
@@ -183,23 +187,23 @@ export const ChallengeDetailPage = () => {
 
         {/* Details */}
         <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Challenge Details</h2>
+          <h2 className="mb-3 text-lg font-semibold text-gray-900">{t('challengeDetail.details')}</h2>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Start Date:</span>
+              <span className="text-gray-600">{t('challengeDetail.startDate')}</span>
               <span className="font-medium text-gray-900">
                 {formatDate(currentChallenge.startDate)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">End Date:</span>
+              <span className="text-gray-600">{t('challengeDetail.endDate')}</span>
               <span className="font-medium text-gray-900">
                 {formatDate(currentChallenge.endDate)}
               </span>
             </div>
             {currentChallenge.targets.distance && (
               <div className="flex justify-between">
-                <span className="text-gray-600">Distance Goal:</span>
+                <span className="text-gray-600">{t('challengeDetail.distanceGoal')}</span>
                 <span className="font-medium text-gray-900">
                   {(currentChallenge.targets.distance / 1000).toFixed(1)} km
                 </span>
@@ -207,7 +211,7 @@ export const ChallengeDetailPage = () => {
             )}
             {currentChallenge.targets.elevation && (
               <div className="flex justify-between">
-                <span className="text-gray-600">Elevation Goal:</span>
+                <span className="text-gray-600">{t('challengeDetail.elevationGoal')}</span>
                 <span className="font-medium text-gray-900">
                   {Math.round(currentChallenge.targets.elevation)} m
                 </span>
@@ -215,7 +219,7 @@ export const ChallengeDetailPage = () => {
             )}
             {currentChallenge.targets.activityType && (
               <div className="flex justify-between">
-                <span className="text-gray-600">Activity Type:</span>
+                <span className="text-gray-600">{t('challengeDetail.activityType')}</span>
                 <span className="font-medium capitalize text-gray-900">
                   {currentChallenge.targets.activityType}
                 </span>
@@ -223,7 +227,7 @@ export const ChallengeDetailPage = () => {
             )}
             {currentChallenge.creator && (
               <div className="flex items-center justify-between border-t border-gray-200 pt-2">
-                <span className="text-gray-600">Created by:</span>
+                <span className="text-gray-600">{t('challengeDetail.createdBy')}</span>
                 <div className="flex items-center gap-2">
                   <Avatar
                     src={currentChallenge.creator.profile}
@@ -244,14 +248,14 @@ export const ChallengeDetailPage = () => {
         {/* Participants */}
         {currentChallenge.participants && currentChallenge.participants.length > 0 && (
           <GlassCard className="p-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">Participants</h2>
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">{t('challengeDetail.participants')}</h2>
             <div className="space-y-2">
               {currentChallenge.participants.map((participant) => {
                 const statusBadge = {
-                  accepted: { bg: 'bg-green-100', text: 'text-green-700', label: 'Accepted' },
-                  invited: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Pending' },
-                  declined: { bg: 'bg-red-100', text: 'text-red-700', label: 'Declined' },
-                  left: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Left' },
+                  accepted: { bg: 'bg-green-100', text: 'text-green-700', label: t('challengeDetail.statusAccepted') },
+                  invited: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: t('challengeDetail.statusPending') },
+                  declined: { bg: 'bg-red-100', text: 'text-red-700', label: t('challengeDetail.statusDeclined') },
+                  left: { bg: 'bg-gray-100', text: 'text-gray-700', label: t('challengeDetail.statusLeft') },
                 }[participant.status] || {
                   bg: 'bg-gray-100',
                   text: 'text-gray-700',
@@ -293,7 +297,7 @@ export const ChallengeDetailPage = () => {
         {/* Progress - show for active and completed/failed challenges */}
         {(isActive || isFinished) && (
           <div className="space-y-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">Progress</h2>
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">{t('challengeDetail.progress')}</h2>
             <ChallengeProgress
               challenge={currentChallenge}
               showAllParticipants={currentChallenge.type === 'collaborative'}
@@ -313,10 +317,10 @@ export const ChallengeDetailPage = () => {
           {isInvited && (
             <>
               <Button onClick={handleAccept} className="w-full">
-                Accept Invitation
+                {t('challengeDetail.acceptInvitation')}
               </Button>
               <Button onClick={handleDecline} variant="secondary" className="w-full">
-                Decline Invitation
+                {t('challengeDetail.declineInvitation')}
               </Button>
             </>
           )}
@@ -329,10 +333,10 @@ export const ChallengeDetailPage = () => {
                 variant="secondary"
                 className="w-full"
               >
-                Invite Friends
+                {t('challengeDetail.inviteFriends')}
               </Button>
               <Button onClick={handleCancelClick} variant="secondary" className="w-full">
-                Cancel Challenge
+                {t('challengeDetail.cancelChallenge')}
               </Button>
             </>
           )}
@@ -345,10 +349,10 @@ export const ChallengeDetailPage = () => {
                 variant="secondary"
                 className="w-full"
               >
-                Invite Friends
+                {t('challengeDetail.inviteFriends')}
               </Button>
               <Button onClick={handleCancelClick} variant="secondary" className="w-full">
-                Cancel Challenge
+                {t('challengeDetail.cancelChallenge')}
               </Button>
             </>
           )}
@@ -356,7 +360,7 @@ export const ChallengeDetailPage = () => {
           {/* Non-creator who accepted can leave */}
           {!isCreator && isAccepted && (isActive || isUpcoming) && (
             <Button onClick={handleLeaveClick} variant="secondary" className="w-full">
-              Leave Challenge
+              {t('challengeDetail.leaveChallenge')}
             </Button>
           )}
         </div>
@@ -367,10 +371,10 @@ export const ChallengeDetailPage = () => {
         isOpen={showCancelModal}
         onClose={() => setShowCancelModal(false)}
         onConfirm={handleCancelConfirm}
-        title="Cancel Challenge"
-        message="Are you sure you want to cancel this challenge? This action cannot be undone and all participants will be notified."
-        confirmText="Cancel Challenge"
-        cancelText="Keep Challenge"
+        title={t('challengeDetail.cancelChallenge')}
+        message={t('challengeDetail.cancelConfirmMessage')}
+        confirmText={t('challengeDetail.cancelChallenge')}
+        cancelText={t('challengeDetail.keepChallenge')}
         confirmVariant="danger"
         isLoading={isProcessing}
       />
@@ -380,10 +384,10 @@ export const ChallengeDetailPage = () => {
         isOpen={showLeaveModal}
         onClose={() => setShowLeaveModal(false)}
         onConfirm={handleLeaveConfirm}
-        title="Leave Challenge"
-        message="Are you sure you want to leave this challenge? You will no longer see progress or compete with other participants."
-        confirmText="Leave Challenge"
-        cancelText="Stay"
+        title={t('challengeDetail.leaveChallenge')}
+        message={t('challengeDetail.leaveConfirmMessage')}
+        confirmText={t('challengeDetail.leaveChallenge')}
+        cancelText={t('challengeDetail.stay')}
         confirmVariant="danger"
         isLoading={isProcessing}
       />

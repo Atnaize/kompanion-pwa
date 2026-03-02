@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout/Layout';
 import { EmptyState, Skeleton, Button, Tabs, TabList, Tab, TabPanel } from '@components/ui';
@@ -6,6 +7,7 @@ import { ChallengeSummaryCard, InvitationCard, ChallengeSummaryModal } from '@fe
 import { useChallengeStore } from '@store/challengeStore';
 
 export const ChallengesPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     challenges,
@@ -65,18 +67,18 @@ export const ChallengesPage = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Challenges</h1>
-            <p className="text-sm text-gray-600">Compete and collaborate with friends</p>
+            <h1 className="text-2xl font-bold text-gray-900">{t('challenges.title')}</h1>
+            <p className="text-sm text-gray-600">{t('challenges.subtitle')}</p>
           </div>
-          <Button onClick={() => navigate('/challenges/create')}>Create</Button>
+          <Button onClick={() => navigate('/challenges/create')}>{t('challenges.create')}</Button>
         </div>
 
         {/* Tabs */}
         <Tabs value={activeTab} onChange={(value) => setActiveTab(value as typeof activeTab)}>
           <TabList>
-            <Tab value="active" label="Active" count={activeChallenges.length} />
-            <Tab value="completed" label="Completed" />
-            <Tab value="invitations" label="Invites" count={pendingInvitations.length} />
+            <Tab value="active" label={t('challenges.active')} count={activeChallenges.length} />
+            <Tab value="completed" label={t('challenges.completed')} />
+            <Tab value="invitations" label={t('challenges.invites')} count={pendingInvitations.length} />
           </TabList>
 
           {/* Loading State */}
@@ -103,10 +105,10 @@ export const ChallengesPage = () => {
                 ) : (
                   <EmptyState
                     icon="🎯"
-                    title="No active challenges"
-                    description="Create a challenge to compete or collaborate with friends"
+                    title={t('challenges.noActive')}
+                    description={t('challenges.noActiveDesc')}
                     action={{
-                      label: 'Create Challenge',
+                      label: t('challenges.createChallenge'),
                       onClick: () => navigate('/challenges/create'),
                     }}
                   />
@@ -128,8 +130,8 @@ export const ChallengesPage = () => {
                 ) : (
                   <EmptyState
                     icon="🏆"
-                    title="No completed challenges"
-                    description="Completed challenges will appear here"
+                    title={t('challenges.noCompleted')}
+                    description={t('challenges.noCompletedDesc')}
                   />
                 )}
               </TabPanel>
@@ -150,8 +152,8 @@ export const ChallengesPage = () => {
                 ) : (
                   <EmptyState
                     icon="📬"
-                    title="No pending invitations"
-                    description="You'll see challenge invitations from your friends here"
+                    title={t('challenges.noInvitations')}
+                    description={t('challenges.noInvitationsDesc')}
                   />
                 )}
               </TabPanel>

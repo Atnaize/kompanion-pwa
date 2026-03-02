@@ -1,38 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { authService } from '@api/services';
 
-const ERROR_MESSAGES: Record<string, string> = {
-  no_code: 'No authorization code received. Please try again.',
-  auth_failed: 'Authentication failed. Please try again.',
-  access_denied: 'Access was denied. Please try again.',
-};
-
-const features = [
-  {
-    icon: '🏆',
-    title: 'Unlock Achievements',
-    description: 'Complete challenges and earn badges for your athletic accomplishments',
-  },
-  {
-    icon: '📊',
-    title: 'Track Progress',
-    description: 'Visualize your stats and see how you improve over time',
-  },
-  {
-    icon: '🎯',
-    title: 'Join Challenges',
-    description: 'Compete with friends in custom challenges and collaborative goals',
-  },
-];
-
 export const LoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [authUrl, setAuthUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const errorCode = searchParams.get('error');
-  const errorMessage = errorCode ? ERROR_MESSAGES[errorCode] || 'An error occurred' : null;
+
+  const errorMessages: Record<string, string> = {
+    no_code: t('login.errors.noCode'),
+    auth_failed: t('login.errors.authFailed'),
+    access_denied: t('login.errors.accessDenied'),
+  };
+
+  const errorMessage = errorCode ? errorMessages[errorCode] || t('login.errors.generic') : null;
+
+  const features = [
+    {
+      icon: '🏆',
+      title: t('login.featureAchievements'),
+      description: t('login.featureAchievementsDesc'),
+    },
+    {
+      icon: '📊',
+      title: t('login.featureProgress'),
+      description: t('login.featureProgressDesc'),
+    },
+    {
+      icon: '🎯',
+      title: t('login.featureChallenges'),
+      description: t('login.featureChallengesDesc'),
+    },
+  ];
 
   useEffect(() => {
     const accessToken = searchParams.get('accessToken');
@@ -77,8 +80,8 @@ export const LoginPage = () => {
       {/* Left side - Hero */}
       <div className="hidden w-1/2 bg-gradient-to-br from-strava-orange via-strava-orange-light to-orange-400 lg:flex lg:flex-col lg:justify-center lg:px-16">
         <div className="max-w-xl">
-          <h1 className="mb-6 text-6xl font-bold text-white">Kompanion</h1>
-          <p className="mb-12 text-2xl text-white/90">Turn your workouts into epic quests</p>
+          <h1 className="mb-6 text-6xl font-bold text-white">{t('login.title')}</h1>
+          <p className="mb-12 text-2xl text-white/90">{t('login.tagline')}</p>
 
           <div className="space-y-8">
             {features.map((feature) => (
@@ -101,8 +104,8 @@ export const LoginPage = () => {
         {/* Mobile header with gradient */}
         <div className="bg-gradient-to-br from-strava-orange via-strava-orange-light to-orange-400 px-6 pb-16 pt-12 lg:hidden">
           <div className="text-center">
-            <h1 className="mb-3 text-5xl font-bold text-white drop-shadow-lg">Kompanion</h1>
-            <p className="text-xl text-white/95 drop-shadow">Turn your workouts into epic quests</p>
+            <h1 className="mb-3 text-5xl font-bold text-white drop-shadow-lg">{t('login.title')}</h1>
+            <p className="text-xl text-white/95 drop-shadow">{t('login.tagline')}</p>
           </div>
         </div>
 
@@ -111,9 +114,9 @@ export const LoginPage = () => {
           {/* Main card */}
           <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10">
             <div className="mb-8 text-center">
-              <h2 className="mb-2 text-2xl font-bold text-gray-900">Get Started</h2>
+              <h2 className="mb-2 text-2xl font-bold text-gray-900">{t('login.getStarted')}</h2>
               <p className="text-gray-600">
-                Connect your Strava account to unlock achievements and track your progress
+                {t('login.connectDescription')}
               </p>
             </div>
 
@@ -164,13 +167,13 @@ export const LoginPage = () => {
             </button>
 
             <p className="mt-6 text-center text-xs text-gray-500">
-              By connecting, you agree to share your Strava activity data with Kompanion
+              {t('login.disclaimer')}
             </p>
           </div>
 
           {/* Footer */}
           <p className="mt-6 text-center text-sm text-gray-500">
-            Powered by Strava • Made with ❤️ for you
+            {t('login.footer')}
           </p>
         </div>
       </div>

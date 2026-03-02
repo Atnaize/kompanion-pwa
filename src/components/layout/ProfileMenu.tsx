@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@store/authStore';
 import { Avatar } from '@components/ui';
 import clsx from 'clsx';
 
 export const ProfileMenu = () => {
+  const { t } = useTranslation();
   const { user, logout } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -58,7 +60,7 @@ export const ProfileMenu = () => {
                 <p className="font-bold text-gray-900">
                   {user.firstname} {user.lastname || ''}
                 </p>
-                <p className="text-xs text-gray-600">Strava ID: {user.stravaId}</p>
+                <p className="text-xs text-gray-600">{t('profileMenu.stravaId', { id: user.stravaId })}</p>
               </div>
             </div>
           </div>
@@ -73,7 +75,7 @@ export const ProfileMenu = () => {
                 'hover:bg-gray-100'
               )}
             >
-              <span className="font-medium text-gray-900">Profile</span>
+              <span className="font-medium text-gray-900">{t('profileMenu.profile')}</span>
             </Link>
             <Link
               to="/settings"
@@ -83,7 +85,7 @@ export const ProfileMenu = () => {
                 'hover:bg-gray-100'
               )}
             >
-              <span className="font-medium text-gray-900">Settings</span>
+              <span className="font-medium text-gray-900">{t('profileMenu.settings')}</span>
             </Link>
 
             {/* Admin Menu - Only visible to admin users */}
@@ -101,7 +103,7 @@ export const ProfileMenu = () => {
                   )}
                 >
                   <span className="relative z-10 bg-gradient-to-r from-violet-600 via-purple-600 to-fuchsia-600 bg-clip-text font-semibold text-transparent">
-                    Admin Panel
+                    {t('profileMenu.adminPanel')}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-500/5 via-purple-500/5 to-fuchsia-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
                 </Link>
@@ -116,7 +118,7 @@ export const ProfileMenu = () => {
                 'hover:bg-gray-100'
               )}
             >
-              <span className="font-medium text-gray-900">Logout</span>
+              <span className="font-medium text-gray-900">{t('profileMenu.logout')}</span>
             </button>
 
             {/* Separator */}
@@ -130,7 +132,7 @@ export const ProfileMenu = () => {
                 'hover:bg-gray-100'
               )}
             >
-              <span className="font-medium text-gray-900">About Kompanion</span>
+              <span className="font-medium text-gray-900">{t('profileMenu.aboutKompanion')}</span>
             </Link>
           </div>
         </div>

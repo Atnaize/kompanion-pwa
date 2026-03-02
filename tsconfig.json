@@ -25,7 +25,8 @@
       "@api/*": ["api/*"],
       "@store/*": ["store/*"],
       "@types": ["types"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@i18n/*": ["i18n/*"]
     }
   },
   "include": ["src"],

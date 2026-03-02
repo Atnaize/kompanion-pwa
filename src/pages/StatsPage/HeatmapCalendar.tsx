@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { GlassCard, Skeleton } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance } from '@utils/format';
@@ -14,6 +15,7 @@ interface DayData {
 }
 
 export const HeatmapCalendar = () => {
+  const { t } = useTranslation();
   const [metric, setMetric] = useState<Metric>('count');
 
   const { data: heatmapData = [], isLoading } = useQuery({
@@ -88,11 +90,11 @@ export const HeatmapCalendar = () => {
 
   const formatTooltip = (day: DayData): string => {
     if (day.value === 0) {
-      return `${day.date}: No activities`;
+      return `${day.date}: ${t('heatmap.noActivities')}`;
     }
 
     if (metric === 'count') {
-      return `${day.date}: ${day.value} activit${day.value === 1 ? 'y' : 'ies'}`;
+      return `${day.date}: ${t('activities.count', { count: day.value })}`;
     }
 
     return `${day.date}: ${formatDistance(day.value)}`;
@@ -158,8 +160,8 @@ export const HeatmapCalendar = () => {
     <GlassCard className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-gray-900">Activity Calendar</h3>
-        <p className="text-sm text-gray-600">Your activity pattern over the last 12 months</p>
+        <h3 className="text-lg font-bold text-gray-900">{t('heatmap.title')}</h3>
+        <p className="text-sm text-gray-600">{t('heatmap.subtitle')}</p>
       </div>
 
       {/* Metric Selector */}
@@ -174,7 +176,7 @@ export const HeatmapCalendar = () => {
                 : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
             }`}
           >
-            {m === 'count' ? 'Activity Count' : 'Distance'}
+            {m === 'count' ? t('heatmap.activityCount') : t('common.distance')}
           </button>
         ))}
       </div>
@@ -182,13 +184,11 @@ export const HeatmapCalendar = () => {
       {/* Summary Stats */}
       <div className="mb-4 flex gap-4 text-sm text-gray-600">
         <div>
-          <span className="font-medium text-gray-900">{totalActivities}</span> activities in the
-          last year
+          {t('heatmap.activitiesInYear', { count: totalActivities })}
         </div>
         {metric === 'distance' && (
           <div>
-            <span className="font-medium text-gray-900">{formatDistance(totalDistance)}</span> total
-            distance
+            {t('heatmap.totalDistance', { distance: formatDistance(totalDistance) })}
           </div>
         )}
       </div>
@@ -229,7 +229,7 @@ export const HeatmapCalendar = () => {
 
       {/* Legend */}
       <div className="mt-4 flex items-center justify-end gap-2 text-xs text-gray-600">
-        <span>Less</span>
+        <span>{t('common.less')}</span>
         <div className="flex gap-1">
           <div className="h-3 w-3 rounded-sm bg-gray-100" />
           <div className="h-3 w-3 rounded-sm bg-orange-200" />
@@ -237,7 +237,7 @@ export const HeatmapCalendar = () => {
           <div className="h-3 w-3 rounded-sm bg-orange-400" />
           <div className="h-3 w-3 rounded-sm bg-orange-500" />
         </div>
-        <span>More</span>
+        <span>{t('common.more')}</span>
       </div>
     </GlassCard>
   );

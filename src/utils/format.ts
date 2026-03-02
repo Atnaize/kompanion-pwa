@@ -1,3 +1,6 @@
+import i18n from '@i18n/index';
+import { useSettingsStore } from '@store/settingsStore';
+
 export const formatDistance = (meters: number): string => {
   const km = meters / 1000;
   return km >= 10 ? `${Math.round(km)} km` : `${km.toFixed(1)} km`;
@@ -25,8 +28,9 @@ export const formatSpeed = (metersPerSecond: number): string => {
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  // Use browser's locale for automatic localization
-  return new Intl.DateTimeFormat(navigator.language, {
+  const locale = useSettingsStore.getState().locale;
+
+  return new Intl.DateTimeFormat(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -40,24 +44,20 @@ export const formatRelativeTime = (dateString: string): string => {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) {
-    return 'Today';
+    return i18n.t('format.today');
   }
 
   if (diffDays === 1) {
-    return 'Yesterday';
+    return i18n.t('format.yesterday');
   }
 
   if (diffDays < 7) {
-    return `${diffDays} days ago`;
+    return i18n.t('format.daysAgo', { count: diffDays });
   }
 
   return formatDate(dateString);
 };
 
-/**
- * Format a Date object to YYYY-MM-DD string in local timezone
- * Used for HTML date inputs
- */
 export const formatDateToInput = (date: Date): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -65,10 +65,6 @@ export const formatDateToInput = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-/**
- * Convert a date string from HTML date input (YYYY-MM-DD) to Date object
- * at start of day in local timezone
- */
 export const parseInputDate = (dateString: string, endOfDay = false): Date => {
   const time = endOfDay ? 'T23:59:59' : 'T00:00:00';
   return new Date(dateString + time);

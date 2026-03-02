@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import { GlassCard, Toggle, Button } from '@components/ui';
 import { useToastStore } from '@store/toastStore';
+import { useSettingsStore } from '@store/settingsStore';
 import { hapticService } from '@utils/haptic';
 import { usePushNotifications } from '@hooks/usePushNotifications';
 
 export const SettingsPage = () => {
+  const { t } = useTranslation();
   const { success, error } = useToastStore();
-  const [hapticEnabled, setHapticEnabled] = useState(hapticService.isEnabled());
+  const { locale, setLocale, hapticEnabled, setHapticEnabled } = useSettingsStore();
 
   const {
     isSupported: isPushSupported,
@@ -19,19 +21,14 @@ export const SettingsPage = () => {
     updatePreferences,
   } = usePushNotifications();
 
-  useEffect(() => {
-    setHapticEnabled(hapticService.isEnabled());
-  }, []);
-
   const handleHapticToggle = (enabled: boolean) => {
-    hapticService.setEnabled(enabled);
     setHapticEnabled(enabled);
 
     if (enabled) {
       hapticService.vibrate('light');
-      success('Haptic feedback enabled');
+      success(t('settings.feedback.hapticEnabled'));
     } else {
-      success('Haptic feedback disabled');
+      success(t('settings.feedback.hapticDisabled'));
     }
   };
 
@@ -39,13 +36,13 @@ export const SettingsPage = () => {
     try {
       if (isSubscribed) {
         await unsubscribe();
-        success('Push notifications disabled');
+        success(t('settings.pushNotifications.disabled'));
       } else {
         await subscribe();
-        success('Push notifications enabled');
+        success(t('settings.pushNotifications.enabled'));
       }
     } catch (err) {
-      error(err instanceof Error ? err.message : 'Failed to update push notifications');
+      error(err instanceof Error ? err.message : t('settings.pushNotifications.disabled'));
     }
   };
 
@@ -55,9 +52,9 @@ export const SettingsPage = () => {
   ) => {
     try {
       await updatePreferences({ [key]: value });
-      success('Preference updated');
+      success(t('settings.preferences.updated'));
     } catch {
-      error('Failed to update preference');
+      error(t('settings.preferences.updateFailed'));
     }
   };
 
@@ -65,22 +62,52 @@ export const SettingsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
-          <p className="text-gray-600">Customize your Kompanion experience</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t('settings.title')}</h2>
+          <p className="text-gray-600">{t('settings.subtitle')}</p>
         </div>
+
+        {/* Language */}
+        <section>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('settings.language.title')}</h3>
+          <GlassCard className="p-5">
+            <p className="mb-3 text-sm text-gray-600">{t('settings.language.description')}</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setLocale('en')}
+                className={`flex-1 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
+                  locale === 'en'
+                    ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
+                    : 'bg-white/50 text-gray-700 hover:bg-white/80'
+                }`}
+              >
+                {t('settings.language.en')}
+              </button>
+              <button
+                onClick={() => setLocale('fr')}
+                className={`flex-1 rounded-lg px-4 py-3 text-sm font-medium transition-all ${
+                  locale === 'fr'
+                    ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
+                    : 'bg-white/50 text-gray-700 hover:bg-white/80'
+                }`}
+              >
+                {t('settings.language.fr')}
+              </button>
+            </div>
+          </GlassCard>
+        </section>
 
         {/* Push Notifications */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Push Notifications</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('settings.pushNotifications.title')}</h3>
           <div className="space-y-4">
             <GlassCard className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-semibold text-gray-900">Enable Notifications</h4>
+                  <h4 className="font-semibold text-gray-900">{t('settings.pushNotifications.enable')}</h4>
                   <p className="text-sm text-gray-600">
                     {isPushSupported
-                      ? 'Receive real-time updates for activities, challenges, and achievements'
-                      : 'Push notifications are not supported on this device'}
+                      ? t('settings.pushNotifications.descriptionSupported')
+                      : t('settings.pushNotifications.descriptionUnsupported')}
                   </p>
                 </div>
                 <Button
@@ -89,32 +116,32 @@ export const SettingsPage = () => {
                   variant={isSubscribed ? 'secondary' : 'primary'}
                   size="sm"
                 >
-                  {isPushLoading ? 'Loading...' : isSubscribed ? 'Disable' : 'Enable'}
+                  {isPushLoading ? t('common.loading') : isSubscribed ? t('common.disable') : t('common.enable')}
                 </Button>
               </div>
             </GlassCard>
 
             {isSubscribed && preferences && (
               <GlassCard className="p-5">
-                <h4 className="mb-4 font-semibold text-gray-900">Notification Preferences</h4>
+                <h4 className="mb-4 font-semibold text-gray-900">{t('settings.preferences.title')}</h4>
                 <div className="space-y-4">
                   <Toggle
                     enabled={preferences.challengeInvites}
                     onChange={(value) => handlePreferenceToggle('challengeInvites', value)}
-                    label="Challenge Invitations"
-                    description="Get notified when you're invited to a challenge"
+                    label={t('settings.preferences.challengeInvites')}
+                    description={t('settings.preferences.challengeInvitesDesc')}
                   />
                   <Toggle
                     enabled={preferences.challengeProgress}
                     onChange={(value) => handlePreferenceToggle('challengeProgress', value)}
-                    label="Challenge Progress"
-                    description="Get notified about challenge milestones and updates"
+                    label={t('settings.preferences.challengeProgress')}
+                    description={t('settings.preferences.challengeProgressDesc')}
                   />
                   <Toggle
                     enabled={preferences.challengeReminders}
                     onChange={(value) => handlePreferenceToggle('challengeReminders', value)}
-                    label="Challenge Reminders"
-                    description="Get notified when challenges are starting or ending soon"
+                    label={t('settings.preferences.challengeReminders')}
+                    description={t('settings.preferences.challengeRemindersDesc')}
                   />
                 </div>
               </GlassCard>
@@ -124,14 +151,14 @@ export const SettingsPage = () => {
 
         {/* Haptic Feedback */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Feedback</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('settings.feedback.title')}</h3>
           <GlassCard className="p-5">
             <Toggle
               enabled={hapticEnabled}
               onChange={handleHapticToggle}
               disabled={!hapticService.isSupported()}
-              label="Haptic Feedback"
-              description={`Enable vibration for achievements and events${!hapticService.isSupported() ? ' (Not supported on this device)' : ''}`}
+              label={t('settings.feedback.haptic')}
+              description={`${t('settings.feedback.hapticDesc')}${!hapticService.isSupported() ? t('settings.feedback.hapticUnsupported') : ''}`}
             />
           </GlassCard>
         </section>
