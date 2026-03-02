@@ -223,5 +223,3 @@ export const friendsService = {
     apiClient.get<Friend[]>(`/friends/search?q=${encodeURIComponent(query)}`),
 };
 
-export { trainingService } from './services/trainingService';
-export type { TrainingProgram, TrainingWeek, TrainingSession } from './services/trainingService';

@@ -24,7 +24,6 @@ import {
   SettingsPage,
   AboutPage,
   AdminPage,
-  TrainingProgramPage,
   NotFoundPage,
 } from '@pages/index';
 
@@ -178,14 +177,6 @@ export const App = () => {
             element={
               <ProtectedRoute>
                 <AdminPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/training"
-            element={
-              <ProtectedRoute>
-                <TrainingProgramPage />
               </ProtectedRoute>
             }
           />

@@ -25,7 +25,6 @@ const navItems: NavItem[] = [
   { path: '/challenges', label: 'Challenges', icon: '🎯', requiresData: true },
   { path: '/achievements', label: 'Badges', icon: '🏆', requiresData: true },
   { path: '/stats', label: 'Stats', icon: '📊', requiresData: true },
-  { path: '/admin/training', label: 'Training', icon: '📅', requiresAdmin: true },
 ];
 
 interface BottomNavProps {
