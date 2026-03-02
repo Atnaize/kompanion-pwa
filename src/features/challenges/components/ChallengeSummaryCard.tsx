@@ -9,9 +9,11 @@ interface ChallengeSummaryCardProps {
 
 export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCardProps) => {
   const now = new Date();
+  const startDate = new Date(challenge.startDate);
   const endDate = new Date(challenge.endDate);
   const daysRemaining = Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  const isActive = challenge.status === 'active';
+  const isUpcoming = challenge.status === 'active' && startDate > now;
+  const isActive = challenge.status === 'active' && !isUpcoming;
   const isCompleted = challenge.status === 'completed';
   const isFailed = challenge.status === 'failed';
 
@@ -31,6 +33,7 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
   const getStatusColor = () => {
     if (isCompleted) return 'text-green-600';
     if (isFailed) return 'text-red-600';
+    if (isUpcoming) return 'text-purple-600';
     if (isActive) return 'text-blue-600';
     return 'text-gray-600';
   };
@@ -38,9 +41,16 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
   const getStatusBadge = () => {
     if (isCompleted) return '✓ Completed';
     if (isFailed) return '✗ Failed';
+    if (isUpcoming) {
+      const daysUntilStart = Math.ceil(
+        (startDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      return daysUntilStart <= 1
+        ? `Starts ${formatDate(challenge.startDate)}`
+        : `Starts in ${daysUntilStart} days`;
+    }
     if (isActive && daysRemaining === 0) return '⚠️ Last day!';
     if (isActive && daysRemaining <= 3) return `⏰ ${daysRemaining} days left`;
-    if (challenge.status === 'draft') return '📝 Draft';
     return null;
   };
 
@@ -114,7 +124,11 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
               <span className={`text-xs font-medium ${getStatusColor()}`}>{statusBadge}</span>
             )}
             <span className="text-xs text-gray-500">
-              {isActive ? `Ends ${formatDate(challenge.endDate)}` : formatDate(challenge.endDate)}
+              {isActive
+                ? `Ends ${formatDate(challenge.endDate)}`
+                : isUpcoming
+                  ? `${formatDate(challenge.startDate)} - ${formatDate(challenge.endDate)}`
+                  : formatDate(challenge.endDate)}
             </span>
           </div>
         </div>

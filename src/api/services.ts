@@ -188,9 +188,12 @@ export const challengesService = {
     }
   ) => apiClient.patch<Challenge>(`/challenges/${id}`, data),
   delete: (id: string) => apiClient.delete(`/challenges/${id}`),
-  start: (id: string) => apiClient.post<Challenge>(`/challenges/${id}/start`),
   cancel: (id: string) => apiClient.post<Challenge>(`/challenges/${id}/cancel`),
   getProgress: (id: string) => apiClient.get<ChallengeProgress>(`/challenges/${id}/progress`),
+
+  // Completion summary
+  getUnseenCompleted: () => apiClient.get<Challenge[]>('/challenges/unseen-completed'),
+  markSummarySeen: (id: string) => apiClient.post(`/challenges/${id}/summary-seen`),
 
   // Invitations
   getPendingInvitations: () => apiClient.get<ChallengeParticipant[]>('/challenges/invitations'),

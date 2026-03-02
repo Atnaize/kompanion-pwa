@@ -6,6 +6,7 @@ import { useToastStore } from './toastStore';
 interface ChallengeState {
   challenges: Challenge[];
   pendingInvitations: ChallengeParticipant[];
+  unseenCompletedChallenges: Challenge[];
   currentChallenge: Challenge | null;
   isLoading: boolean;
   lastEventTimestamp: string | null;
@@ -15,6 +16,7 @@ interface ChallengeState {
   fetchChallenges: () => Promise<void>;
   fetchChallengeById: (id: string) => Promise<void>;
   fetchPendingInvitations: () => Promise<void>;
+  fetchUnseenCompleted: () => Promise<void>;
   createChallenge: (
     challenge: Parameters<typeof challengesService.create>[0]
   ) => Promise<Challenge | null>;
@@ -23,12 +25,12 @@ interface ChallengeState {
     data: Parameters<typeof challengesService.update>[1]
   ) => Promise<void>;
   deleteChallenge: (id: string) => Promise<void>;
-  startChallenge: (id: string) => Promise<void>;
   cancelChallenge: (id: string) => Promise<void>;
   acceptInvitation: (id: string) => Promise<void>;
   declineInvitation: (id: string) => Promise<void>;
   leaveChallenge: (id: string) => Promise<void>;
   inviteFriends: (challengeId: string, userIds: number[]) => Promise<void>;
+  markSummarySeen: (challengeId: string) => Promise<void>;
 
   // Event polling
   startPolling: () => void;
@@ -42,6 +44,7 @@ interface ChallengeState {
 export const useChallengeStore = create<ChallengeState>((set, get) => ({
   challenges: [],
   pendingInvitations: [],
+  unseenCompletedChallenges: [],
   currentChallenge: null,
   isLoading: false,
   lastEventTimestamp: null,
@@ -95,6 +98,18 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
     }
   },
 
+  fetchUnseenCompleted: async () => {
+    try {
+      const response = await challengesService.getUnseenCompleted();
+
+      if (response.success && response.data) {
+        set({ unseenCompletedChallenges: response.data });
+      }
+    } catch (error) {
+      console.error('Error fetching unseen completed challenges:', error);
+    }
+  },
+
   createChallenge: async (challenge) => {
     try {
       const response = await challengesService.create(challenge);
@@ -143,24 +158,6 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
     } catch (error) {
       console.error('Error deleting challenge:', error);
       useToastStore.getState().addToast('Failed to delete challenge', 'error');
-    }
-  },
-
-  startChallenge: async (id) => {
-    try {
-      const response = await challengesService.start(id);
-
-      if (response.success) {
-        await get().fetchChallengeById(id);
-        useToastStore.getState().addToast('Challenge started!', 'success');
-      } else {
-        useToastStore.getState().addToast(response.error || 'Failed to start challenge', 'error');
-      }
-    } catch (error) {
-      console.error('Error starting challenge:', error);
-      // Extract error message from the error object
-      const errorMessage = error instanceof Error ? error.message : 'Failed to start challenge';
-      useToastStore.getState().addToast(errorMessage, 'error');
     }
   },
 
@@ -244,6 +241,21 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
     }
   },
 
+  markSummarySeen: async (challengeId) => {
+    try {
+      await challengesService.markSummarySeen(challengeId);
+
+      // Remove from unseen list
+      set((state) => ({
+        unseenCompletedChallenges: state.unseenCompletedChallenges.filter(
+          (c) => c.id !== challengeId
+        ),
+      }));
+    } catch (error) {
+      console.error('Error marking summary as seen:', error);
+    }
+  },
+
   pollEvents: async () => {
     try {
       const { lastEventTimestamp } = get();
@@ -263,12 +275,17 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
 
           // Show notifications for important events
           events.forEach((event: ChallengeEvent) => {
-            if (event.type === 'activity_added') {
-              // Don't show toast for every activity
+            if (event.type === 'invited') {
+              useToastStore.getState().addToast("You've been invited to a challenge!", 'info');
+              void get().fetchPendingInvitations();
             } else if (event.type === 'completed') {
-              useToastStore.getState().addToast('Challenge completed! 🎉', 'success');
+              useToastStore.getState().addToast('Challenge completed!', 'success');
+              void get().fetchUnseenCompleted();
+            } else if (event.type === 'failed') {
+              useToastStore.getState().addToast('A challenge has ended', 'info');
+              void get().fetchUnseenCompleted();
             } else if (event.type === 'milestone_reached') {
-              useToastStore.getState().addToast('Milestone reached! 🔥', 'success');
+              useToastStore.getState().addToast('Milestone reached!', 'success');
             }
           });
         }
@@ -311,6 +328,7 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
     set({
       challenges: [],
       pendingInvitations: [],
+      unseenCompletedChallenges: [],
       currentChallenge: null,
       isLoading: false,
       lastEventTimestamp: null,

@@ -108,12 +108,13 @@ export interface ApiResponse<T = unknown> {
 
 // Challenge System Types
 export type ChallengeType = 'collaborative' | 'competitive';
-export type ChallengeStatus = 'draft' | 'active' | 'completed' | 'failed' | 'cancelled';
+export type ChallengeStatus = 'active' | 'completed' | 'failed' | 'cancelled';
 export type ParticipantStatus = 'invited' | 'accepted' | 'declined' | 'left';
 export type CompetitiveGoal = 'most' | 'least' | 'exact';
 export type ChallengeEventType =
   | 'created'
   | 'started'
+  | 'invited'
   | 'activity_added'
   | 'milestone_reached'
   | 'lead_change'

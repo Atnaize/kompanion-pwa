@@ -14,7 +14,6 @@ export const ChallengeDetailPage = () => {
     currentChallenge,
     isLoading,
     fetchChallengeById,
-    startChallenge,
     cancelChallenge,
     acceptInvitation,
     declineInvitation,
@@ -54,22 +53,30 @@ export const ChallengeDetailPage = () => {
     });
   };
 
+  const now = new Date();
+  const isUpcoming =
+    currentChallenge.status === 'active' && new Date(currentChallenge.startDate) > now;
+  const isActive = currentChallenge.status === 'active' && !isUpcoming;
+  const isCompleted = currentChallenge.status === 'completed';
+  const isFailed = currentChallenge.status === 'failed';
+  const isFinished = isCompleted || isFailed;
+
   const getStatusBadge = (status: string) => {
+    if (isUpcoming) {
+      return { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Upcoming' };
+    }
+
     const badges = {
-      draft: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Draft' },
       active: { bg: 'bg-green-100', text: 'text-green-700', label: 'Active' },
       completed: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Completed' },
       failed: { bg: 'bg-red-100', text: 'text-red-700', label: 'Failed' },
       cancelled: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Cancelled' },
     };
 
-    const badge = badges[status as keyof typeof badges] || badges.draft;
-    return (
-      <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge.bg} ${badge.text}`}>
-        {badge.label}
-      </span>
-    );
+    return badges[status as keyof typeof badges] || { bg: 'bg-gray-100', text: 'text-gray-700', label: status };
   };
+
+  const badge = getStatusBadge(currentChallenge.status);
 
   const getTypeIcon = (type: string): string => {
     return type === 'collaborative' ? '🤝' : '⚔️';
@@ -84,14 +91,6 @@ export const ChallengeDetailPage = () => {
   const isCreator = currentChallenge.creator?.id === user?.userId;
   const isInvited = userParticipation?.status === 'invited';
   const isAccepted = userParticipation?.status === 'accepted';
-  const isDraft = currentChallenge.status === 'draft';
-  const isActive = currentChallenge.status === 'active';
-
-  const handleStart = async () => {
-    if (id) {
-      await startChallenge(id);
-    }
-  };
 
   const handleCancelClick = () => {
     setShowCancelModal(true);
@@ -155,7 +154,9 @@ export const ChallengeDetailPage = () => {
               >
                 ← Back
               </button>
-              {getStatusBadge(currentChallenge.status)}
+              <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge.bg} ${badge.text}`}>
+                {badge.label}
+              </span>
             </div>
             <div className="mb-2 flex items-center gap-2">
               <span className="text-2xl">{getTypeIcon(currentChallenge.type)}</span>
@@ -281,8 +282,8 @@ export const ChallengeDetailPage = () => {
           </GlassCard>
         )}
 
-        {/* Progress */}
-        {isActive && (
+        {/* Progress - show for active and completed/failed challenges */}
+        {(isActive || isFinished) && (
           <div className="space-y-4">
             <h2 className="mb-3 text-lg font-semibold text-gray-900">Progress</h2>
             <ChallengeProgress
@@ -312,12 +313,9 @@ export const ChallengeDetailPage = () => {
             </>
           )}
 
-          {/* Creator actions for draft challenges */}
-          {isCreator && isDraft && (
+          {/* Creator actions for upcoming challenges */}
+          {isCreator && isUpcoming && (
             <>
-              <Button onClick={handleStart} className="w-full">
-                Start Challenge
-              </Button>
               <Button
                 onClick={() => setShowInviteModal(true)}
                 variant="secondary"
@@ -348,7 +346,7 @@ export const ChallengeDetailPage = () => {
           )}
 
           {/* Non-creator who accepted can leave */}
-          {!isCreator && isAccepted && (isDraft || isActive) && (
+          {!isCreator && isAccepted && (isActive || isUpcoming) && (
             <Button onClick={handleLeaveClick} variant="secondary" className="w-full">
               Leave Challenge
             </Button>

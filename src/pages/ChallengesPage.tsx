@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout/Layout';
 import { EmptyState, Skeleton, Button, Tabs, TabList, Tab, TabPanel } from '@components/ui';
-import { ChallengeSummaryCard, InvitationCard } from '@features/challenges';
+import { ChallengeSummaryCard, InvitationCard, ChallengeSummaryModal } from '@features/challenges';
 import { useChallengeStore } from '@store/challengeStore';
 
 export const ChallengesPage = () => {
@@ -10,43 +10,54 @@ export const ChallengesPage = () => {
   const {
     challenges,
     pendingInvitations,
+    unseenCompletedChallenges,
     isLoading,
     fetchChallenges,
     fetchPendingInvitations,
+    fetchUnseenCompleted,
+    markSummarySeen,
     acceptInvitation,
     declineInvitation,
     startPolling,
     stopPolling,
   } = useChallengeStore();
 
-  const [activeTab, setActiveTab] = useState<'active' | 'draft' | 'completed' | 'invitations'>(
-    'active'
-  );
+  const [activeTab, setActiveTab] = useState<'active' | 'completed' | 'invitations'>('active');
 
   useEffect(() => {
     void fetchChallenges();
     void fetchPendingInvitations();
+    void fetchUnseenCompleted();
     startPolling();
 
     return () => {
       stopPolling();
     };
-  }, [fetchChallenges, fetchPendingInvitations, startPolling, stopPolling]);
+  }, [fetchChallenges, fetchPendingInvitations, fetchUnseenCompleted, startPolling, stopPolling]);
 
-  const getFilteredChallenges = (status: 'active' | 'draft' | 'completed') => {
-    switch (status) {
-      case 'active':
-        return challenges.filter((c) => c.status === 'active');
-      case 'draft':
-        return challenges.filter((c) => c.status === 'draft');
-      case 'completed':
-        return challenges.filter((c) => c.status === 'completed' || c.status === 'failed');
-    }
+  const activeChallenges = challenges
+    .filter((c) => c.status === 'active')
+    .sort((a, b) => {
+      const now = new Date();
+      const aStarted = new Date(a.startDate) <= now;
+      const bStarted = new Date(b.startDate) <= now;
+
+      // Active (started) challenges first, upcoming last
+      if (aStarted && !bStarted) return -1;
+      if (!aStarted && bStarted) return 1;
+
+      return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
+    });
+
+  const completedChallenges = challenges.filter(
+    (c) => c.status === 'completed' || c.status === 'failed'
+  );
+
+  const handleDismissSummary = async (challengeId: string) => {
+    await markSummarySeen(challengeId);
   };
 
-  const activeChallenges = getFilteredChallenges('active');
-  const draftChallenges = getFilteredChallenges('draft');
-  const completedChallenges = getFilteredChallenges('completed');
+  const currentSummaryChallenge = unseenCompletedChallenges[0] || null;
 
   return (
     <Layout>
@@ -64,7 +75,6 @@ export const ChallengesPage = () => {
         <Tabs value={activeTab} onChange={(value) => setActiveTab(value as typeof activeTab)}>
           <TabList>
             <Tab value="active" label="Active" count={activeChallenges.length} />
-            <Tab value="draft" label="Draft" count={draftChallenges.length} />
             <Tab value="completed" label="Completed" />
             <Tab value="invitations" label="Invites" count={pendingInvitations.length} />
           </TabList>
@@ -99,27 +109,6 @@ export const ChallengesPage = () => {
                       label: 'Create Challenge',
                       onClick: () => navigate('/challenges/create'),
                     }}
-                  />
-                )}
-              </TabPanel>
-
-              {/* Draft Tab */}
-              <TabPanel value="draft" className="mt-4">
-                {draftChallenges.length > 0 ? (
-                  <div className="space-y-3">
-                    {draftChallenges.map((challenge) => (
-                      <ChallengeSummaryCard
-                        key={challenge.id}
-                        challenge={challenge}
-                        onClick={() => navigate(`/challenges/${challenge.id}`)}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <EmptyState
-                    icon="📝"
-                    title="No draft challenges"
-                    description="Your draft challenges will appear here"
                   />
                 )}
               </TabPanel>
@@ -170,6 +159,18 @@ export const ChallengesPage = () => {
           )}
         </Tabs>
       </div>
+
+      {/* Completion Summary Modal */}
+      {currentSummaryChallenge && (
+        <ChallengeSummaryModal
+          challenge={currentSummaryChallenge}
+          onDismiss={() => void handleDismissSummary(currentSummaryChallenge.id)}
+          onViewChallenge={() => {
+            void handleDismissSummary(currentSummaryChallenge.id);
+            navigate(`/challenges/${currentSummaryChallenge.id}`);
+          }}
+        />
+      )}
     </Layout>
   );
 };
