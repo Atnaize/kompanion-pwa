@@ -59,6 +59,10 @@ self.addEventListener('notificationclick', (event) => {
     urlPath = '/challenges';
   } else if (notificationData?.type === 'challenge_ending') {
     urlPath = '/challenges';
+  } else if (notificationData?.type === 'challenge_cancelled') {
+    urlPath = '/challenges';
+  } else if (notificationData?.type === 'challenge_completed') {
+    urlPath = '/challenges';
   } else if (notificationData?.type === 'achievement') {
     urlPath = '/achievements';
   }

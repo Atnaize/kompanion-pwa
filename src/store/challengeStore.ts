@@ -286,6 +286,8 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
               void get().fetchUnseenCompleted();
             } else if (event.type === 'milestone_reached') {
               useToastStore.getState().addToast('Milestone reached!', 'success');
+            } else if (event.type === 'cancelled') {
+              useToastStore.getState().addToast('A challenge has been cancelled', 'info');
             }
           });
         }
