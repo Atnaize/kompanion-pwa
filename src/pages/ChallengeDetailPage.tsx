@@ -73,7 +73,13 @@ export const ChallengeDetailPage = () => {
       cancelled: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Cancelled' },
     };
 
-    return badges[status as keyof typeof badges] || { bg: 'bg-gray-100', text: 'text-gray-700', label: status };
+    return (
+      badges[status as keyof typeof badges] || {
+        bg: 'bg-gray-100',
+        text: 'text-gray-700',
+        label: status,
+      }
+    );
   };
 
   const badge = getStatusBadge(currentChallenge.status);
@@ -154,7 +160,9 @@ export const ChallengeDetailPage = () => {
               >
                 ← Back
               </button>
-              <span className={`rounded-full px-3 py-1 text-xs font-medium ${badge.bg} ${badge.text}`}>
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium ${badge.bg} ${badge.text}`}
+              >
                 {badge.label}
               </span>
             </div>

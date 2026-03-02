@@ -134,7 +134,8 @@ export const ChallengeSummaryModal = ({
               <div className="space-y-2">
                 {sortedParticipants.map((participant, index) => {
                   const rank = index + 1;
-                  const rankEmoji = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+                  const rankEmoji =
+                    rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
                   const isCurrentUser = participant.userId === user?.userId;
 
                   return (
