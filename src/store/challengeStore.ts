@@ -41,13 +41,15 @@ interface ChallengeState {
   reset: () => void;
 }
 
+const LAST_EVENT_TS_KEY = 'challenge_last_event_ts';
+
 export const useChallengeStore = create<ChallengeState>((set, get) => ({
   challenges: [],
   pendingInvitations: [],
   unseenCompletedChallenges: [],
   currentChallenge: null,
   isLoading: false,
-  lastEventTimestamp: null,
+  lastEventTimestamp: localStorage.getItem(LAST_EVENT_TS_KEY),
   pollingInterval: null,
 
   fetchChallenges: async () => {
@@ -259,15 +261,23 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
   pollEvents: async () => {
     try {
       const { lastEventTimestamp } = get();
+      const isFirstEverPoll = !lastEventTimestamp;
       const response = await challengesService.getEvents(lastEventTimestamp || undefined);
 
       if (response.success && response.data) {
         const { events, latestTimestamp } = response.data;
 
         if (events.length > 0) {
-          // Update timestamp
+          // Persist timestamp so it survives page navigation/reloads
           if (latestTimestamp) {
             set({ lastEventTimestamp: latestTimestamp });
+            localStorage.setItem(LAST_EVENT_TS_KEY, latestTimestamp);
+          }
+
+          // On the very first poll (no stored timestamp), just establish the cursor
+          // without showing toasts for all historical events
+          if (isFirstEverPoll) {
+            return;
           }
 
           // Refresh challenges if there are new events
@@ -327,6 +337,7 @@ export const useChallengeStore = create<ChallengeState>((set, get) => ({
 
   reset: () => {
     get().stopPolling();
+    localStorage.removeItem(LAST_EVENT_TS_KEY);
     set({
       challenges: [],
       pendingInvitations: [],
