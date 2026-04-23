@@ -101,7 +101,11 @@ export const PersonalRecordsPage = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{t('personalRecords.title')}</h1>
           <p className="text-sm text-gray-600">
-            {t('personalRecords.summary', { count: prActivities.length, activityCount: prActivities.length, prCount: totalPRs })}
+            {t('personalRecords.summary', {
+              count: prActivities.length,
+              activityCount: prActivities.length,
+              prCount: totalPRs,
+            })}
           </p>
         </div>
 
@@ -164,7 +168,9 @@ export const PersonalRecordsPage = () => {
           <EmptyState
             icon="🏆"
             title={
-              selectedType !== 'all' ? t('personalRecords.noPrsForType') : t('personalRecords.noPrsYet')
+              selectedType !== 'all'
+                ? t('personalRecords.noPrsForType')
+                : t('personalRecords.noPrsYet')
             }
             description={
               selectedType !== 'all'

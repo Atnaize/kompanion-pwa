@@ -98,12 +98,16 @@ export const SettingsPage = () => {
 
         {/* Push Notifications */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('settings.pushNotifications.title')}</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900">
+            {t('settings.pushNotifications.title')}
+          </h3>
           <div className="space-y-4">
             <GlassCard className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-semibold text-gray-900">{t('settings.pushNotifications.enable')}</h4>
+                  <h4 className="font-semibold text-gray-900">
+                    {t('settings.pushNotifications.enable')}
+                  </h4>
                   <p className="text-sm text-gray-600">
                     {isPushSupported
                       ? t('settings.pushNotifications.descriptionSupported')
@@ -116,14 +120,20 @@ export const SettingsPage = () => {
                   variant={isSubscribed ? 'secondary' : 'primary'}
                   size="sm"
                 >
-                  {isPushLoading ? t('common.loading') : isSubscribed ? t('common.disable') : t('common.enable')}
+                  {isPushLoading
+                    ? t('common.loading')
+                    : isSubscribed
+                      ? t('common.disable')
+                      : t('common.enable')}
                 </Button>
               </div>
             </GlassCard>
 
             {isSubscribed && preferences && (
               <GlassCard className="p-5">
-                <h4 className="mb-4 font-semibold text-gray-900">{t('settings.preferences.title')}</h4>
+                <h4 className="mb-4 font-semibold text-gray-900">
+                  {t('settings.preferences.title')}
+                </h4>
                 <div className="space-y-4">
                   <Toggle
                     enabled={preferences.challengeInvites}

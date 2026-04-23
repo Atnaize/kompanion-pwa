@@ -60,7 +60,9 @@ export const ProfileMenu = () => {
                 <p className="font-bold text-gray-900">
                   {user.firstname} {user.lastname || ''}
                 </p>
-                <p className="text-xs text-gray-600">{t('profileMenu.stravaId', { id: user.stravaId })}</p>
+                <p className="text-xs text-gray-600">
+                  {t('profileMenu.stravaId', { id: user.stravaId })}
+                </p>
               </div>
             </div>
           </div>

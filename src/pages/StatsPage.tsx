@@ -95,7 +95,11 @@ export const StatsPage = () => {
               <section>
                 <h3 className="mb-4 text-lg font-bold text-gray-900">{t('stats.overall')}</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <StatTile icon="🏃" label={t('common.activities')} value={stats.totalActivities.toString()} />
+                  <StatTile
+                    icon="🏃"
+                    label={t('common.activities')}
+                    value={stats.totalActivities.toString()}
+                  />
                   <StatTile
                     icon="📏"
                     label={t('common.distance')}
@@ -106,26 +110,38 @@ export const StatsPage = () => {
                     label={t('common.elevation')}
                     value={formatElevation(stats.totalElevation)}
                   />
-                  <StatTile icon="⏱️" label={t('common.time')} value={formatDuration(stats.totalTime)} />
+                  <StatTile
+                    icon="⏱️"
+                    label={t('common.time')}
+                    value={formatDuration(stats.totalTime)}
+                  />
                   <StatTile
                     icon="🔥"
                     label={t('stats.currentStreak')}
                     value={`${stats.currentStreak} ${t('common.days')}`}
                   />
-                  <StatTile icon="🏆" label={t('stats.bestStreak')} value={`${stats.longestStreak} ${t('common.days')}`} />
+                  <StatTile
+                    icon="🏆"
+                    label={t('stats.bestStreak')}
+                    value={`${stats.longestStreak} ${t('common.days')}`}
+                  />
                 </div>
               </section>
 
               {/* By Activity Type */}
               {activityTypes.length > 0 && (
                 <section>
-                  <h3 className="mb-4 text-lg font-bold text-gray-900">{t('stats.byActivityType')}</h3>
+                  <h3 className="mb-4 text-lg font-bold text-gray-900">
+                    {t('stats.byActivityType')}
+                  </h3>
                   <div className="space-y-3">
                     {activityTypes.map(([type, data]) => (
                       <GlassCard key={type} className="p-4">
                         <div className="mb-3 flex items-center justify-between">
                           <h4 className="font-bold text-gray-900">{type}</h4>
-                          <span className="text-sm text-gray-600">{t('stats.activitiesCount', { count: data.count })}</span>
+                          <span className="text-sm text-gray-600">
+                            {t('stats.activitiesCount', { count: data.count })}
+                          </span>
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-sm">
                           <div>

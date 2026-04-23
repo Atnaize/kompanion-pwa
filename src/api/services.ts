@@ -2,6 +2,11 @@ import { apiClient } from './client';
 import type {
   User,
   Activity,
+  ActivityAthlete,
+  ActivityComment,
+  ActivityLap,
+  ActivityPhoto,
+  ActivityStreams,
   Stats,
   Achievement,
   SyncResult,
@@ -70,6 +75,11 @@ export const activitiesService = {
     });
   },
   getById: (id: number) => apiClient.get<Activity>(`/activities/${id}`),
+  getStreams: (id: number) => apiClient.get<ActivityStreams>(`/activities/${id}/streams`),
+  getLaps: (id: number) => apiClient.get<ActivityLap[]>(`/activities/${id}/laps`),
+  getKudoers: (id: number) => apiClient.get<ActivityAthlete[]>(`/activities/${id}/kudoers`),
+  getComments: (id: number) => apiClient.get<ActivityComment[]>(`/activities/${id}/comments`),
+  getPhotos: (id: number) => apiClient.get<ActivityPhoto[]>(`/activities/${id}/photos`),
 };
 
 export const statsService = {
@@ -222,4 +232,3 @@ export const friendsService = {
   search: (query: string) =>
     apiClient.get<Friend[]>(`/friends/search?q=${encodeURIComponent(query)}`),
 };
-

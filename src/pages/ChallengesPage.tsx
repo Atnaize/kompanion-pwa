@@ -78,7 +78,11 @@ export const ChallengesPage = () => {
           <TabList>
             <Tab value="active" label={t('challenges.active')} count={activeChallenges.length} />
             <Tab value="completed" label={t('challenges.completed')} />
-            <Tab value="invitations" label={t('challenges.invites')} count={pendingInvitations.length} />
+            <Tab
+              value="invitations"
+              label={t('challenges.invites')}
+              count={pendingInvitations.length}
+            />
           </TabList>
 
           {/* Loading State */}

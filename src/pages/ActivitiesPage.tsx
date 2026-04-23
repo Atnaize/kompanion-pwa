@@ -158,7 +158,10 @@ export const ActivitiesPage = () => {
             <h1 className="text-2xl font-bold text-gray-900">{t('activities.title')}</h1>
             <p className="text-sm text-gray-600">
               {searchQuery
-                ? t('activities.countMatching', { count: filteredActivities.length, query: searchQuery })
+                ? t('activities.countMatching', {
+                    count: filteredActivities.length,
+                    query: searchQuery,
+                  })
                 : t('activities.count', { count: filteredActivities.length })}
             </p>
           </div>

@@ -50,7 +50,10 @@ export const PeriodComparison = () => {
 
     const labels: Record<Exclude<Period, 'custom'>, { current: string; previous: string }> = {
       week: { current: t('periodComparison.thisWeek'), previous: t('periodComparison.lastWeek') },
-      month: { current: t('periodComparison.thisMonth'), previous: t('periodComparison.lastMonth') },
+      month: {
+        current: t('periodComparison.thisMonth'),
+        previous: t('periodComparison.lastMonth'),
+      },
       year: { current: t('periodComparison.thisYear'), previous: t('periodComparison.lastYear') },
     };
     return isCurrent
@@ -169,7 +172,9 @@ export const PeriodComparison = () => {
       {period === 'custom' && (
         <div className="mb-6 space-y-4 rounded-lg bg-white/50 p-4 backdrop-blur-sm">
           <div>
-            <h4 className="mb-2 text-sm font-medium text-gray-900">{t('periodComparison.currentPeriod')}</h4>
+            <h4 className="mb-2 text-sm font-medium text-gray-900">
+              {t('periodComparison.currentPeriod')}
+            </h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label htmlFor="currentStart" className="mb-1 block text-xs text-gray-600">
@@ -199,7 +204,9 @@ export const PeriodComparison = () => {
           </div>
 
           <div>
-            <h4 className="mb-2 text-sm font-medium text-gray-900">{t('periodComparison.previousPeriod')}</h4>
+            <h4 className="mb-2 text-sm font-medium text-gray-900">
+              {t('periodComparison.previousPeriod')}
+            </h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label htmlFor="previousStart" className="mb-1 block text-xs text-gray-600">

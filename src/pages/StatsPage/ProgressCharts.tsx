@@ -119,7 +119,9 @@ export const ProgressCharts = () => {
 
       {/* Period Selector */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">{t('common.timePeriod')}</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700">
+          {t('common.timePeriod')}
+        </label>
         <div className="grid grid-cols-4 gap-2">
           {(['week', 'month', 'year', 'all'] as Period[]).map((p) => (
             <button

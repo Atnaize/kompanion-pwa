@@ -104,7 +104,9 @@ export const LoginPage = () => {
         {/* Mobile header with gradient */}
         <div className="bg-gradient-to-br from-strava-orange via-strava-orange-light to-orange-400 px-6 pb-16 pt-12 lg:hidden">
           <div className="text-center">
-            <h1 className="mb-3 text-5xl font-bold text-white drop-shadow-lg">{t('login.title')}</h1>
+            <h1 className="mb-3 text-5xl font-bold text-white drop-shadow-lg">
+              {t('login.title')}
+            </h1>
             <p className="text-xl text-white/95 drop-shadow">{t('login.tagline')}</p>
           </div>
         </div>
@@ -115,9 +117,7 @@ export const LoginPage = () => {
           <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10">
             <div className="mb-8 text-center">
               <h2 className="mb-2 text-2xl font-bold text-gray-900">{t('login.getStarted')}</h2>
-              <p className="text-gray-600">
-                {t('login.connectDescription')}
-              </p>
+              <p className="text-gray-600">{t('login.connectDescription')}</p>
             </div>
 
             {errorMessage && (
@@ -166,15 +166,11 @@ export const LoginPage = () => {
               )}
             </button>
 
-            <p className="mt-6 text-center text-xs text-gray-500">
-              {t('login.disclaimer')}
-            </p>
+            <p className="mt-6 text-center text-xs text-gray-500">{t('login.disclaimer')}</p>
           </div>
 
           {/* Footer */}
-          <p className="mt-6 text-center text-sm text-gray-500">
-            {t('login.footer')}
-          </p>
+          <p className="mt-6 text-center text-sm text-gray-500">{t('login.footer')}</p>
         </div>
       </div>
     </div>

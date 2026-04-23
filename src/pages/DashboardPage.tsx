@@ -161,7 +161,11 @@ export const DashboardPage = () => {
                     label={t('common.elevation')}
                     value={formatElevation(stats?.totalElevation || 0)}
                   />
-                  <StatTile icon="🔥" label={t('common.streak')} value={`${stats?.currentStreak || 0} ${t('common.days')}`} />
+                  <StatTile
+                    icon="🔥"
+                    label={t('common.streak')}
+                    value={`${stats?.currentStreak || 0} ${t('common.days')}`}
+                  />
                 </div>
               )}
             </section>
@@ -177,7 +181,9 @@ export const DashboardPage = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-2xl">🏆</span>
-                        <h3 className="text-lg font-bold text-gray-900">{t('dashboard.personalRecords')}</h3>
+                        <h3 className="text-lg font-bold text-gray-900">
+                          {t('dashboard.personalRecords')}
+                        </h3>
                       </div>
                       <p className="mt-1 text-sm text-gray-600">
                         {t('dashboard.prDescription', {
@@ -202,7 +208,9 @@ export const DashboardPage = () => {
             {/* Recent Activities */}
             <section>
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">{t('dashboard.recentActivities')}</h2>
+                <h2 className="text-xl font-bold text-gray-900">
+                  {t('dashboard.recentActivities')}
+                </h2>
                 <Button size="sm" onClick={handleSync} disabled={isSyncing}>
                   {isSyncing ? t('common.syncing') : t('common.sync')}
                 </Button>

@@ -48,9 +48,7 @@ export const InstallPrompt = () => {
               </>
             ) : (
               <>
-                <p className="mb-3 text-sm text-gray-600">
-                  {t('pwa.install.androidDescription')}
-                </p>
+                <p className="mb-3 text-sm text-gray-600">{t('pwa.install.androidDescription')}</p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => void showInstallPrompt()}

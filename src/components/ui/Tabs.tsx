@@ -34,9 +34,35 @@ export const Tabs = ({ value, onChange, children, className }: TabsProps) => {
 interface TabListProps {
   children: ReactNode;
   className?: string;
+  /** Wrap tabs onto multiple rows instead of horizontal scroll */
+  wrap?: boolean;
+  /** Show fade masks on edges as a scroll-affordance hint (ignored when wrap=true) */
+  fade?: boolean;
 }
 
-export const TabList = ({ children, className }: TabListProps) => {
+export const TabList = ({ children, className, wrap = false, fade = false }: TabListProps) => {
+  if (wrap) {
+    return (
+      <div className={clsx('flex flex-wrap justify-center gap-1.5', className)}>{children}</div>
+    );
+  }
+  if (fade) {
+    return (
+      <div className={clsx('relative', className)}>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-4 bg-gradient-to-r from-gray-50 to-transparent"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l from-gray-50 to-transparent"
+        />
+        <div className="no-scrollbar flex gap-1.5 overflow-x-auto scroll-smooth px-1">
+          {children}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={clsx('no-scrollbar flex gap-2 overflow-x-auto', className)}>{children}</div>
   );
@@ -46,10 +72,13 @@ interface TabProps {
   value: string;
   label: string;
   count?: number;
+  icon?: ReactNode;
   className?: string;
+  /** Compact variant: smaller padding and count pill */
+  compact?: boolean;
 }
 
-export const Tab = ({ value, label, count, className }: TabProps) => {
+export const Tab = ({ value, label, count, icon, className, compact }: TabProps) => {
   const { activeTab, onChange } = useTabsContext();
   const isActive = activeTab === value;
 
@@ -57,19 +86,33 @@ export const Tab = ({ value, label, count, className }: TabProps) => {
     <button
       onClick={() => onChange(value)}
       className={clsx(
-        'shrink-0 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all',
+        'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg font-medium transition-all',
+        compact ? 'px-2.5 py-1.5 text-[13px]' : 'px-4 py-2 text-sm',
         isActive
-          ? 'bg-gradient-to-br from-strava-orange to-orange-600 text-white shadow-lg'
-          : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80',
+          ? 'bg-gradient-to-br from-strava-orange to-orange-600 text-white shadow-md'
+          : 'bg-white/60 text-gray-700 backdrop-blur-sm hover:bg-white/90',
         className
       )}
     >
-      {label}
+      {icon && (
+        <span
+          className={clsx(
+            'leading-none',
+            compact ? 'text-[14px]' : 'text-base',
+            isActive ? 'opacity-100' : 'opacity-80'
+          )}
+          aria-hidden
+        >
+          {icon}
+        </span>
+      )}
+      <span>{label}</span>
       {count !== undefined && count > 0 && (
         <span
           className={clsx(
-            'ml-1.5 rounded-full px-1.5 py-0.5 text-xs',
-            isActive ? 'bg-white/20' : 'bg-orange-100 text-orange-700'
+            'rounded-full px-1.5 text-[10px] font-semibold leading-[18px]',
+            compact ? 'min-w-[18px] text-center' : 'min-w-[20px] px-2 text-xs leading-5',
+            isActive ? 'bg-white/25 text-white' : 'bg-orange-100 text-orange-700'
           )}
         >
           {count}

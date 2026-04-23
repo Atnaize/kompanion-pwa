@@ -16,9 +16,7 @@ export const UpdateNotification = () => {
           <div className="text-2xl">🚀</div>
           <div className="flex-1">
             <h3 className="mb-1 font-semibold text-white">{t('pwa.update.title')}</h3>
-            <p className="mb-3 text-sm text-white/90">
-              {t('pwa.update.description')}
-            </p>
+            <p className="mb-3 text-sm text-white/90">{t('pwa.update.description')}</p>
             <div className="flex gap-2">
               <button
                 onClick={() => void updateServiceWorker()}

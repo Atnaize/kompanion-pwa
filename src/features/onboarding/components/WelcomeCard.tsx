@@ -33,7 +33,10 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
             )}
             {isSaving && (
               <span className="font-medium text-strava-orange">
-                {t('welcome.savingActivities', { current: syncProgress?.current || 0, total: syncProgress?.total || 0 })}
+                {t('welcome.savingActivities', {
+                  current: syncProgress?.current || 0,
+                  total: syncProgress?.total || 0,
+                })}
               </span>
             )}
           </>

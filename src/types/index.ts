@@ -43,12 +43,21 @@ export interface Activity {
   sport_type: string;
   start_date: string;
   start_date_local: string;
+  timezone?: string;
   average_speed: number;
   max_speed: number;
   average_heartrate?: number;
   max_heartrate?: number;
   average_watts?: number;
+  weighted_average_watts?: number;
   max_watts?: number;
+  kilojoules?: number;
+  average_cadence?: number;
+  average_temp?: number;
+  calories?: number;
+  suffer_score?: number;
+  description?: string;
+  device_name?: string;
   elev_high?: number;
   elev_low?: number;
   pr_count: number;
@@ -56,6 +65,88 @@ export interface Activity {
   comment_count: number;
   achievement_count: number;
   segment_efforts?: SegmentEffort[];
+  map?: {
+    id?: string;
+    summary_polyline?: string;
+    polyline?: string;
+  };
+}
+
+export interface ActivityLap {
+  id: number;
+  lap_index: number;
+  name: string;
+  distance: number;
+  elapsed_time: number;
+  moving_time: number;
+  average_speed: number;
+  max_speed: number;
+  total_elevation_gain: number;
+  average_heartrate?: number;
+  max_heartrate?: number;
+  average_cadence?: number;
+  average_watts?: number;
+  split: number;
+  start_date_local: string;
+}
+
+export type StreamType =
+  | 'time'
+  | 'distance'
+  | 'latlng'
+  | 'altitude'
+  | 'velocity_smooth'
+  | 'heartrate'
+  | 'cadence'
+  | 'watts'
+  | 'temp'
+  | 'moving'
+  | 'grade_smooth';
+
+export interface Stream<T = number> {
+  type: StreamType;
+  data: T[];
+  series_type: 'distance' | 'time';
+  original_size: number;
+  resolution: 'low' | 'medium' | 'high';
+}
+
+export interface ActivityAthlete {
+  id: number;
+  firstname: string;
+  lastname: string;
+  profile?: string;
+  profile_medium?: string;
+}
+
+export interface ActivityComment {
+  id: number;
+  activity_id: number;
+  text: string;
+  created_at: string;
+  athlete: ActivityAthlete;
+}
+
+export interface ActivityPhoto {
+  unique_id: string;
+  urls: Record<string, string>;
+  caption?: string | null;
+  created_at?: string;
+  sizes?: Record<string, [number, number]>;
+}
+
+export interface ActivityStreams {
+  time?: Stream<number>;
+  distance?: Stream<number>;
+  latlng?: Stream<[number, number]>;
+  altitude?: Stream<number>;
+  velocity_smooth?: Stream<number>;
+  heartrate?: Stream<number>;
+  cadence?: Stream<number>;
+  watts?: Stream<number>;
+  temp?: Stream<number>;
+  moving?: Stream<boolean>;
+  grade_smooth?: Stream<number>;
 }
 
 export interface Stats {

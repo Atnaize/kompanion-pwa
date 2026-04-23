@@ -21,9 +21,7 @@ export const NotFoundPage = () => {
 
           <h1 className="mb-4 text-2xl font-bold text-gray-900">{t('notFound.title')}</h1>
 
-          <p className="mb-6 text-gray-600">
-            {t('notFound.description')}
-          </p>
+          <p className="mb-6 text-gray-600">{t('notFound.description')}</p>
 
           <button
             onClick={handleGoHome}

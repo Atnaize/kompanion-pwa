@@ -95,7 +95,9 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
               ))}
             </div>
             <span className="text-xs text-gray-600">
-              {t('challenges.participant', { count: challenge.participants?.filter((p) => p.status === 'accepted').length || 0 })}
+              {t('challenges.participant', {
+                count: challenge.participants?.filter((p) => p.status === 'accepted').length || 0,
+              })}
             </span>
           </div>
 

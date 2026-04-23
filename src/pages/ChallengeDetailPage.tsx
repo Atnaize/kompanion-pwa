@@ -67,14 +67,30 @@ export const ChallengeDetailPage = () => {
 
   const getStatusBadge = (status: string) => {
     if (isUpcoming) {
-      return { bg: 'bg-purple-100', text: 'text-purple-700', label: t('challengeDetail.statusUpcoming') };
+      return {
+        bg: 'bg-purple-100',
+        text: 'text-purple-700',
+        label: t('challengeDetail.statusUpcoming'),
+      };
     }
 
     const badges = {
-      active: { bg: 'bg-green-100', text: 'text-green-700', label: t('challengeDetail.statusActive') },
-      completed: { bg: 'bg-blue-100', text: 'text-blue-700', label: t('challengeDetail.statusCompleted') },
+      active: {
+        bg: 'bg-green-100',
+        text: 'text-green-700',
+        label: t('challengeDetail.statusActive'),
+      },
+      completed: {
+        bg: 'bg-blue-100',
+        text: 'text-blue-700',
+        label: t('challengeDetail.statusCompleted'),
+      },
       failed: { bg: 'bg-red-100', text: 'text-red-700', label: t('challengeDetail.statusFailed') },
-      cancelled: { bg: 'bg-gray-100', text: 'text-gray-700', label: t('challengeDetail.statusCancelled') },
+      cancelled: {
+        bg: 'bg-gray-100',
+        text: 'text-gray-700',
+        label: t('challengeDetail.statusCancelled'),
+      },
     };
 
     return (
@@ -187,7 +203,9 @@ export const ChallengeDetailPage = () => {
 
         {/* Details */}
         <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">{t('challengeDetail.details')}</h2>
+          <h2 className="mb-3 text-lg font-semibold text-gray-900">
+            {t('challengeDetail.details')}
+          </h2>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">{t('challengeDetail.startDate')}</span>
@@ -248,14 +266,32 @@ export const ChallengeDetailPage = () => {
         {/* Participants */}
         {currentChallenge.participants && currentChallenge.participants.length > 0 && (
           <GlassCard className="p-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">{t('challengeDetail.participants')}</h2>
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              {t('challengeDetail.participants')}
+            </h2>
             <div className="space-y-2">
               {currentChallenge.participants.map((participant) => {
                 const statusBadge = {
-                  accepted: { bg: 'bg-green-100', text: 'text-green-700', label: t('challengeDetail.statusAccepted') },
-                  invited: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: t('challengeDetail.statusPending') },
-                  declined: { bg: 'bg-red-100', text: 'text-red-700', label: t('challengeDetail.statusDeclined') },
-                  left: { bg: 'bg-gray-100', text: 'text-gray-700', label: t('challengeDetail.statusLeft') },
+                  accepted: {
+                    bg: 'bg-green-100',
+                    text: 'text-green-700',
+                    label: t('challengeDetail.statusAccepted'),
+                  },
+                  invited: {
+                    bg: 'bg-yellow-100',
+                    text: 'text-yellow-700',
+                    label: t('challengeDetail.statusPending'),
+                  },
+                  declined: {
+                    bg: 'bg-red-100',
+                    text: 'text-red-700',
+                    label: t('challengeDetail.statusDeclined'),
+                  },
+                  left: {
+                    bg: 'bg-gray-100',
+                    text: 'text-gray-700',
+                    label: t('challengeDetail.statusLeft'),
+                  },
                 }[participant.status] || {
                   bg: 'bg-gray-100',
                   text: 'text-gray-700',
@@ -297,7 +333,9 @@ export const ChallengeDetailPage = () => {
         {/* Progress - show for active and completed/failed challenges */}
         {(isActive || isFinished) && (
           <div className="space-y-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">{t('challengeDetail.progress')}</h2>
+            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+              {t('challengeDetail.progress')}
+            </h2>
             <ChallengeProgress
               challenge={currentChallenge}
               showAllParticipants={currentChallenge.type === 'collaborative'}

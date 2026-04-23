@@ -183,13 +183,9 @@ export const HeatmapCalendar = () => {
 
       {/* Summary Stats */}
       <div className="mb-4 flex gap-4 text-sm text-gray-600">
-        <div>
-          {t('heatmap.activitiesInYear', { count: totalActivities })}
-        </div>
+        <div>{t('heatmap.activitiesInYear', { count: totalActivities })}</div>
         {metric === 'distance' && (
-          <div>
-            {t('heatmap.totalDistance', { distance: formatDistance(totalDistance) })}
-          </div>
+          <div>{t('heatmap.totalDistance', { distance: formatDistance(totalDistance) })}</div>
         )}
       </div>
 

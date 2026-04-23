@@ -63,7 +63,9 @@ export const ProfilePage = () => {
                 <h4 className="text-xl font-bold text-gray-900">
                   {user.firstname} {user.lastname}
                 </h4>
-                <p className="mt-1 text-sm text-gray-500">{t('profileMenu.stravaId', { id: user.stravaId })}</p>
+                <p className="mt-1 text-sm text-gray-500">
+                  {t('profileMenu.stravaId', { id: user.stravaId })}
+                </p>
               </div>
             </div>
 
@@ -140,7 +142,9 @@ export const ProfilePage = () => {
                         onClick={handleDeleteAccount}
                         disabled={isDeleting}
                       >
-                        {isDeleting ? t('profile.deleteAccount.deleting') : t('profile.deleteAccount.confirmButton')}
+                        {isDeleting
+                          ? t('profile.deleteAccount.deleting')
+                          : t('profile.deleteAccount.confirmButton')}
                       </Button>
                     </div>
                   </div>
