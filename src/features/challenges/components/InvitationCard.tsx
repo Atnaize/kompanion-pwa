@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Swords, Users, type LucideIcon } from 'lucide-react';
 import type { ChallengeParticipant } from '@types';
 import { GlassCard, Button, Avatar } from '@components/ui';
 
@@ -47,8 +48,8 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
     return type === 'collaborative' ? 'Team Challenge' : 'Competition';
   };
 
-  const getTypeIcon = (type: string): string => {
-    return type === 'collaborative' ? '🤝' : '⚔️';
+  const getTypeIcon = (type: string): LucideIcon => {
+    return type === 'collaborative' ? Users : Swords;
   };
 
   const creator = challenge.creator;
@@ -62,7 +63,10 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="mb-1 flex items-center gap-2">
-              <span className="text-lg">{getTypeIcon(challenge.type)}</span>
+              {(() => {
+                const Icon = getTypeIcon(challenge.type);
+                return <Icon className="h-4 w-4 shrink-0 text-strava-orange" strokeWidth={1.75} />;
+              })()}
               <h3 className="truncate font-semibold text-gray-900">{challenge.name}</h3>
             </div>
             <p className="mb-2 text-xs text-gray-500">

@@ -79,7 +79,9 @@ export const ActivityEngagement = ({
             ))}
           </div>
         ) : actualKudoers.length === 0 ? (
-          <p className="text-sm text-gray-400">{t('activityDetail.noKudos')}</p>
+          <p className="text-sm text-gray-400">
+            {kudosCount > 0 ? t('activityDetail.kudosUnavailable') : t('activityDetail.noKudos')}
+          </p>
         ) : (
           <div className="flex flex-wrap items-center gap-1.5">
             {visibleAvatars.map((a) => (
@@ -124,7 +126,11 @@ export const ActivityEngagement = ({
             ))}
           </div>
         ) : actualComments.length === 0 ? (
-          <p className="text-sm text-gray-400">{t('activityDetail.noComments')}</p>
+          <p className="text-sm text-gray-400">
+            {commentCount > 0
+              ? t('activityDetail.commentsUnavailable')
+              : t('activityDetail.noComments')}
+          </p>
         ) : (
           <ul className="space-y-3.5">
             {visibleComments.map((c) => (

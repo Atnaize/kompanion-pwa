@@ -160,8 +160,10 @@ export const HeatmapCalendar = () => {
     <GlassCard className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-gray-900">{t('heatmap.title')}</h3>
-        <p className="text-sm text-gray-600">{t('heatmap.subtitle')}</p>
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          {t('heatmap.title')}
+        </h3>
+        <p className="mt-1 text-sm text-gray-500">{t('heatmap.subtitle')}</p>
       </div>
 
       {/* Metric Selector */}

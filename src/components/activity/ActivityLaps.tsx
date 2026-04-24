@@ -1,21 +1,11 @@
 import { useMemo } from 'react';
 import type { ActivityLap } from '@types';
-import { formatDistance, formatDuration } from '@utils/format';
+import { formatDistance, formatDuration, formatPaceFromSpeed, formatSpeed } from '@utils/format';
 
 interface ActivityLapsProps {
   laps: ActivityLap[];
   showPace?: boolean;
 }
-
-const formatPace = (metersPerSecond: number): string => {
-  if (!metersPerSecond || metersPerSecond <= 0) return '—';
-  const secondsPerKm = 1000 / metersPerSecond;
-  const m = Math.floor(secondsPerKm / 60);
-  const s = Math.round(secondsPerKm % 60);
-  return `${m}:${String(s).padStart(2, '0')}/km`;
-};
-
-const formatSpeed = (mps: number) => `${(mps * 3.6).toFixed(1)} km/h`;
 
 export const ActivityLaps = ({ laps, showPace = false }: ActivityLapsProps) => {
   const { maxSpeed, maxHr } = useMemo(() => {
@@ -68,7 +58,7 @@ export const ActivityLaps = ({ laps, showPace = false }: ActivityLapsProps) => {
                 {formatDuration(lap.moving_time)}
               </div>
               <div className="relative col-span-3 tabular-nums text-gray-700">
-                {showPace ? formatPace(lap.average_speed) : formatSpeed(lap.average_speed)}
+                {showPace ? formatPaceFromSpeed(lap.average_speed) : formatSpeed(lap.average_speed)}
               </div>
               <div className="relative col-span-2 text-right tabular-nums text-gray-700">
                 {hasHr && lap.average_heartrate ? (

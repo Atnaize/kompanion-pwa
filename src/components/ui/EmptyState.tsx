@@ -4,7 +4,7 @@ import { GlassCard } from './GlassCard';
 import { Button } from './Button';
 
 interface EmptyStateProps {
-  icon: string;
+  icon: ReactNode;
   title: string;
   description: string;
   action?: {
@@ -15,9 +15,16 @@ interface EmptyStateProps {
 }
 
 export const EmptyState = ({ icon, title, description, action, children }: EmptyStateProps) => {
+  // String icons (legacy emoji) get the original 6xl treatment; ReactNode
+  // icons (Lucide) render at their intrinsic size and just get centered.
+  const isStringIcon = typeof icon === 'string';
   return (
     <GlassCard className="p-8 text-center">
-      <div className="mb-4 text-6xl">{icon}</div>
+      {isStringIcon ? (
+        <div className="mb-4 text-6xl">{icon}</div>
+      ) : (
+        <div className="mb-4 flex justify-center">{icon}</div>
+      )}
       <h3 className="mb-2 text-xl font-bold text-gray-900">{title}</h3>
       <p className="mb-6 text-gray-600">{description}</p>
       {action && (

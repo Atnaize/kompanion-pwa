@@ -26,6 +26,27 @@ export const formatSpeed = (metersPerSecond: number): string => {
   return `${kmPerHour} km/h`;
 };
 
+/** Pace in `M:SS/km` derived from a m/s speed. Returns "—" for invalid speeds. */
+export const formatPaceFromSpeed = (metersPerSecond: number): string => {
+  if (!metersPerSecond || metersPerSecond <= 0) return '—';
+  const secondsPerKm = 1000 / metersPerSecond;
+  const m = Math.floor(secondsPerKm / 60);
+  const s = Math.round(secondsPerKm % 60);
+  return `${m}:${String(s).padStart(2, '0')}/km`;
+};
+
+/** Full date + time formatted for the given locale. */
+export const formatLocalDateTime = (iso: string, locale: string): string => {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(iso));
+};
+
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   const locale = useSettingsStore.getState().locale;

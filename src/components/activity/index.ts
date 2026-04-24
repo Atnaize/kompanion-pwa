@@ -1,3 +1,4 @@
+export * from './ActivityCard';
 export * from './ActivityMap';
 export * from './ActivityChart';
 export * from './ActivityLaps';

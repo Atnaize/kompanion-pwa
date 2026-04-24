@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Friend } from '@types';
 import { GlassCard, Skeleton, Avatar } from '@components/ui';
 
@@ -35,6 +36,7 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
   showSearch = true,
   searchQuery: externalSearchQuery,
 }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const activeSearchQuery = externalSearchQuery ?? searchQuery;
   const [filteredFriends, setFilteredFriends] = useState<Friend[]>(friends);
@@ -93,9 +95,7 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
   if (friends.length === 0 && !activeSearchQuery) {
     return (
       <GlassCard className="p-6 text-center">
-        <p className="text-sm text-gray-500">
-          No Kompanion users found. Try searching for users by name to invite them!
-        </p>
+        <p className="text-sm text-gray-500">{t('friendSelector.emptyHint')}</p>
       </GlassCard>
     );
   }

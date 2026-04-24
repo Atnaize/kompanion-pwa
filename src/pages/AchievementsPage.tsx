@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { Layout } from '@components/layout';
 import {
+  AnimatedNumber,
   BadgeCard,
   AchievementUnlockedModal,
   AchievementCardSkeleton,
@@ -13,6 +16,7 @@ import type { Achievement } from '@types';
 
 export const AchievementsPage = () => {
   const [unlockedAchievement, setUnlockedAchievement] = useState<Achievement | null>(null);
+  const [showUnlocked, setShowUnlocked] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: achievements = [], isLoading } = useQuery({
@@ -60,9 +64,14 @@ export const AchievementsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Achievements</h2>
-          <p className="text-gray-600">
-            {unlocked.length} / {achievements?.length || 0} unlocked
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+            Achievements
+          </p>
+          <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900">
+            <AnimatedNumber value={unlocked.length} /> / {achievements?.length || 0}
+          </p>
+          <p className="text-xs text-gray-500">
+            unlocked
             {redeemableCount > 0 && (
               <span className="ml-2 text-strava-orange">• {redeemableCount} ready to unlock</span>
             )}
@@ -82,30 +91,81 @@ export const AchievementsPage = () => {
           <NoAchievementsEmpty />
         ) : (
           <>
-            {unlocked.length > 0 && (
+            {lockedSorted.length > 0 && (
               <section>
-                <h3 className="mb-4 text-lg font-bold text-gray-900">Unlocked</h3>
+                <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                  In Progress
+                </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  {unlocked.map((achievement) => (
-                    <BadgeCard key={achievement.id} {...achievement} unlocked />
+                  {lockedSorted.map((achievement, i) => (
+                    <motion.div
+                      key={achievement.id}
+                      initial={i < 12 ? { opacity: 0, y: 8 } : false}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.35,
+                        delay: Math.min(i, 12) * 0.04,
+                        ease: 'easeOut',
+                      }}
+                    >
+                      <BadgeCard
+                        {...achievement}
+                        redeemable={achievement.isRedeemable}
+                        onRedeem={() => handleRedeem(achievement)}
+                      />
+                    </motion.div>
                   ))}
                 </div>
               </section>
             )}
 
-            {lockedSorted.length > 0 && (
+            {unlocked.length > 0 && (
               <section>
-                <h3 className="mb-4 text-lg font-bold text-gray-900">In Progress</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {lockedSorted.map((achievement) => (
-                    <BadgeCard
-                      key={achievement.id}
-                      {...achievement}
-                      redeemable={achievement.isRedeemable}
-                      onRedeem={() => handleRedeem(achievement)}
-                    />
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowUnlocked((v) => !v)}
+                  aria-expanded={showUnlocked}
+                  className="mb-4 flex w-full items-center justify-between rounded-lg text-left transition-colors hover:text-gray-700"
+                >
+                  <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                    Unlocked · {unlocked.length}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-gray-400 transition-transform duration-300 ${
+                      showUnlocked ? 'rotate-180' : ''
+                    }`}
+                    strokeWidth={1.75}
+                  />
+                </button>
+                <AnimatePresence initial={false}>
+                  {showUnlocked && (
+                    <motion.div
+                      key="unlocked-grid"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                      className="overflow-hidden"
+                    >
+                      <div className="grid grid-cols-2 gap-3">
+                        {unlocked.map((achievement, i) => (
+                          <motion.div
+                            key={achievement.id}
+                            initial={i < 12 ? { opacity: 0, y: 8 } : false}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                              duration: 0.35,
+                              delay: Math.min(i, 12) * 0.04,
+                              ease: 'easeOut',
+                            }}
+                          >
+                            <BadgeCard {...achievement} unlocked />
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </section>
             )}
           </>

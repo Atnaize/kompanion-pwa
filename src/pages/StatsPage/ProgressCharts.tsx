@@ -10,6 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
+import { BarChart3 } from 'lucide-react';
 import { GlassCard, Skeleton } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
@@ -87,8 +88,10 @@ export const ProgressCharts = () => {
   return (
     <GlassCard className="p-6">
       <div className="mb-6">
-        <h3 className="mb-2 text-lg font-bold text-gray-900">{t('progressCharts.title')}</h3>
-        <p className="text-sm text-gray-600">{t('progressCharts.subtitle')}</p>
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          {t('progressCharts.title')}
+        </h3>
+        <p className="mt-1 text-sm text-gray-500">{t('progressCharts.subtitle')}</p>
       </div>
 
       {/* Metric Selector */}
@@ -156,9 +159,9 @@ export const ProgressCharts = () => {
         <Skeleton className="h-64" />
       ) : progressData.length === 0 ? (
         <div className="flex h-64 items-center justify-center rounded-lg bg-gray-50">
-          <div className="text-center">
-            <p className="text-2xl">📊</p>
-            <p className="mt-2 text-sm text-gray-600">{t('progressCharts.noData')}</p>
+          <div className="flex flex-col items-center text-center">
+            <BarChart3 className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
+            <p className="mt-2 text-sm text-gray-500">{t('progressCharts.noData')}</p>
           </div>
         </div>
       ) : (

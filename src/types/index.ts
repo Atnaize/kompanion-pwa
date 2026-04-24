@@ -63,6 +63,8 @@ export interface Activity {
   pr_count: number;
   kudos_count: number;
   comment_count: number;
+  photo_count: number;
+  total_photo_count: number;
   achievement_count: number;
   segment_efforts?: SegmentEffort[];
   map?: {

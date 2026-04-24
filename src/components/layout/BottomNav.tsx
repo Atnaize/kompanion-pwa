@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+import { Activity, BarChart3, Home, Target, Timer, Trophy, type LucideIcon } from 'lucide-react';
 import { useAuthStore } from '@store/authStore';
 
 interface NavItem {
   path: string;
   label: string;
-  icon: string;
+  icon: LucideIcon;
   requiresData?: boolean;
   requiresAdmin?: boolean;
 }
@@ -21,12 +22,12 @@ interface TabBadges {
 }
 
 const navItems: NavItem[] = [
-  { path: '/dashboard', label: 'nav.home', icon: '🏠' },
-  { path: '/activities', label: 'nav.activities', icon: '🏃', requiresData: true },
-  { path: '/challenges', label: 'nav.challenges', icon: '🎯', requiresData: true },
-  { path: '/achievements', label: 'nav.badges', icon: '🏆', requiresData: true },
-  { path: '/personal-records', label: 'nav.personalRecords', icon: '⏱️', requiresData: true },
-  { path: '/stats', label: 'nav.stats', icon: '📊', requiresData: true },
+  { path: '/dashboard', label: 'nav.home', icon: Home },
+  { path: '/activities', label: 'nav.activities', icon: Activity, requiresData: true },
+  { path: '/challenges', label: 'nav.challenges', icon: Target, requiresData: true },
+  { path: '/achievements', label: 'nav.badges', icon: Trophy, requiresData: true },
+  { path: '/personal-records', label: 'nav.personalRecords', icon: Timer, requiresData: true },
+  { path: '/stats', label: 'nav.stats', icon: BarChart3, requiresData: true },
 ];
 
 interface BottomNavProps {
@@ -40,11 +41,9 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
   const { t } = useTranslation();
 
   const visibleItems = navItems.filter((item) => {
-    // Hide data tabs if specified
     if (hideDataTabs && item.requiresData) {
       return false;
     }
-    // Hide admin-only items if user is not admin
     if (item.requiresAdmin && !user?.isAdmin) {
       return false;
     }
@@ -52,41 +51,61 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
   });
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40">
+    <nav
+      className="fixed bottom-0 left-0 right-0 z-40"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       <div className="border-t border-white/20 bg-white/80 shadow-lg backdrop-blur-lg">
-        <div className="mx-auto max-w-lg px-4">
-          <div className="flex items-center justify-around">
+        <div className="mx-auto max-w-lg px-2">
+          <div className="flex items-stretch justify-around">
             {visibleItems.map((item) => {
               const isActive = location.pathname === item.path;
               const badge = badges[item.path];
               const showBadge = badge && badge.count > 0;
+              const Icon = item.icon;
 
               return (
                 <Link
                   key={item.path}
                   to={item.path}
+                  aria-label={t(item.label)}
+                  aria-current={isActive ? 'page' : undefined}
                   className={clsx(
-                    'relative flex flex-col items-center px-2 py-3 transition-all duration-200',
-                    'min-w-[60px] rounded-t-xl',
+                    'relative flex flex-1 flex-col items-center justify-center gap-1 px-1 py-2.5',
+                    'min-w-[56px] rounded-t-xl transition-colors duration-200',
                     isActive
-                      ? 'scale-105 bg-strava-orange/10 text-strava-orange'
-                      : 'text-gray-600 hover:bg-gray-100/50 hover:text-gray-900 active:scale-95'
+                      ? 'text-strava-orange'
+                      : 'text-gray-500 hover:text-gray-900 active:bg-gray-100/60'
                   )}
                 >
-                  <span className="mb-1 text-2xl">{item.icon}</span>
-                  <span className="text-xs font-medium">{t(item.label)}</span>
+                  <span className="relative flex h-6 w-6 items-center justify-center">
+                    <Icon
+                      size={22}
+                      strokeWidth={isActive ? 2.25 : 1.75}
+                      className="transition-transform duration-200"
+                      aria-hidden="true"
+                    />
+                    {showBadge && (
+                      <span
+                        className={clsx(
+                          'absolute -right-2 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none text-white shadow-sm ring-2 ring-white',
+                          badge.color || 'bg-strava-orange'
+                        )}
+                      >
+                        {badge.count > 99 ? '99+' : badge.count}
+                      </span>
+                    )}
+                  </span>
+                  <span
+                    className={clsx(
+                      'text-[10px] leading-none tracking-tight transition-all',
+                      isActive ? 'font-semibold' : 'font-medium'
+                    )}
+                  >
+                    {t(item.label)}
+                  </span>
                   {isActive && (
-                    <div className="absolute bottom-0 left-1/2 h-1 w-12 -translate-x-1/2 rounded-t-full bg-strava-orange" />
-                  )}
-                  {showBadge && (
-                    <div
-                      className={clsx(
-                        'absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white shadow-md',
-                        badge.color || 'bg-strava-orange'
-                      )}
-                    >
-                      {badge.count}
-                    </div>
+                    <span className="absolute bottom-0 left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-t-full bg-strava-orange" />
                   )}
                 </Link>
               );

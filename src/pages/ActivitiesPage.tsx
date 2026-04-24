@@ -2,11 +2,15 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
+import { Activity as ActivityIcon, type LucideIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Layout } from '@components/layout';
-import { GlassCard, Button, Skeleton, EmptyState } from '@components/ui';
+import { AnimatedNumber, GlassCard, Button, Skeleton, EmptyState } from '@components/ui';
+import { ActivityCard } from '@components/activity';
 import { activitiesService } from '@api/services';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
-import { formatDistance, formatElevation, formatRelativeTime, formatDuration } from '@utils/format';
+import { getSportPresentation } from '@utils/sport';
 import { useAuthStore } from '@store/authStore';
 import { useToastStore } from '@store/toastStore';
 import { hapticService } from '@utils/haptic';
@@ -99,10 +103,15 @@ export const ActivitiesPage = () => {
     return result;
   }, [activities, selectedType, searchQuery]);
 
-  // Get unique activity types for filter chips
+  // Get unique activity types with counts for filter chips
   const activityTypes = useMemo(() => {
-    const types = new Set(activities.map((a) => a.type));
-    return Array.from(types).sort();
+    const counts = new Map<string, number>();
+    for (const activity of activities) {
+      counts.set(activity.type, (counts.get(activity.type) ?? 0) + 1);
+    }
+    return Array.from(counts.entries())
+      .map(([type, count]) => ({ type, count }))
+      .sort((a, b) => a.type.localeCompare(b.type));
   }, [activities]);
 
   // Paginate displayed activities for infinite scroll
@@ -120,20 +129,6 @@ export const ActivitiesPage = () => {
   }, [hasMore, isLoading]);
 
   const scrollTriggerRef = useInfiniteScroll(loadMore);
-
-  // Activity type emoji mapping
-  const getActivityEmoji = (type: string): string => {
-    const emojiMap: Record<string, string> = {
-      Run: '🏃',
-      Ride: '🚴',
-      Swim: '🏊',
-      Walk: '🚶',
-      Hike: '🥾',
-      Workout: '💪',
-      Yoga: '🧘',
-    };
-    return emojiMap[type] || '🏃';
-  };
 
   if (isLoading) {
     return (
@@ -155,15 +150,17 @@ export const ActivitiesPage = () => {
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{t('activities.title')}</h1>
-            <p className="text-sm text-gray-600">
-              {searchQuery
-                ? t('activities.countMatching', {
-                    count: filteredActivities.length,
-                    query: searchQuery,
-                  })
-                : t('activities.count', { count: filteredActivities.length })}
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+              {t('activities.title')}
             </p>
+            <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900">
+              <AnimatedNumber value={filteredActivities.length} />
+            </p>
+            {searchQuery && (
+              <p className="text-xs text-gray-500">
+                {t('activities.matchingQuery', { query: searchQuery })}
+              </p>
+            )}
           </div>
           <Button size="sm" onClick={handleSync} disabled={isSyncing}>
             {isSyncing ? t('common.syncing') : t('common.sync')}
@@ -183,35 +180,31 @@ export const ActivitiesPage = () => {
 
         {/* Filter Chips */}
         <div className="flex flex-wrap gap-2">
-          <button
+          <FilterChip
+            label={t('common.all')}
+            count={activities.length}
+            isSelected={selectedType === 'all'}
             onClick={() => setSelectedType('all')}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-              selectedType === 'all'
-                ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
-            }`}
-          >
-            {t('common.all')} ({activities.length})
-          </button>
-          {activityTypes.map((type) => (
-            <button
-              key={type}
-              onClick={() => setSelectedType(type)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                selectedType === type
-                  ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                  : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
-              }`}
-            >
-              {getActivityEmoji(type)} {type} ({activities.filter((a) => a.type === type).length})
-            </button>
-          ))}
+          />
+          {activityTypes.map(({ type, count }) => {
+            const { icon: Icon } = getSportPresentation(type);
+            return (
+              <FilterChip
+                key={type}
+                icon={Icon}
+                label={type}
+                count={count}
+                isSelected={selectedType === type}
+                onClick={() => setSelectedType(type)}
+              />
+            );
+          })}
         </div>
 
         {/* Activities List */}
         {displayedActivities.length === 0 ? (
           <EmptyState
-            icon="🏃"
+            icon={<ActivityIcon className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
             title={t('activities.noActivitiesFound')}
             description={
               searchQuery || selectedType !== 'all'
@@ -232,64 +225,19 @@ export const ActivitiesPage = () => {
           />
         ) : (
           <div className="space-y-3">
-            {displayedActivities.map((activity: Activity) => (
-              <GlassCard
+            {displayedActivities.map((activity: Activity, i: number) => (
+              <motion.div
                 key={activity.id}
-                className="cursor-pointer p-4 transition-all hover:scale-[1.01] hover:shadow-lg"
-                onClick={() => navigate(`/activities/${activity.id}`)}
+                initial={i < 8 ? { opacity: 0, y: 8 } : false}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, delay: Math.min(i, 8) * 0.04, ease: 'easeOut' }}
               >
-                <div className="flex items-start gap-4">
-                  {/* Activity Icon */}
-                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 text-2xl">
-                    {getActivityEmoji(activity.type)}
-                  </div>
-
-                  {/* Activity Info */}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <h3 className="truncate font-bold text-gray-900">{activity.name}</h3>
-                        <p className="text-sm text-gray-600">
-                          {formatRelativeTime(activity.start_date_local)}
-                        </p>
-                      </div>
-                      {activity.pr_count > 0 && (
-                        <span className="flex-shrink-0 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 px-2 py-0.5 text-xs font-medium text-white">
-                          🏆 {t('activities.pr', { count: activity.pr_count })}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Metrics */}
-                    <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-                      <div>
-                        <p className="text-gray-600">{t('common.distance')}</p>
-                        <p className="font-medium text-gray-900">
-                          {formatDistance(activity.distance)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">{t('common.duration')}</p>
-                        <p className="font-medium text-gray-900">
-                          {formatDuration(activity.moving_time)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">{t('common.elevation')}</p>
-                        <p className="font-medium text-gray-900">
-                          {formatElevation(activity.total_elevation_gain)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-600">{t('common.avgSpeed')}</p>
-                        <p className="font-medium text-gray-900">
-                          {(activity.average_speed * 3.6).toFixed(1)} km/h
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </GlassCard>
+                <ActivityCard
+                  activity={activity}
+                  variant="detailed"
+                  onClick={() => navigate(`/activities/${activity.id}`)}
+                />
+              </motion.div>
             ))}
 
             {/* Infinite Scroll Trigger */}
@@ -314,3 +262,36 @@ export const ActivitiesPage = () => {
     </Layout>
   );
 };
+
+interface FilterChipProps {
+  icon?: LucideIcon;
+  label: string;
+  count: number;
+  isSelected: boolean;
+  onClick: () => void;
+}
+
+const FilterChip = ({ icon: Icon, label, count, isSelected, onClick }: FilterChipProps) => (
+  <button
+    type="button"
+    onClick={onClick}
+    aria-pressed={isSelected}
+    className={clsx(
+      'inline-flex items-center gap-1.5 rounded-full py-1.5 pl-3 pr-1.5 text-sm font-medium transition-all duration-150 active:scale-95',
+      isSelected
+        ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-500/30'
+        : 'bg-white/70 text-gray-700 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm hover:bg-white hover:shadow-md'
+    )}
+  >
+    {Icon && <Icon size={14} strokeWidth={2} aria-hidden="true" />}
+    <span>{label}</span>
+    <span
+      className={clsx(
+        'ml-0.5 inline-flex min-w-[22px] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums',
+        isSelected ? 'bg-white/25 text-white' : 'bg-gray-900/5 text-gray-600'
+      )}
+    >
+      {count}
+    </span>
+  </button>
+);

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Swords, Users } from 'lucide-react';
 import { GlassCard, ProgressRing, Avatar } from '@components/ui';
 import type { Challenge } from '@types';
 import { formatDistance, formatDate } from '@utils/format';
@@ -71,7 +72,11 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
           {/* Header */}
           <div className="mb-1 flex items-start justify-between gap-2">
             <h3 className="truncate font-semibold text-gray-900">{challenge.name}</h3>
-            {challenge.type === 'collaborative' ? '🤝' : '🏆'}
+            {challenge.type === 'collaborative' ? (
+              <Users className="h-4 w-4 shrink-0 text-strava-orange" strokeWidth={1.75} />
+            ) : (
+              <Swords className="h-4 w-4 shrink-0 text-strava-orange" strokeWidth={1.75} />
+            )}
           </div>
 
           {/* Description */}

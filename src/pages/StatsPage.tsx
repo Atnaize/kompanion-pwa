@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BarChart3 } from 'lucide-react';
 import { Layout } from '@components/layout';
 import {
   ActivityBarsViz,
@@ -62,7 +63,7 @@ export const StatsPage = () => {
     return (
       <Layout>
         <EmptyState
-          icon="📊"
+          icon={<BarChart3 className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
           title={t('stats.noStats')}
           description={t('stats.noStatsDesc')}
           action={{
@@ -80,8 +81,10 @@ export const StatsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t('stats.title')}</h2>
-          <p className="text-gray-600">{t('stats.subtitle')}</p>
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+            {t('stats.title')}
+          </p>
+          <p className="mt-1 text-sm text-gray-500">{t('stats.subtitle')}</p>
         </div>
 
         {/* Tabs Navigation */}
@@ -98,7 +101,9 @@ export const StatsPage = () => {
             <div className="space-y-6">
               {/* Overall Stats */}
               <section>
-                <h3 className="mb-4 text-lg font-bold text-gray-900">{t('stats.overall')}</h3>
+                <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                  {t('stats.overall')}
+                </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <StatTile
                     label={t('common.activities')}
@@ -147,30 +152,44 @@ export const StatsPage = () => {
               {/* By Activity Type */}
               {activityTypes.length > 0 && (
                 <section>
-                  <h3 className="mb-4 text-lg font-bold text-gray-900">
+                  <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
                     {t('stats.byActivityType')}
                   </h3>
                   <div className="space-y-3">
                     {activityTypes.map(([type, data]) => (
                       <GlassCard key={type} className="p-4">
-                        <div className="mb-3 flex items-center justify-between">
-                          <h4 className="font-bold text-gray-900">{type}</h4>
-                          <span className="text-sm text-gray-600">
+                        <div className="mb-3 flex items-baseline justify-between">
+                          <h4 className="font-mono text-xs font-semibold uppercase tracking-wider text-gray-700">
+                            {type}
+                          </h4>
+                          <span className="font-mono text-[11px] tabular-nums text-gray-500">
                             {t('stats.activitiesCount', { count: data.count })}
                           </span>
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-sm">
                           <div>
-                            <div className="text-xs text-gray-600">{t('common.distance')}</div>
-                            <div className="font-medium">{formatDistance(data.distance)}</div>
+                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                              {t('common.distance')}
+                            </div>
+                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900">
+                              {formatDistance(data.distance)}
+                            </div>
                           </div>
                           <div>
-                            <div className="text-xs text-gray-600">{t('common.elevation')}</div>
-                            <div className="font-medium">{formatElevation(data.elevation)}</div>
+                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                              {t('common.elevation')}
+                            </div>
+                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900">
+                              {formatElevation(data.elevation)}
+                            </div>
                           </div>
                           <div>
-                            <div className="text-xs text-gray-600">{t('common.time')}</div>
-                            <div className="font-medium">{formatDuration(data.time)}</div>
+                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                              {t('common.time')}
+                            </div>
+                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900">
+                              {formatDuration(data.time)}
+                            </div>
                           </div>
                         </div>
                       </GlassCard>

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Header } from './Header';
 import { BottomNav } from './BottomNav';
+import { Background } from './Background';
 import { useAuthStore } from '@store/authStore';
 import { useTabBadges } from '@hooks/useTabBadges';
 
@@ -14,8 +15,10 @@ export const Layout = ({ children }: LayoutProps) => {
   const badges = useTabBadges();
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,_#fff3e6_0%,_#fafafa_55%,_#f3f4f6_100%)]">
-      <div className="mx-auto max-w-lg px-4 py-6 pb-24">
+    <div className="relative min-h-screen bg-gray-50">
+      <Background />
+
+      <div className="relative z-10 mx-auto max-w-lg px-4 py-6 pb-24">
         <Header />
         <main>{children}</main>
       </div>

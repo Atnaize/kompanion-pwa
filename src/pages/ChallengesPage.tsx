@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Inbox, Target, Trophy } from 'lucide-react';
 import { Layout } from '@components/layout/Layout';
 import { EmptyState, Skeleton, Button, Tabs, TabList, Tab, TabPanel } from '@components/ui';
 import { ChallengeSummaryCard, InvitationCard, ChallengeSummaryModal } from '@features/challenges';
@@ -67,8 +68,10 @@ export const ChallengesPage = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{t('challenges.title')}</h1>
-            <p className="text-sm text-gray-600">{t('challenges.subtitle')}</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+              {t('challenges.title')}
+            </p>
+            <p className="mt-1 text-sm text-gray-500">{t('challenges.subtitle')}</p>
           </div>
           <Button onClick={() => navigate('/challenges/create')}>{t('challenges.create')}</Button>
         </div>
@@ -108,7 +111,7 @@ export const ChallengesPage = () => {
                   </div>
                 ) : (
                   <EmptyState
-                    icon="🎯"
+                    icon={<Target className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
                     title={t('challenges.noActive')}
                     description={t('challenges.noActiveDesc')}
                     action={{
@@ -133,7 +136,7 @@ export const ChallengesPage = () => {
                   </div>
                 ) : (
                   <EmptyState
-                    icon="🏆"
+                    icon={<Trophy className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
                     title={t('challenges.noCompleted')}
                     description={t('challenges.noCompletedDesc')}
                   />
@@ -155,7 +158,7 @@ export const ChallengesPage = () => {
                   </div>
                 ) : (
                   <EmptyState
-                    icon="📬"
+                    icon={<Inbox className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
                     title={t('challenges.noInvitations')}
                     description={t('challenges.noInvitationsDesc')}
                   />

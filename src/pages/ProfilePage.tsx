@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { AlertTriangle } from 'lucide-react';
 import { Layout } from '@components/layout';
 import { GlassCard, Button, Avatar } from '@components/ui';
 import { useAuthStore } from '@store/authStore';
@@ -49,7 +50,9 @@ export const ProfilePage = () => {
       <div className="space-y-6">
         {/* Profile Section */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('profile.title')}</h3>
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+            {t('profile.title')}
+          </h3>
           <GlassCard className="p-6">
             <div className="mb-6 flex items-center gap-4">
               <Avatar
@@ -84,7 +87,9 @@ export const ProfilePage = () => {
 
         {/* Account Actions */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">{t('profile.accountActions')}</h3>
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+            {t('profile.accountActions')}
+          </h3>
           <div className="space-y-3">
             {/* Logout */}
             <GlassCard className="p-5">
@@ -117,8 +122,9 @@ export const ProfilePage = () => {
                   </Button>
                 ) : (
                   <div className="mt-4 rounded-xl bg-red-50 p-4">
-                    <p className="mb-3 text-sm font-medium text-red-900">
-                      ⚠️ {t('profile.deleteAccount.confirmTitle')}
+                    <p className="mb-3 flex items-center gap-2 text-sm font-medium text-red-900">
+                      <AlertTriangle className="h-4 w-4 shrink-0" strokeWidth={2} />
+                      {t('profile.deleteAccount.confirmTitle')}
                     </p>
                     <p className="mb-4 text-xs text-red-700">
                       {t('profile.deleteAccount.confirmDescription')}
