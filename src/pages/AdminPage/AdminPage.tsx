@@ -6,6 +6,7 @@ import { TestingTab } from './TestingTab';
 import { NotificationsTab } from './NotificationsTab';
 import { ApiTestsTab } from './ApiTestsTab';
 import { StorageTab } from './StorageTab';
+import { WebhooksTab } from './WebhooksTab';
 
 export const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('tokens');
@@ -23,6 +24,7 @@ export const AdminPage = () => {
             <Tab value="tokens" label="Tokens" />
             <Tab value="testing" label="Testing" />
             <Tab value="notifications" label="Notifications" />
+            <Tab value="webhooks" label="Webhooks" />
             <Tab value="api" label="API Tests" />
             <Tab value="storage" label="Storage" />
           </TabList>
@@ -35,6 +37,9 @@ export const AdminPage = () => {
           </TabPanel>
           <TabPanel value="notifications">
             <NotificationsTab />
+          </TabPanel>
+          <TabPanel value="webhooks">
+            <WebhooksTab />
           </TabPanel>
           <TabPanel value="api">
             <ApiTestsTab />
