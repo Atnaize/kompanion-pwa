@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 interface HeroStatProps {
   label: string;
-  value: string;
+  value: ReactNode;
   sub?: string;
   icon?: ReactNode;
 }

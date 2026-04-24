@@ -50,13 +50,8 @@ export const ActivityCardSkeleton = () => {
 export const StatTileSkeleton = () => {
   return (
     <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md">
-      <div className="flex items-center gap-3">
-        <Skeleton variant="circular" width="40px" height="40px" />
-        <div className="flex-1 space-y-2">
-          <Skeleton width="60%" height="16px" />
-          <Skeleton width="80%" height="20px" />
-        </div>
-      </div>
+      <Skeleton width="40%" height="10px" />
+      <Skeleton width="60%" height="28px" className="mt-3" />
     </div>
   );
 };

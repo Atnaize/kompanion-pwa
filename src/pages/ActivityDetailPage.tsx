@@ -3,7 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
-import { GlassCard, Button, Skeleton, Tabs, TabList, Tab, TabPanel } from '@components/ui';
+import {
+  AnimatedNumber,
+  Button,
+  GlassCard,
+  Skeleton,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
+} from '@components/ui';
 import {
   ActivityMap,
   ActivityChart,
@@ -180,12 +189,9 @@ export const ActivityDetailPage = () => {
     );
   }
 
-  const primarySpeed = foot
-    ? formatPace(activity.average_speed)
-    : `${(activity.average_speed * 3.6).toFixed(1)} km/h`;
-  const maxSpeedText = foot
-    ? formatPace(activity.max_speed)
-    : `${(activity.max_speed * 3.6).toFixed(1)} km/h`;
+  const formatSpeedValue = (mps: number): string =>
+    foot ? formatPace(mps) : `${(mps * 3.6).toFixed(1)} km/h`;
+  const maxSpeedText = formatSpeedValue(activity.max_speed);
 
   return (
     <Layout>
@@ -225,10 +231,13 @@ export const ActivityDetailPage = () => {
             </div>
 
             <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <HeroStat label={t('common.distance')} value={formatDistance(activity.distance)} />
+              <HeroStat
+                label={t('common.distance')}
+                value={<AnimatedNumber value={activity.distance} format={formatDistance} />}
+              />
               <HeroStat
                 label={t('common.duration')}
-                value={formatDuration(activity.moving_time)}
+                value={<AnimatedNumber value={activity.moving_time} format={formatDuration} />}
                 sub={
                   activity.elapsed_time !== activity.moving_time
                     ? t('activityDetail.elapsedSuffix', {
@@ -239,12 +248,14 @@ export const ActivityDetailPage = () => {
               />
               <HeroStat
                 label={foot ? t('activityDetail.avgPace') : t('activityDetail.avgSpeed')}
-                value={primarySpeed}
+                value={<AnimatedNumber value={activity.average_speed} format={formatSpeedValue} />}
                 sub={t('activityDetail.maxSuffix', { value: maxSpeedText })}
               />
               <HeroStat
                 label={t('common.elevation')}
-                value={formatElevation(activity.total_elevation_gain)}
+                value={
+                  <AnimatedNumber value={activity.total_elevation_gain} format={formatElevation} />
+                }
                 sub={
                   activity.elev_high
                     ? t('activityDetail.peakSuffix', { value: Math.round(activity.elev_high) })

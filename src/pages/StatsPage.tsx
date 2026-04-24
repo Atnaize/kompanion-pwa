@@ -4,9 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import {
+  ActivityBarsViz,
+  AnimatedNumber,
+  DistanceProgressViz,
+  ElevationMountainViz,
   GlassCard,
   StatTile,
   StatTileSkeleton,
+  StreakDotsViz,
   EmptyState,
   Tabs,
   TabList,
@@ -96,34 +101,45 @@ export const StatsPage = () => {
                 <h3 className="mb-4 text-lg font-bold text-gray-900">{t('stats.overall')}</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <StatTile
-                    icon="🏃"
                     label={t('common.activities')}
-                    value={stats.totalActivities.toString()}
+                    value={<AnimatedNumber value={stats.totalActivities} />}
+                    viz={<ActivityBarsViz />}
                   />
                   <StatTile
-                    icon="📏"
                     label={t('common.distance')}
-                    value={formatDistance(stats.totalDistance)}
+                    value={<AnimatedNumber value={stats.totalDistance} format={formatDistance} />}
+                    viz={
+                      <DistanceProgressViz progress={Math.min(1, stats.totalDistance / 100000)} />
+                    }
                   />
                   <StatTile
-                    icon="⛰️"
                     label={t('common.elevation')}
-                    value={formatElevation(stats.totalElevation)}
+                    value={<AnimatedNumber value={stats.totalElevation} format={formatElevation} />}
+                    viz={<ElevationMountainViz />}
                   />
                   <StatTile
-                    icon="⏱️"
                     label={t('common.time')}
-                    value={formatDuration(stats.totalTime)}
+                    value={<AnimatedNumber value={stats.totalTime} format={formatDuration} />}
                   />
                   <StatTile
-                    icon="🔥"
                     label={t('stats.currentStreak')}
-                    value={`${stats.currentStreak} ${t('common.days')}`}
+                    value={
+                      <AnimatedNumber
+                        value={stats.currentStreak}
+                        format={(n) => `${Math.round(n)} ${t('common.days')}`}
+                      />
+                    }
+                    viz={<StreakDotsViz filled={stats.currentStreak} />}
                   />
                   <StatTile
-                    icon="🏆"
                     label={t('stats.bestStreak')}
-                    value={`${stats.longestStreak} ${t('common.days')}`}
+                    value={
+                      <AnimatedNumber
+                        value={stats.longestStreak}
+                        format={(n) => `${Math.round(n)} ${t('common.days')}`}
+                      />
+                    }
+                    viz={<StreakDotsViz filled={Math.min(7, stats.longestStreak)} />}
                   />
                 </div>
               </section>

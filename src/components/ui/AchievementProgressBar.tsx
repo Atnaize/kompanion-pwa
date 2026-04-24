@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { motion } from 'framer-motion';
+import { AnimatedNumber } from './AnimatedNumber';
 
 interface AchievementProgressBarProps {
   percentage: number;
@@ -22,11 +24,13 @@ const formatValue = (value: number, type: string): string => {
     case 'elevation':
       return `${Math.round(value)} m`;
     case 'activities':
-      return `${value}`;
+      return `${Math.round(value)}`;
     case 'streak':
-      return `${value} days`;
+      return `${Math.round(value)} days`;
+    case 'speed':
+      return `${value.toFixed(1)}`;
     default:
-      return `${value}`;
+      return `${Math.round(value)}`;
   }
 };
 
@@ -41,14 +45,19 @@ export const AchievementProgressBar = ({
     <div className="mt-3 space-y-1">
       <div className="flex items-center justify-between text-xs">
         <span className="font-medium text-gray-700">
-          {formatValue(currentValue, requirementType)} / {formatValue(targetValue, requirementType)}
+          <AnimatedNumber value={currentValue} format={(n) => formatValue(n, requirementType)} /> /{' '}
+          {formatValue(targetValue, requirementType)}
         </span>
-        <span className="font-bold text-gray-900">{percentage}%</span>
+        <span className="font-bold text-gray-900">
+          <AnimatedNumber value={percentage} format={(n) => `${Math.round(n)}%`} />
+        </span>
       </div>
       <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-        <div
-          className={clsx('h-full rounded-full transition-all duration-500', rarityColors[rarity])}
-          style={{ width: `${percentage}%` }}
+        <motion.div
+          className={clsx('h-full rounded-full', rarityColors[rarity])}
+          initial={{ width: 0 }}
+          animate={{ width: `${percentage}%` }}
+          transition={{ duration: 3, ease: [0.22, 1, 0.36, 1] }}
         />
       </div>
     </div>

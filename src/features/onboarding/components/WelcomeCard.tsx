@@ -5,7 +5,7 @@ export interface WelcomeCardProps {
   onSync: () => void;
   isSyncing: boolean;
   syncProgress?: {
-    type: 'fetching' | 'saving' | 'complete' | 'error';
+    type: 'fetching' | 'saving' | 'processing' | 'complete' | 'error';
     current?: number;
     total?: number;
     message?: string;
@@ -16,6 +16,7 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
   const { t } = useTranslation();
   const isFetching = syncProgress?.type === 'fetching';
   const isSaving = syncProgress?.type === 'saving';
+  const isProcessing = syncProgress?.type === 'processing';
 
   return (
     <GlassCard className="p-8 text-center">
@@ -34,6 +35,14 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
             {isSaving && (
               <span className="font-medium text-strava-orange">
                 {t('welcome.savingActivities', {
+                  current: syncProgress?.current || 0,
+                  total: syncProgress?.total || 0,
+                })}
+              </span>
+            )}
+            {isProcessing && (
+              <span className="font-medium text-strava-orange">
+                {t('welcome.processingRecords', {
                   current: syncProgress?.current || 0,
                   total: syncProgress?.total || 0,
                 })}

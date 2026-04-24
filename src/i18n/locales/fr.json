@@ -36,11 +36,19 @@
     "startDate": "Date de d\u00e9but",
     "endDate": "Date de fin"
   },
+  "sync": {
+    "fetching": "Récupération… {{count}}",
+    "saving": "Enregistrement {{current}}/{{total}}",
+    "processing": "Records {{current}}/{{total}}",
+    "done": "Terminé !",
+    "failed": "Échec de la synchro"
+  },
   "nav": {
     "home": "Accueil",
     "activities": "Activit\u00e9s",
     "challenges": "D\u00e9fis",
     "badges": "Badges",
+    "personalRecords": "Records",
     "stats": "Stats"
   },
   "header": {
@@ -122,12 +130,7 @@
   "dashboard": {
     "quickStats": "Statistiques rapides",
     "personalRecords": "Records personnels",
-    "prRecord_one": "record personnel",
-    "prRecord_other": "records personnels",
-    "prActivity_one": "activit\u00e9",
-    "prActivity_other": "activit\u00e9s",
-    "prDescription": "Vous avez {{totalPRs}} {{recordText}} dans {{activityCount}} {{activityText}}",
-    "viewAllPrs": "Voir tous les RP \u2192",
+    "viewAllPrs": "Voir tous les records \u2192",
     "recentActivities": "Activit\u00e9s r\u00e9centes",
     "syncSuccess_one": "{{count}} activit\u00e9 synchronis\u00e9e !",
     "syncSuccess_other": "{{count}} activit\u00e9s synchronis\u00e9es !",
@@ -141,6 +144,7 @@
     "title": "Bienvenue sur Kompanion !",
     "fetchingFromStrava": "R\u00e9cup\u00e9ration depuis Strava... {{count}} activit\u00e9s trouv\u00e9es",
     "savingActivities": "Enregistrement des activit\u00e9s... {{current}}/{{total}}",
+    "processingRecords": "Calcul des records personnels... {{current}}/{{total}}",
     "description": "Commen\u00e7ons par synchroniser vos activit\u00e9s Strava.",
     "syncButton": "Synchroniser mes activit\u00e9s"
   },
@@ -441,17 +445,30 @@
   },
   "personalRecords": {
     "title": "Records personnels",
-    "summary_one": "{{activityCount}} activit\u00e9 avec {{prCount}} record personnel",
-    "summary_other": "{{activityCount}} activit\u00e9s avec {{prCount}} records personnels",
-    "totalPrs": "Total des RP",
-    "activitiesWithPrs": "Activit\u00e9s avec RP",
-    "avgPrsPerActivity": "RP moy. par activit\u00e9",
-    "noPrsForType": "Aucun RP pour ce type d'activit\u00e9",
-    "tryDifferentType": "Essayez de s\u00e9lectionner un autre type d'activit\u00e9",
+    "subtitle": "Vos meilleurs temps de course par distance",
+    "summary": "{{total}} records sur {{bands}} distances",
+    "best": "Meilleur",
+    "noRecordForBand": "Aucun record pour cette distance",
     "noPrsYet": "Aucun record personnel pour le moment",
-    "keepTraining": "Continuez \u00e0 vous entra\u00eener et vous atteindrez des records personnels !",
-    "showAll": "Tout afficher",
-    "endOfList": "Vous avez atteint la fin de vos records personnels \ud83c\udfc6"
+    "keepTraining": "Allez courir quelques kilom\u00e8tres \u2014 vos meilleurs temps seront r\u00e9cup\u00e9r\u00e9s depuis Strava lors de la prochaine synchronisation.",
+    "bands": {
+      "400m": "400 m",
+      "1km": "1 km",
+      "5km": "5 km",
+      "10km": "10 km",
+      "15km": "15 km",
+      "half_marathon": "Semi-marathon",
+      "marathon": "Marathon"
+    },
+    "bandsShort": {
+      "400m": "400M",
+      "1km": "1K",
+      "5km": "5K",
+      "10km": "10K",
+      "15km": "15K",
+      "half_marathon": "21.1K",
+      "marathon": "42.2K"
+    }
   },
   "about": {
     "title": "\u00c0 propos de",

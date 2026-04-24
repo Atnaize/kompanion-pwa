@@ -14,7 +14,7 @@ export const Layout = ({ children }: LayoutProps) => {
   const badges = useTabBadges();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,_#fff3e6_0%,_#fafafa_55%,_#f3f4f6_100%)]">
       <div className="mx-auto max-w-lg px-4 py-6 pb-24">
         <Header />
         <main>{children}</main>

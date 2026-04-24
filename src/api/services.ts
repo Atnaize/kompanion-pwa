@@ -18,6 +18,7 @@ import type {
   ChallengeType,
   CompetitiveGoal,
   ChallengeParticipant,
+  PersonalRecordBandGroup,
 } from '@types';
 
 export const authService = {
@@ -34,7 +35,7 @@ export const activitiesService = {
   sync: () => apiClient.post<SyncResult>('/activities/sync'),
   syncWithProgress: (
     onProgress: (data: {
-      type: 'fetching' | 'saving' | 'complete' | 'error';
+      type: 'fetching' | 'saving' | 'processing' | 'complete' | 'error';
       current?: number;
       total?: number;
       message?: string;
@@ -226,6 +227,10 @@ export const challengesService = {
       `/challenges/${id}/events${params}`
     );
   },
+};
+
+export const personalRecordsService = {
+  list: () => apiClient.get<PersonalRecordBandGroup[]>('/personal-records'),
 };
 
 export const friendsService = {

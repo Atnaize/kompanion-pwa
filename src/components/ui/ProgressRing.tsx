@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion';
+import { AnimatedNumber } from './AnimatedNumber';
+
 interface ProgressRingProps {
   progress: number;
   size?: number;
@@ -30,7 +33,7 @@ export const ProgressRing = ({
         strokeWidth={strokeWidth}
         fill="none"
       />
-      <circle
+      <motion.circle
         cx={size / 2}
         cy={size / 2}
         r={radius}
@@ -38,9 +41,10 @@ export const ProgressRing = ({
         strokeWidth={strokeWidth}
         fill="none"
         strokeDasharray={circumference}
-        strokeDashoffset={offset}
         strokeLinecap="round"
-        className="transition-all duration-500"
+        initial={{ strokeDashoffset: circumference }}
+        animate={{ strokeDashoffset: offset }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       />
       <text
         x={size / 2}
@@ -50,7 +54,7 @@ export const ProgressRing = ({
         className="rotate-90 transform fill-gray-900 font-bold"
         style={{ transformOrigin: 'center', fontSize: `${fontSize}px` }}
       >
-        {Math.round(progress)}%
+        <AnimatedNumber value={progress} format={(n) => `${Math.round(n)}%`} duration={1} />
       </text>
     </svg>
   );

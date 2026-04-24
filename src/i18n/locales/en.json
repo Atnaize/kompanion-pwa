@@ -36,11 +36,19 @@
     "startDate": "Start Date",
     "endDate": "End Date"
   },
+  "sync": {
+    "fetching": "Fetching… {{count}}",
+    "saving": "Saving {{current}}/{{total}}",
+    "processing": "Records {{current}}/{{total}}",
+    "done": "Done!",
+    "failed": "Sync failed"
+  },
   "nav": {
     "home": "Home",
     "activities": "Activities",
     "challenges": "Challenges",
     "badges": "Badges",
+    "personalRecords": "Records",
     "stats": "Stats"
   },
   "header": {
@@ -122,12 +130,7 @@
   "dashboard": {
     "quickStats": "Quick Stats",
     "personalRecords": "Personal Records",
-    "prRecord_one": "personal record",
-    "prRecord_other": "personal records",
-    "prActivity_one": "activity",
-    "prActivity_other": "activities",
-    "prDescription": "You have {{totalPRs}} {{recordText}} across {{activityCount}} {{activityText}}",
-    "viewAllPrs": "View All PRs →",
+    "viewAllPrs": "View All Records →",
     "recentActivities": "Recent Activities",
     "syncSuccess_one": "{{count}} activity synced!",
     "syncSuccess_other": "{{count}} activities synced!",
@@ -141,6 +144,7 @@
     "title": "Welcome to Kompanion!",
     "fetchingFromStrava": "Fetching from Strava... {{count}} activities found",
     "savingActivities": "Saving activities... {{current}}/{{total}}",
+    "processingRecords": "Processing personal records... {{current}}/{{total}}",
     "description": "Let's get started by syncing your Strava activities.",
     "syncButton": "Sync My Activities"
   },
@@ -441,17 +445,30 @@
   },
   "personalRecords": {
     "title": "Personal Records",
-    "summary_one": "{{activityCount}} activity with {{prCount}} personal record",
-    "summary_other": "{{activityCount}} activities with {{prCount}} personal records",
-    "totalPrs": "Total PRs",
-    "activitiesWithPrs": "Activities with PRs",
-    "avgPrsPerActivity": "Avg PRs per Activity",
-    "noPrsForType": "No PRs for this activity type",
-    "tryDifferentType": "Try selecting a different activity type",
+    "subtitle": "Your best running times per distance",
+    "summary": "{{total}} records across {{bands}} distances",
+    "best": "Best",
+    "noRecordForBand": "No record yet for this distance",
     "noPrsYet": "No personal records yet",
-    "keepTraining": "Keep training and you will achieve personal records!",
-    "showAll": "Show All",
-    "endOfList": "You've reached the end of your personal records 🏆"
+    "keepTraining": "Go run some kilometres — we'll pick up your best times from Strava on the next sync.",
+    "bands": {
+      "400m": "400 m",
+      "1km": "1 km",
+      "5km": "5 km",
+      "10km": "10 km",
+      "15km": "15 km",
+      "half_marathon": "Half-marathon",
+      "marathon": "Marathon"
+    },
+    "bandsShort": {
+      "400m": "400M",
+      "1km": "1K",
+      "5km": "5K",
+      "10km": "10K",
+      "15km": "15K",
+      "half_marathon": "21.1K",
+      "marathon": "42.2K"
+    }
   },
   "about": {
     "title": "About",

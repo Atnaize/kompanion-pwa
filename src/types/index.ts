@@ -285,6 +285,30 @@ export interface ChallengeProgress {
   isComplete: boolean;
 }
 
+export type PersonalRecordBand =
+  | '400m'
+  | '1km'
+  | '5km'
+  | '10km'
+  | '15km'
+  | 'half_marathon'
+  | 'marathon';
+
+export interface PersonalRecord {
+  bestTimeSeconds: number;
+  achievedAt: string;
+  activity: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface PersonalRecordBandGroup {
+  band: PersonalRecordBand;
+  distanceMeters: number;
+  records: PersonalRecord[];
+}
+
 export interface Friend {
   id: number;
   stravaId: number;

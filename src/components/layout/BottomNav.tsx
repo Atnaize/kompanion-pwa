@@ -25,6 +25,7 @@ const navItems: NavItem[] = [
   { path: '/activities', label: 'nav.activities', icon: '🏃', requiresData: true },
   { path: '/challenges', label: 'nav.challenges', icon: '🎯', requiresData: true },
   { path: '/achievements', label: 'nav.badges', icon: '🏆', requiresData: true },
+  { path: '/personal-records', label: 'nav.personalRecords', icon: '⏱️', requiresData: true },
   { path: '/stats', label: 'nav.stats', icon: '📊', requiresData: true },
 ];
 

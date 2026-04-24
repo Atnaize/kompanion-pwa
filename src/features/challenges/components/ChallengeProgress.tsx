@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ChallengeParticipant, Challenge } from '@types';
-import { GlassCard, ProgressRing, Avatar } from '@components/ui';
+import { AnimatedNumber, Avatar, GlassCard, ProgressRing } from '@components/ui';
 
 interface ChallengeProgressProps {
   challenge: Challenge;
@@ -76,7 +76,7 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                   <div>
                     <p className="mb-1 text-xs text-gray-500">Distance</p>
                     <p className="text-lg font-semibold text-gray-900">
-                      {formatDistance(totalDistance)} km
+                      <AnimatedNumber value={totalDistance} format={formatDistance} /> km
                     </p>
                     <p className="text-xs text-gray-500">
                       of {formatDistance(challenge.targets.distance)} km
@@ -87,7 +87,7 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                   <div>
                     <p className="mb-1 text-xs text-gray-500">Elevation</p>
                     <p className="text-lg font-semibold text-gray-900">
-                      {formatElevation(totalElevation)} m
+                      <AnimatedNumber value={totalElevation} format={formatElevation} /> m
                     </p>
                     <p className="text-xs text-gray-500">
                       of {formatElevation(challenge.targets.elevation)} m
@@ -97,7 +97,9 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                 {challenge.targets.activities && (
                   <div>
                     <p className="mb-1 text-xs text-gray-500">Activities</p>
-                    <p className="text-lg font-semibold text-gray-900">{totalActivities}</p>
+                    <p className="text-lg font-semibold text-gray-900">
+                      <AnimatedNumber value={totalActivities} />
+                    </p>
                     <p className="text-xs text-gray-500">of {challenge.targets.activities}</p>
                   </div>
                 )}
@@ -127,7 +129,11 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                         <div>
                           <span className="text-gray-500">Distance: </span>
                           <span className="font-medium text-gray-900">
-                            {formatDistance(participant.totalDistance)} km
+                            <AnimatedNumber
+                              value={participant.totalDistance}
+                              format={formatDistance}
+                            />{' '}
+                            km
                           </span>
                         </div>
                       )}
@@ -135,7 +141,11 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                         <div>
                           <span className="text-gray-500">Elevation: </span>
                           <span className="font-medium text-gray-900">
-                            {formatElevation(participant.totalElevation)} m
+                            <AnimatedNumber
+                              value={participant.totalElevation}
+                              format={formatElevation}
+                            />{' '}
+                            m
                           </span>
                         </div>
                       )}
@@ -143,7 +153,7 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                         <div>
                           <span className="text-gray-500">Activities: </span>
                           <span className="font-medium text-gray-900">
-                            {participant.activityCount}
+                            <AnimatedNumber value={participant.activityCount} />
                           </span>
                         </div>
                       )}
@@ -199,7 +209,8 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                     <div>
                       <p className="text-gray-500">Distance</p>
                       <p className="font-medium text-gray-900">
-                        {formatDistance(participant.totalDistance)} km
+                        <AnimatedNumber value={participant.totalDistance} format={formatDistance} />{' '}
+                        km
                       </p>
                     </div>
                   )}
@@ -207,14 +218,20 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                     <div>
                       <p className="text-gray-500">Elevation</p>
                       <p className="font-medium text-gray-900">
-                        {formatElevation(participant.totalElevation)} m
+                        <AnimatedNumber
+                          value={participant.totalElevation}
+                          format={formatElevation}
+                        />{' '}
+                        m
                       </p>
                     </div>
                   )}
                   {challenge.targets.activities && (
                     <div>
                       <p className="text-gray-500">Activities</p>
-                      <p className="font-medium text-gray-900">{participant.activityCount}</p>
+                      <p className="font-medium text-gray-900">
+                        <AnimatedNumber value={participant.activityCount} />
+                      </p>
                     </div>
                   )}
                 </div>

@@ -1,5 +1,15 @@
 import { Layout } from '@components/layout';
-import { Button, GlassCard, StatTile, ProgressRing, BadgeCard } from '@components/ui';
+import {
+  ActivityBarsViz,
+  BadgeCard,
+  Button,
+  DistanceProgressViz,
+  ElevationMountainViz,
+  GlassCard,
+  ProgressRing,
+  StatTile,
+  StreakDotsViz,
+} from '@components/ui';
 import { useToastStore } from '@store/toastStore';
 import { apiClient } from '@api/client';
 
@@ -116,10 +126,20 @@ export const ComponentsPage = () => {
         <section>
           <h3 className="mb-4 text-lg font-bold text-gray-900">Stat Tiles</h3>
           <div className="grid grid-cols-2 gap-3">
-            <StatTile icon="🏃" label="Activities" value="42" />
-            <StatTile icon="📏" label="Distance" value="125 km" subValue="This week" />
-            <StatTile icon="⛰️" label="Elevation" value="1,234 m" />
-            <StatTile icon="🔥" label="Streak" value="7 days" subValue="Keep it up!" />
+            <StatTile label="Activities" value="42" viz={<ActivityBarsViz />} />
+            <StatTile
+              label="Distance"
+              value="125 km"
+              subValue="This week"
+              viz={<DistanceProgressViz progress={0.65} />}
+            />
+            <StatTile label="Elevation" value="1,234 m" viz={<ElevationMountainViz />} />
+            <StatTile
+              label="Streak"
+              value="7 days"
+              subValue="Keep it up!"
+              viz={<StreakDotsViz filled={7} />}
+            />
           </div>
         </section>
 

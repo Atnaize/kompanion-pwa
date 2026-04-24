@@ -2,22 +2,25 @@ import { ReactNode } from 'react';
 import { GlassCard } from './GlassCard';
 
 interface StatTileProps {
-  icon: ReactNode;
   label: string;
-  value: string;
+  value: ReactNode;
   subValue?: string;
+  /** Background viz (absolute-positioned). See stat-vizzes.tsx. */
+  viz?: ReactNode;
 }
 
-export const StatTile = ({ icon, label, value, subValue }: StatTileProps) => {
+export const StatTile = ({ label, value, subValue, viz }: StatTileProps) => {
   return (
-    <GlassCard className="p-4">
-      <div className="flex items-center gap-3">
-        <div className="text-2xl">{icon}</div>
-        <div className="flex-1">
-          <div className="text-xs font-medium uppercase tracking-wide text-gray-600">{label}</div>
-          <div className="text-xl font-bold text-gray-900">{value}</div>
-          {subValue && <div className="text-xs text-gray-500">{subValue}</div>}
+    <GlassCard className="relative overflow-hidden p-4">
+      {viz}
+      <div className="relative">
+        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          {label}
         </div>
+        <div className="mt-2 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900">
+          {value}
+        </div>
+        {subValue && <div className="mt-0.5 text-xs text-gray-400">{subValue}</div>}
       </div>
     </GlassCard>
   );
