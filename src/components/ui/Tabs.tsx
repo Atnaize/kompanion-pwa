@@ -51,11 +51,11 @@ export const TabList = ({ children, className, wrap = false, fade = false }: Tab
       <div className={clsx('relative', className)}>
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-4 bg-gradient-to-r from-gray-50 to-transparent"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-4 bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-950"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l from-gray-50 to-transparent"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-950"
         />
         <div className="no-scrollbar flex gap-1.5 overflow-x-auto scroll-smooth px-1">
           {children}
@@ -90,7 +90,7 @@ export const Tab = ({ value, label, count, icon, className, compact }: TabProps)
         compact ? 'px-2.5 py-1.5 text-[13px]' : 'px-4 py-2 text-sm',
         isActive
           ? 'bg-gradient-to-br from-strava-orange to-orange-600 text-white shadow-md'
-          : 'bg-white/60 text-gray-700 backdrop-blur-sm hover:bg-white/90',
+          : 'bg-white/60 text-gray-700 backdrop-blur-sm hover:bg-white/90 dark:bg-gray-900/60 dark:text-gray-300 dark:hover:bg-gray-900/90',
         className
       )}
     >

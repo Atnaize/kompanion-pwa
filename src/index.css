@@ -10,7 +10,15 @@
   }
 
   body {
-    @apply antialiased;
+    @apply bg-white text-gray-900 antialiased transition-colors duration-200;
+  }
+
+  html.dark body {
+    @apply bg-gray-950 text-gray-100;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 }
 

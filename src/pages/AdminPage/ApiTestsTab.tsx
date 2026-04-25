@@ -14,7 +14,7 @@ export const ApiTestsTab = () => {
   return (
     <div className="space-y-4">
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900">API Endpoint Tests</h2>
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">API Endpoint Tests</h2>
         <div className="space-y-2">
           {ENDPOINTS.map((ep) => (
             <Button
@@ -32,7 +32,7 @@ export const ApiTestsTab = () => {
 
       {Object.keys(results).length > 0 && (
         <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">Test Results</h2>
+          <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Test Results</h2>
           <div className="space-y-3">
             {Object.entries(results).map(([name, result]) => (
               <ResultCard key={name} name={name} result={result} />
@@ -48,9 +48,9 @@ const ResultCard = ({ name, result }: { name: string; result: ApiTestResult }) =
   const dataStr = result.data ? JSON.stringify(result.data, null, 2) : '';
 
   return (
-    <div className="rounded-lg bg-white/30 p-3">
+    <div className="rounded-lg bg-white/30 p-3 dark:bg-gray-900/30">
       <div className="mb-2 flex items-center justify-between">
-        <span className="font-medium text-gray-900">{name}</span>
+        <span className="font-medium text-gray-900 dark:text-gray-50">{name}</span>
         <StatusPill tone={result.success ? 'success' : 'danger'}>
           {result.success ? 'Success' : 'Failed'}
         </StatusPill>
@@ -58,8 +58,8 @@ const ResultCard = ({ name, result }: { name: string; result: ApiTestResult }) =
       {result.error && <p className="text-xs text-red-600">Error: {result.error}</p>}
       {dataStr && (
         <details className="text-xs">
-          <summary className="cursor-pointer text-gray-600">View Data</summary>
-          <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-gray-900">{dataStr}</pre>
+          <summary className="cursor-pointer text-gray-600 dark:text-gray-400">View Data</summary>
+          <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-gray-900 dark:bg-gray-800 dark:text-gray-50">{dataStr}</pre>
         </details>
       )}
     </div>

@@ -47,8 +47,8 @@ export const ActivityCard = ({ activity, variant = 'compact', onClick }: Activit
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-semibold text-gray-900">{activity.name}</h3>
-              <p className="mt-0.5 text-xs text-gray-500">
+              <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">{activity.name}</h3>
+              <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                 {formatRelativeTime(activity.start_date_local)}
               </p>
             </div>
@@ -62,7 +62,7 @@ export const ActivityCard = ({ activity, variant = 'compact', onClick }: Activit
           </div>
 
           {variant === 'compact' ? (
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-700">
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-700 dark:text-gray-300">
               <Metric icon={Route} value={formatDistance(activity.distance)} />
               <Metric icon={TrendingUp} value={formatElevation(activity.total_elevation_gain)} />
               <Metric icon={Clock} value={formatDuration(activity.moving_time)} />
@@ -96,7 +96,7 @@ export const ActivityCard = ({ activity, variant = 'compact', onClick }: Activit
           <ChevronRight
             size={18}
             strokeWidth={1.75}
-            className="shrink-0 self-center text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-gray-500"
+            className="shrink-0 self-center text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-400"
             aria-hidden="true"
           />
         )}
@@ -112,7 +112,7 @@ interface MetricProps {
 
 const Metric = ({ icon: Icon, value }: MetricProps) => (
   <span className="inline-flex items-center gap-1">
-    <Icon size={13} strokeWidth={1.75} className="text-gray-400" />
+    <Icon size={13} strokeWidth={1.75} className="text-gray-400 dark:text-gray-500" />
     <span className="font-medium tabular-nums">{value}</span>
   </span>
 );
@@ -125,10 +125,10 @@ interface DetailedMetricProps {
 
 const DetailedMetric = ({ icon: Icon, label, value }: DetailedMetricProps) => (
   <div className="min-w-0">
-    <p className="flex items-center gap-1 text-xs uppercase tracking-wide text-gray-500">
-      {Icon && <Icon size={11} strokeWidth={2} className="text-gray-400" />}
+    <p className="flex items-center gap-1 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+      {Icon && <Icon size={11} strokeWidth={2} className="text-gray-400 dark:text-gray-500" />}
       <span className="truncate">{label}</span>
     </p>
-    <p className="mt-0.5 truncate font-semibold tabular-nums text-gray-900">{value}</p>
+    <p className="mt-0.5 truncate font-semibold tabular-nums text-gray-900 dark:text-gray-50">{value}</p>
   </div>
 );

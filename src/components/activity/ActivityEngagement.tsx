@@ -37,9 +37,9 @@ const formatRelative = (iso: string, locale: string): string => {
 
 const SectionHeader = ({ title, count }: { title: string; count: number }) => (
   <div className="mb-3 flex items-baseline gap-2">
-    <h3 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500">{title}</h3>
-    <span className="text-[11px] font-semibold tabular-nums text-gray-400">{count}</span>
-    <span className="ml-1 h-px flex-1 bg-gradient-to-r from-gray-200 to-transparent" />
+    <h3 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">{title}</h3>
+    <span className="text-[11px] font-semibold tabular-nums text-gray-400 dark:text-gray-500">{count}</span>
+    <span className="ml-1 h-px flex-1 bg-gradient-to-r from-gray-200 to-transparent dark:from-gray-700" />
   </div>
 );
 
@@ -67,7 +67,7 @@ export const ActivityEngagement = ({
   const hiddenCommentCount = actualComments.length - visibleComments.length;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/80 shadow-sm backdrop-blur-md">
+    <div className="overflow-hidden rounded-2xl border border-white/40 bg-white/80 shadow-sm backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/80">
       {/* Kudos */}
       <section className="px-5 pt-5">
         <SectionHeader title={t('activityDetail.kudos')} count={kudosCount} />
@@ -75,11 +75,11 @@ export const ActivityEngagement = ({
         {isLoading && actualKudoers.length === 0 ? (
           <div className="flex gap-1.5">
             {Array.from({ length: Math.min(5, Math.max(1, kudosCount)) }).map((_, i) => (
-              <div key={i} className="h-9 w-9 animate-pulse rounded-full bg-gray-200" />
+              <div key={i} className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
             ))}
           </div>
         ) : actualKudoers.length === 0 ? (
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-400 dark:text-gray-500">
             {kudosCount > 0 ? t('activityDetail.kudosUnavailable') : t('activityDetail.noKudos')}
           </p>
         ) : (
@@ -91,7 +91,7 @@ export const ActivityEngagement = ({
                   src={a.profile_medium || a.profile}
                   firstname={a.firstname}
                   lastname={a.lastname}
-                  className="h-9 w-9 ring-2 ring-white transition-transform hover:-translate-y-0.5"
+                  className="h-9 w-9 ring-2 ring-white transition-transform hover:-translate-y-0.5 dark:ring-gray-900"
                 />
               </div>
             ))}
@@ -99,7 +99,7 @@ export const ActivityEngagement = ({
               <button
                 type="button"
                 onClick={() => setShowAllKudoers(true)}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-600 ring-2 ring-white transition hover:bg-gray-200"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-xs font-semibold text-gray-600 ring-2 ring-white transition hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-900 dark:hover:bg-gray-700"
                 aria-label={t('activityDetail.viewAllKudos', { count: actualKudoers.length })}
               >
                 +{hiddenAvatarCount}
@@ -110,23 +110,23 @@ export const ActivityEngagement = ({
       </section>
 
       {/* Comments */}
-      <section className="mt-5 border-t border-gray-100 px-5 py-5">
+      <section className="mt-5 border-t border-gray-100 px-5 py-5 dark:border-gray-800">
         <SectionHeader title={t('activityDetail.comments')} count={commentCount} />
 
         {isLoading && actualComments.length === 0 ? (
           <div className="space-y-3">
             {Array.from({ length: Math.min(2, Math.max(1, commentCount)) }).map((_, i) => (
               <div key={i} className="flex gap-3">
-                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
+                <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
                 <div className="flex-1 space-y-1.5">
-                  <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
-                  <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
+                  <div className="h-3 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
+                  <div className="h-3 w-full animate-pulse rounded bg-gray-200 dark:bg-gray-800" />
                 </div>
               </div>
             ))}
           </div>
         ) : actualComments.length === 0 ? (
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-400 dark:text-gray-500">
             {commentCount > 0
               ? t('activityDetail.commentsUnavailable')
               : t('activityDetail.noComments')}
@@ -144,14 +144,14 @@ export const ActivityEngagement = ({
                 />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-baseline gap-2">
-                    <span className="truncate text-sm font-semibold text-gray-900">
+                    <span className="truncate text-sm font-semibold text-gray-900 dark:text-gray-50">
                       {fullName(c.athlete)}
                     </span>
-                    <span className="shrink-0 text-[11px] text-gray-400">
+                    <span className="shrink-0 text-[11px] text-gray-400 dark:text-gray-500">
                       {formatRelative(c.created_at, locale)}
                     </span>
                   </div>
-                  <p className="whitespace-pre-wrap break-words text-sm leading-snug text-gray-700">
+                  <p className="whitespace-pre-wrap break-words text-sm leading-snug text-gray-700 dark:text-gray-300">
                     {c.text}
                   </p>
                 </div>
@@ -173,7 +173,7 @@ export const ActivityEngagement = ({
           <button
             type="button"
             onClick={() => setShowAllComments(false)}
-            className="mt-3 text-xs font-medium text-gray-500 hover:underline"
+            className="mt-3 text-xs font-medium text-gray-500 hover:underline dark:text-gray-400"
           >
             {t('activityDetail.showLess')}
           </button>

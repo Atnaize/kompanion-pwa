@@ -16,7 +16,7 @@ const rarityColors = {
 };
 
 const rarityText = {
-  common: 'text-gray-600',
+  common: 'text-gray-600 dark:text-gray-400',
   rare: 'text-blue-600',
   epic: 'text-purple-600',
   legendary: 'text-orange-600',
@@ -90,7 +90,7 @@ export const AchievementUnlockedModal = ({
     >
       <div
         className={clsx(
-          'relative w-full max-w-sm rounded-2xl bg-white p-8 shadow-2xl transition-all duration-500',
+          'relative w-full max-w-sm rounded-2xl bg-white p-8 shadow-2xl transition-all duration-500 dark:bg-gray-900',
           showContent ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
         )}
         onClick={(e) => e.stopPropagation()}
@@ -101,7 +101,7 @@ export const AchievementUnlockedModal = ({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 transition-colors hover:text-gray-600"
+          className="absolute right-4 top-4 text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
@@ -136,8 +136,8 @@ export const AchievementUnlockedModal = ({
             <p className="text-sm font-medium uppercase tracking-wide text-strava-orange">
               {t('achievements.achievementUnlocked')}
             </p>
-            <h2 className="mt-2 text-2xl font-bold text-gray-900">{achievement.name}</h2>
-            <p className="mt-2 text-gray-600">{achievement.description}</p>
+            <h2 className="mt-2 text-2xl font-bold text-gray-900 dark:text-gray-50">{achievement.name}</h2>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">{achievement.description}</p>
             <span
               className={clsx(
                 'mt-3 inline-block text-sm font-bold capitalize',

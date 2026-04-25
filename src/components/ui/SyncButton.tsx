@@ -53,9 +53,9 @@ export const SyncButton = ({
   return (
     <div
       className={clsx(
-        'relative overflow-hidden rounded-2xl bg-orange-100 shadow-inner',
+        'relative overflow-hidden rounded-2xl bg-orange-100 shadow-inner dark:bg-orange-950/40',
         sizeClasses,
-        'flex items-center justify-center font-medium text-gray-900',
+        'flex items-center justify-center font-medium text-gray-900 dark:text-gray-50',
         className
       )}
       aria-live="polite"

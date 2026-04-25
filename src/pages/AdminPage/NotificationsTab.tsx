@@ -41,11 +41,11 @@ export const NotificationsTab = () => {
   return (
     <div className="space-y-4">
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900">Notification Debug Info</h2>
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Notification Debug Info</h2>
         {debug ? (
           <DebugChecks debug={debug} isSupported={isSupported} isSubscribed={isSubscribed} />
         ) : (
-          <p className="text-sm text-gray-500">Loading...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
         )}
         <div className="mt-4 flex gap-2">
           <Button onClick={refresh} variant="secondary" size="sm">
@@ -60,8 +60,8 @@ export const NotificationsTab = () => {
       </GlassCard>
 
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900">Send Test Notification</h2>
-        <p className="mb-4 text-sm text-gray-600">
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Send Test Notification</h2>
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Send a test push notification to your device. All debug checks above should show green for
           this to work.
         </p>
@@ -127,8 +127,8 @@ const DebugChecks = ({ debug, isSupported, isSubscribed }: DebugChecksProps) => 
       </CheckRow>
       {debug.pushSubscription && (
         <div className="mt-2">
-          <span className="text-gray-600">Endpoint:</span>
-          <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs">
+          <span className="text-gray-600 dark:text-gray-400">Endpoint:</span>
+          <p className="mt-1 break-all rounded bg-gray-100 p-2 font-mono text-xs dark:bg-gray-800">
             {debug.pushSubscription}
           </p>
         </div>
@@ -139,7 +139,7 @@ const DebugChecks = ({ debug, isSupported, isSubscribed }: DebugChecksProps) => 
 
 const CheckRow = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="flex justify-between">
-    <span className="text-gray-600">{label}</span>
+    <span className="text-gray-600 dark:text-gray-400">{label}</span>
     {children}
   </div>
 );

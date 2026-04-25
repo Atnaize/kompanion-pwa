@@ -51,7 +51,7 @@ export const ProgressRing = ({
         y={size / 2}
         textAnchor="middle"
         dominantBaseline="middle"
-        className="rotate-90 transform fill-gray-900 font-bold"
+        className="rotate-90 transform fill-gray-900 font-bold dark:fill-gray-50"
         style={{ transformOrigin: 'center', fontSize: `${fontSize}px` }}
       >
         <AnimatedNumber value={progress} format={(n) => `${Math.round(n)}%`} duration={1} />

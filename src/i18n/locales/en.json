@@ -62,7 +62,12 @@
     "settings": "Settings",
     "adminPanel": "Admin Panel",
     "logout": "Logout",
-    "aboutKompanion": "About Kompanion"
+    "aboutKompanion": "About Kompanion",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "settings": {
     "title": "Settings",

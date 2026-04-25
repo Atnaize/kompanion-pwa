@@ -65,8 +65,8 @@ export const ActivityChart = ({
   return (
     <div>
       <div className="mb-2 flex items-baseline justify-between">
-        <h3 className="text-sm font-semibold text-gray-800">{label}</h3>
-        <span className="text-xs text-gray-500">{displayUnit}</span>
+        <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-100">{label}</h3>
+        <span className="text-xs text-gray-500 dark:text-gray-400">{displayUnit}</span>
       </div>
       <div className="h-40 w-full">
         <ResponsiveContainer width="100%" height="100%">

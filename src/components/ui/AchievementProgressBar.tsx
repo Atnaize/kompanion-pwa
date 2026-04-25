@@ -44,15 +44,15 @@ export const AchievementProgressBar = ({
   return (
     <div className="mt-3 space-y-1">
       <div className="flex items-center justify-between text-xs">
-        <span className="font-medium text-gray-700">
+        <span className="font-medium text-gray-700 dark:text-gray-300">
           <AnimatedNumber value={currentValue} format={(n) => formatValue(n, requirementType)} /> /{' '}
           {formatValue(targetValue, requirementType)}
         </span>
-        <span className="font-bold text-gray-900">
+        <span className="font-bold text-gray-900 dark:text-gray-50">
           <AnimatedNumber value={percentage} format={(n) => `${Math.round(n)}%`} />
         </span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-800">
         <motion.div
           className={clsx('h-full rounded-full', rarityColors[rarity])}
           initial={{ width: 0 }}

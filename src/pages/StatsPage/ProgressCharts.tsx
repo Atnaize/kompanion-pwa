@@ -88,15 +88,15 @@ export const ProgressCharts = () => {
   return (
     <GlassCard className="p-6">
       <div className="mb-6">
-        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
           {t('progressCharts.title')}
         </h3>
-        <p className="mt-1 text-sm text-gray-500">{t('progressCharts.subtitle')}</p>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('progressCharts.subtitle')}</p>
       </div>
 
       {/* Metric Selector */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">{t('common.metric')}</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t('common.metric')}</label>
         <div className="grid grid-cols-4 gap-2">
           {(['distance', 'elevation', 'time', 'count'] as Metric[]).map((m) => (
             <button
@@ -105,7 +105,7 @@ export const ProgressCharts = () => {
               className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
                 metric === m
                   ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                  : 'bg-white/50 text-gray-700 hover:bg-white/80'
+                  : 'bg-white/50 text-gray-700 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:hover:bg-gray-900/80'
               }`}
             >
               {m === 'distance'
@@ -122,7 +122,7 @@ export const ProgressCharts = () => {
 
       {/* Period Selector */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700">
+        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
           {t('common.timePeriod')}
         </label>
         <div className="grid grid-cols-4 gap-2">
@@ -139,7 +139,7 @@ export const ProgressCharts = () => {
               className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
                 period === p
                   ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                  : 'bg-white/50 text-gray-700 hover:bg-white/80'
+                  : 'bg-white/50 text-gray-700 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:hover:bg-gray-900/80'
               }`}
             >
               {p === 'week'
@@ -158,10 +158,10 @@ export const ProgressCharts = () => {
       {isLoading ? (
         <Skeleton className="h-64" />
       ) : progressData.length === 0 ? (
-        <div className="flex h-64 items-center justify-center rounded-lg bg-gray-50">
+        <div className="flex h-64 items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-950">
           <div className="flex flex-col items-center text-center">
-            <BarChart3 className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
-            <p className="mt-2 text-sm text-gray-500">{t('progressCharts.noData')}</p>
+            <BarChart3 className="h-8 w-8 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{t('progressCharts.noData')}</p>
           </div>
         </div>
       ) : (
@@ -212,10 +212,10 @@ export const ProgressCharts = () => {
           </div>
 
           {/* Summary Stats */}
-          <div className="mt-4 grid grid-cols-3 gap-3 border-t border-gray-200 pt-4 text-center">
+          <div className="mt-4 grid grid-cols-3 gap-3 border-t border-gray-200 pt-4 text-center dark:border-gray-800">
             <div>
-              <p className="text-xs text-gray-600">{t('common.total')}</p>
-              <p className="font-bold text-gray-900">
+              <p className="text-xs text-gray-600 dark:text-gray-400">{t('common.total')}</p>
+              <p className="font-bold text-gray-900 dark:text-gray-50">
                 {formatValue(
                   progressData.reduce((sum, d) => sum + d.value, 0),
                   true
@@ -223,8 +223,8 @@ export const ProgressCharts = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-600">{t('common.average')}</p>
-              <p className="font-bold text-gray-900">
+              <p className="text-xs text-gray-600 dark:text-gray-400">{t('common.average')}</p>
+              <p className="font-bold text-gray-900 dark:text-gray-50">
                 {formatValue(
                   progressData.reduce((sum, d) => sum + d.value, 0) / progressData.length,
                   true
@@ -232,8 +232,8 @@ export const ProgressCharts = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-600">{t('common.peak')}</p>
-              <p className="font-bold text-gray-900">
+              <p className="text-xs text-gray-600 dark:text-gray-400">{t('common.peak')}</p>
+              <p className="font-bold text-gray-900 dark:text-gray-50">
                 {formatValue(Math.max(...progressData.map((d) => d.value)), true)}
               </p>
             </div>

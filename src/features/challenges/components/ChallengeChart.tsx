@@ -122,7 +122,7 @@ export const ChallengeChart: React.FC<ChallengeChartProps> = ({ challenge }) => 
 
   return (
     <GlassCard className="p-4">
-      <h3 className="mb-4 text-sm font-semibold text-gray-900">
+      <h3 className="mb-4 text-sm font-semibold text-gray-900 dark:text-gray-50">
         Contribution Breakdown ({metricLabel})
       </h3>
       <ResponsiveContainer width="100%" height={300}>

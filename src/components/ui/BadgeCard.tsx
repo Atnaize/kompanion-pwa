@@ -83,11 +83,11 @@ export const BadgeCard = ({
           {isSecretLocked ? '?' : icon}
         </div>
         <div className="w-full">
-          <h3 className="font-bold text-gray-900">{name}</h3>
-          <p className="mt-1 text-xs text-gray-600">{description}</p>
+          <h3 className="font-bold text-gray-900 dark:text-gray-50">{name}</h3>
+          <p className="mt-1 text-xs text-gray-600 dark:text-gray-400">{description}</p>
           <span
             className={clsx('mt-2 inline-block text-xs font-medium capitalize', {
-              'text-gray-600': rarity === 'common',
+              'text-gray-600 dark:text-gray-400': rarity === 'common',
               'text-blue-600': rarity === 'rare',
               'text-purple-600': rarity === 'epic',
               'text-orange-600': rarity === 'legendary',

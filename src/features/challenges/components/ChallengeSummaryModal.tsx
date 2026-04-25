@@ -54,8 +54,8 @@ export const ChallengeSummaryModal = ({
             >
               {isSuccess ? 'Challenge Completed!' : 'Challenge Ended'}
             </h2>
-            <p className="text-lg font-medium text-gray-900">{challenge.name}</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-lg font-medium text-gray-900 dark:text-gray-50">{challenge.name}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {challenge.type === 'collaborative' ? '🤝 Collaborative' : '🏆 Competitive'}
             </p>
           </div>
@@ -69,23 +69,23 @@ export const ChallengeSummaryModal = ({
           <div className="mb-6 grid grid-cols-3 gap-3 text-center">
             {challenge.targets.distance && (
               <div>
-                <p className="text-lg font-bold text-gray-900">{formatDistance(totalDistance)}</p>
-                <p className="text-xs text-gray-600">
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">{formatDistance(totalDistance)}</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
                   of {formatDistance(challenge.targets.distance)}
                 </p>
               </div>
             )}
             {challenge.targets.elevation && (
               <div>
-                <p className="text-lg font-bold text-gray-900">{Math.round(totalElevation)}m</p>
-                <p className="text-xs text-gray-600">
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">{Math.round(totalElevation)}m</p>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
                   of {Math.round(challenge.targets.elevation)}m
                 </p>
               </div>
             )}
             <div>
-              <p className="text-lg font-bold text-gray-900">{totalActivities}</p>
-              <p className="text-xs text-gray-600">
+              <p className="text-lg font-bold text-gray-900 dark:text-gray-50">{totalActivities}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
                 {totalActivities === 1 ? 'activity' : 'activities'}
               </p>
             </div>
@@ -94,7 +94,7 @@ export const ChallengeSummaryModal = ({
           {/* Collaborative: Individual Contributions */}
           {isCollaborative && (
             <div className="mb-6">
-              <h3 className="mb-3 text-sm font-semibold text-gray-700">Team Contributions</h3>
+              <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Team Contributions</h3>
               <div className="space-y-2">
                 {sortedParticipants.map((participant) => (
                   <div
@@ -111,14 +111,14 @@ export const ChallengeSummaryModal = ({
                         size="sm"
                         className="h-7 w-7"
                       />
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
                         {participant.user.firstname}
                         {participant.userId === user?.userId && (
                           <span className="ml-1 text-xs text-blue-600">(you)</span>
                         )}
                       </span>
                     </div>
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {formatDistance(participant.totalDistance)}
                     </span>
                   </div>
@@ -130,7 +130,7 @@ export const ChallengeSummaryModal = ({
           {/* Competitive: Leaderboard */}
           {!isCollaborative && (
             <div className="mb-6">
-              <h3 className="mb-3 text-sm font-semibold text-gray-700">Final Rankings</h3>
+              <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Final Rankings</h3>
               <div className="space-y-2">
                 {sortedParticipants.map((participant, index) => {
                   const rank = index + 1;
@@ -154,14 +154,14 @@ export const ChallengeSummaryModal = ({
                           size="sm"
                           className="h-7 w-7"
                         />
-                        <span className="text-sm font-medium text-gray-900">
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
                           {participant.user.firstname}
                           {isCurrentUser && (
                             <span className="ml-1 text-xs text-blue-600">(you)</span>
                           )}
                         </span>
                       </div>
-                      <span className="text-sm font-medium text-gray-700">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                         {formatDistance(participant.totalDistance)}
                       </span>
                     </div>
@@ -169,7 +169,7 @@ export const ChallengeSummaryModal = ({
                 })}
               </div>
               {currentUserRank > 0 && (
-                <p className="mt-2 text-center text-sm text-gray-600">
+                <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
                   You finished{' '}
                   <span className="font-semibold">
                     {currentUserRank === 1

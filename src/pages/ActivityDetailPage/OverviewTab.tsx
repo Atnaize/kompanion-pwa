@@ -143,7 +143,7 @@ export const OverviewTab = ({
           )}
         </div>
         {activity.description && (
-          <p className="mt-4 whitespace-pre-wrap rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+          <p className="mt-4 whitespace-pre-wrap rounded-lg bg-gray-50 p-3 text-sm text-gray-700 dark:bg-gray-950 dark:text-gray-300">
             {activity.description}
           </p>
         )}
@@ -168,7 +168,7 @@ export const OverviewTab = ({
       )}
 
       <div>
-        <h2 className="mb-2 px-1 text-sm font-semibold uppercase tracking-wide text-gray-500">
+        <h2 className="mb-2 px-1 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
           {t('activityDetail.engagement')}
         </h2>
         <ActivityEngagement
@@ -184,5 +184,5 @@ export const OverviewTab = ({
 };
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">{children}</h2>
+  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{children}</h2>
 );

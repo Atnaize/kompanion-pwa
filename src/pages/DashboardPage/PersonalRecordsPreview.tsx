@@ -37,10 +37,10 @@ export const PersonalRecordsPreview = ({ disabled = false }: PersonalRecordsPrev
         onClick={() => navigate('/personal-records')}
       >
         <div className="mb-5 flex items-baseline justify-between">
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('dashboard.personalRecords')}
           </h3>
-          <span className="text-gray-400 transition-transform group-hover:translate-x-0.5">›</span>
+          <span className="text-gray-400 transition-transform group-hover:translate-x-0.5 dark:text-gray-500">›</span>
         </div>
 
         <div
@@ -69,12 +69,12 @@ interface BandPillProps {
 
 const BandPill = ({ label, time, isFreshest }: BandPillProps) => (
   <div className="flex w-[72px] flex-col items-center">
-    <div className="inline-flex items-center rounded-full border border-strava-orange/40 bg-white/60 px-2.5 py-0.5 shadow-sm backdrop-blur-sm">
+    <div className="inline-flex items-center rounded-full border border-strava-orange/40 bg-white/60 px-2.5 py-0.5 shadow-sm backdrop-blur-sm dark:bg-gray-900/40">
       <span className="font-mono text-[10px] font-bold tracking-[0.15em] text-strava-orange">
         {label}
       </span>
     </div>
-    <div className="mt-2 font-mono text-base font-semibold tabular-nums tracking-tight text-gray-900">
+    <div className="mt-2 font-mono text-base font-semibold tabular-nums tracking-tight text-gray-900 dark:text-gray-50">
       {time}
     </div>
     <div

@@ -50,11 +50,11 @@ export const PersonalRecordsBoard = ({ groups, onActivityClick }: PersonalRecord
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h1 className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900">
+        <h1 className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
           <Sparkles size={20} className="text-strava-orange" strokeWidth={2} />
           {t('personalRecords.title')}
         </h1>
-        <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-500">
+        <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
           {t('personalRecords.summary', { bands: bandsWithRecords, total: totalRecords })}
         </p>
       </div>
@@ -80,7 +80,7 @@ export const PersonalRecordsBoard = ({ groups, onActivityClick }: PersonalRecord
           </div>
 
           <div className="min-w-0">
-            <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500">
+            <div className="mb-1 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
               Pace · distance curve
             </div>
             {chartData.length >= 2 ? (
@@ -130,7 +130,7 @@ export const PersonalRecordsBoard = ({ groups, onActivityClick }: PersonalRecord
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="flex h-32 items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white/40 font-mono text-xs uppercase tracking-widest text-gray-400">
+              <div className="flex h-32 items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white/40 font-mono text-xs uppercase tracking-widest text-gray-400 dark:border-gray-700 dark:bg-gray-900/40 dark:text-gray-500">
                 Need 2+ PRs to plot
               </div>
             )}
@@ -163,11 +163,11 @@ interface StatProps {
 
 const Stat = ({ icon, label, value }: StatProps) => (
   <div>
-    <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500">
-      <span className="text-gray-400">{icon}</span>
+    <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+      <span className="text-gray-400 dark:text-gray-500">{icon}</span>
       {label}
     </div>
-    <div className="mt-1 font-mono text-3xl font-semibold tabular-nums text-gray-900">{value}</div>
+    <div className="mt-1 font-mono text-3xl font-semibold tabular-nums text-gray-900 dark:text-gray-50">{value}</div>
   </div>
 );
 
@@ -240,16 +240,16 @@ const BandTile = ({
             >
               <div className="flex items-stretch gap-4">
                 <div className="flex-1">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
                     Time
                   </div>
-                  <div className="mt-1 font-mono text-xl font-semibold tabular-nums leading-none text-gray-900">
+                  <div className="mt-1 font-mono text-xl font-semibold tabular-nums leading-none text-gray-900 dark:text-gray-50">
                     {formatRecordTime(best.bestTimeSeconds)}
                   </div>
                 </div>
-                <div className="w-px bg-gray-200/70" aria-hidden="true" />
+                <div className="w-px bg-gray-200/70 dark:bg-gray-800/70" aria-hidden="true" />
                 <div className="flex-1 text-right">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
                     Pace
                   </div>
                   <div
@@ -259,21 +259,21 @@ const BandTile = ({
                     )}
                   >
                     {formatPace(best.bestTimeSeconds, group.distanceMeters)}
-                    <span className="ml-0.5 align-baseline text-[10px] font-medium uppercase tracking-widest text-gray-400">
+                    <span className="ml-0.5 align-baseline text-[10px] font-medium uppercase tracking-widest text-gray-400 dark:text-gray-500">
                       /km
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="mt-4 truncate text-xs text-gray-600">
+              <div className="mt-4 truncate text-xs text-gray-600 dark:text-gray-400">
                 <span className="truncate">{best.activity.name}</span>
-                <span className="mx-1.5 text-gray-300">·</span>
-                <span className="text-gray-500">{formatDate(best.achievedAt)}</span>
+                <span className="mx-1.5 text-gray-300 dark:text-gray-600">·</span>
+                <span className="text-gray-500 dark:text-gray-400">{formatDate(best.achievedAt)}</span>
               </div>
             </button>
 
             {group.records.length > 1 && (
-              <div className="mt-4 space-y-1 border-t border-gray-200/60 pt-3">
+              <div className="mt-4 space-y-1 border-t border-gray-200/60 pt-3 dark:border-gray-800/60">
                 {group.records.slice(1).map((record, index) => (
                   <AttemptRow
                     key={record.activity.id}
@@ -290,8 +290,8 @@ const BandTile = ({
           </>
         ) : (
           <div className="mt-5">
-            <div className="font-mono text-4xl font-semibold leading-none text-gray-300">—:—</div>
-            <div className="mt-3 font-mono text-[10px] uppercase tracking-widest text-gray-400">
+            <div className="font-mono text-4xl font-semibold leading-none text-gray-300 dark:text-gray-600">—:—</div>
+            <div className="mt-3 font-mono text-[10px] uppercase tracking-widest text-gray-400 dark:text-gray-500">
               {emptyLabel}
             </div>
           </div>
@@ -316,13 +316,13 @@ const AttemptRow = ({ rank, tier, time, activityName, achievedAt, onClick }: Att
   const rankStyle =
     rank === 2
       ? clsx(tier.tint, tier.text)
-      : 'bg-transparent text-gray-500 ring-1 ring-inset ring-gray-300';
+      : 'bg-transparent text-gray-500 ring-1 ring-inset ring-gray-300 dark:text-gray-400 dark:ring-gray-700';
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className="group flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-white/70 active:scale-[0.99]"
+      className="group flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-white/70 active:scale-[0.99] dark:hover:bg-gray-900/70"
     >
       <span
         className={clsx(
@@ -332,15 +332,15 @@ const AttemptRow = ({ rank, tier, time, activityName, achievedAt, onClick }: Att
       >
         {rank.toString().padStart(2, '0')}
       </span>
-      <span className="font-mono text-sm font-semibold tabular-nums text-gray-900">{time}</span>
-      <div className="min-w-0 flex-1 truncate text-[11px] text-gray-500" title={activityName}>
+      <span className="font-mono text-sm font-semibold tabular-nums text-gray-900 dark:text-gray-50">{time}</span>
+      <div className="min-w-0 flex-1 truncate text-[11px] text-gray-500 dark:text-gray-400" title={activityName}>
         {activityName}
       </div>
-      <span className="shrink-0 font-mono text-[10px] text-gray-400">{formatDate(achievedAt)}</span>
+      <span className="shrink-0 font-mono text-[10px] text-gray-400 dark:text-gray-500">{formatDate(achievedAt)}</span>
       <ChevronRight
         size={14}
         strokeWidth={1.75}
-        className="shrink-0 text-gray-300 transition-transform group-hover:translate-x-0.5 group-hover:text-gray-500"
+        className="shrink-0 text-gray-300 transition-transform group-hover:translate-x-0.5 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-400"
         aria-hidden="true"
       />
     </button>

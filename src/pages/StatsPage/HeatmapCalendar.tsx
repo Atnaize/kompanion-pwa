@@ -66,7 +66,7 @@ export const HeatmapCalendar = () => {
 
   const getColorIntensity = (value: number): string => {
     if (value === 0) {
-      return 'bg-gray-100';
+      return 'bg-gray-100 dark:bg-gray-800';
     }
 
     // Calculate max value for color scaling
@@ -160,10 +160,10 @@ export const HeatmapCalendar = () => {
     <GlassCard className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
           {t('heatmap.title')}
         </h3>
-        <p className="mt-1 text-sm text-gray-500">{t('heatmap.subtitle')}</p>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('heatmap.subtitle')}</p>
       </div>
 
       {/* Metric Selector */}
@@ -175,7 +175,7 @@ export const HeatmapCalendar = () => {
             className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
               metric === m
                 ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80'
+                : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:hover:bg-gray-900/80'
             }`}
           >
             {m === 'count' ? t('heatmap.activityCount') : t('common.distance')}
@@ -184,7 +184,7 @@ export const HeatmapCalendar = () => {
       </div>
 
       {/* Summary Stats */}
-      <div className="mb-4 flex gap-4 text-sm text-gray-600">
+      <div className="mb-4 flex gap-4 text-sm text-gray-600 dark:text-gray-400">
         <div>{t('heatmap.activitiesInYear', { count: totalActivities })}</div>
         {metric === 'distance' && (
           <div>{t('heatmap.totalDistance', { distance: formatDistance(totalDistance) })}</div>
@@ -199,7 +199,7 @@ export const HeatmapCalendar = () => {
             {monthLabels.map((label) => (
               <div
                 key={`${label.label}-${label.weekIndex}`}
-                className="absolute text-xs text-gray-600"
+                className="absolute text-xs text-gray-600 dark:text-gray-400"
                 style={{ left: `${(label.weekIndex * 100) / weeks}%` }}
               >
                 {label.label}
@@ -226,10 +226,10 @@ export const HeatmapCalendar = () => {
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex items-center justify-end gap-2 text-xs text-gray-600">
+      <div className="mt-4 flex items-center justify-end gap-2 text-xs text-gray-600 dark:text-gray-400">
         <span>{t('common.less')}</span>
         <div className="flex gap-1">
-          <div className="h-3 w-3 rounded-sm bg-gray-100" />
+          <div className="h-3 w-3 rounded-sm bg-gray-100 dark:bg-gray-800" />
           <div className="h-3 w-3 rounded-sm bg-orange-200" />
           <div className="h-3 w-3 rounded-sm bg-orange-300" />
           <div className="h-3 w-3 rounded-sm bg-orange-400" />

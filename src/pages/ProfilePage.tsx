@@ -50,7 +50,7 @@ export const ProfilePage = () => {
       <div className="space-y-6">
         {/* Profile Section */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('profile.title')}
           </h3>
           <GlassCard className="p-6">
@@ -63,23 +63,23 @@ export const ProfilePage = () => {
                 className="border-4"
               />
               <div>
-                <h4 className="text-xl font-bold text-gray-900">
+                <h4 className="text-xl font-bold text-gray-900 dark:text-gray-50">
                   {user.firstname} {user.lastname}
                 </h4>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                   {t('profileMenu.stravaId', { id: user.stravaId })}
                 </p>
               </div>
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center justify-between border-b border-gray-200 py-2">
-                <span className="text-sm text-gray-600">{t('profile.accountType')}</span>
-                <span className="font-medium text-gray-900">{t('profile.stravaConnected')}</span>
+              <div className="flex items-center justify-between border-b border-gray-200 py-2 dark:border-gray-800">
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('profile.accountType')}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">{t('profile.stravaConnected')}</span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-gray-600">{t('profile.userId')}</span>
-                <span className="font-medium text-gray-900">{user.userId}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t('profile.userId')}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">{user.userId}</span>
               </div>
             </div>
           </GlassCard>
@@ -87,7 +87,7 @@ export const ProfilePage = () => {
 
         {/* Account Actions */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('profile.accountActions')}
           </h3>
           <div className="space-y-3">
@@ -95,8 +95,8 @@ export const ProfilePage = () => {
             <GlassCard className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-gray-900">{t('profile.logout.title')}</h4>
-                  <p className="text-sm text-gray-600">{t('profile.logout.description')}</p>
+                  <h4 className="font-bold text-gray-900 dark:text-gray-50">{t('profile.logout.title')}</h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('profile.logout.description')}</p>
                 </div>
                 <Button variant="secondary" onClick={handleLogout}>
                   {t('profile.logout.button')}
@@ -108,7 +108,7 @@ export const ProfilePage = () => {
             <GlassCard className="border-2 border-red-200 p-5">
               <div>
                 <h4 className="font-bold text-red-600">{t('profile.deleteAccount.title')}</h4>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                   {t('profile.deleteAccount.description')}
                 </p>
 

@@ -48,7 +48,7 @@ export const Toast = ({ message, type = 'info', duration = 3000, onClose }: Toas
   return (
     <div
       className={clsx(
-        'flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 p-4 shadow-lg backdrop-blur-md',
+        'flex items-center gap-3 rounded-2xl border border-white/20 bg-white/90 p-4 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/90',
         'transform transition-all duration-300 ease-out',
         isExiting ? '-translate-y-8 scale-95 opacity-0' : 'translate-y-0 scale-100 opacity-100'
       )}
@@ -65,7 +65,7 @@ export const Toast = ({ message, type = 'info', duration = 3000, onClose }: Toas
       >
         {config.icon}
       </div>
-      <p className="flex-1 text-sm font-medium text-gray-900">{message}</p>
+      <p className="flex-1 text-sm font-medium text-gray-900 dark:text-gray-50">{message}</p>
       <button
         onClick={() => {
           setIsExiting(true);
@@ -74,7 +74,7 @@ export const Toast = ({ message, type = 'info', duration = 3000, onClose }: Toas
             onClose?.();
           }, 200);
         }}
-        className="flex-shrink-0 text-xl leading-none text-gray-400 transition-colors hover:text-gray-600"
+        className="flex-shrink-0 text-xl leading-none text-gray-400 transition-colors hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
         aria-label="Close"
       >
         ×

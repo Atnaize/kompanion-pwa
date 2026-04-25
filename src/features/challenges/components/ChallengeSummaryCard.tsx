@@ -38,7 +38,7 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
     if (isFailed) return 'text-red-600';
     if (isUpcoming) return 'text-purple-600';
     if (isActive) return 'text-blue-600';
-    return 'text-gray-600';
+    return 'text-gray-600 dark:text-gray-400';
   };
 
   const getStatusBadge = () => {
@@ -71,7 +71,7 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
         <div className="min-w-0 flex-1">
           {/* Header */}
           <div className="mb-1 flex items-start justify-between gap-2">
-            <h3 className="truncate font-semibold text-gray-900">{challenge.name}</h3>
+            <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">{challenge.name}</h3>
             {challenge.type === 'collaborative' ? (
               <Users className="h-4 w-4 shrink-0 text-strava-orange" strokeWidth={1.75} />
             ) : (
@@ -81,14 +81,14 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
 
           {/* Description */}
           {challenge.description && (
-            <p className="mb-2 line-clamp-1 text-sm text-gray-600">{challenge.description}</p>
+            <p className="mb-2 line-clamp-1 text-sm text-gray-600 dark:text-gray-400">{challenge.description}</p>
           )}
 
           {/* Participants */}
           <div className="mb-2 flex items-center gap-2">
             <div className="flex -space-x-2">
               {challenge.participants?.slice(0, 3).map((p) => (
-                <div key={p.id} className="rounded-full border-2 border-white">
+                <div key={p.id} className="rounded-full border-2 border-white dark:border-gray-900">
                   <Avatar
                     src={p.user.profile}
                     firstname={p.user.firstname}
@@ -99,7 +99,7 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
                 </div>
               ))}
             </div>
-            <span className="text-xs text-gray-600">
+            <span className="text-xs text-gray-600 dark:text-gray-400">
               {t('challenges.participant', {
                 count: challenge.participants?.filter((p) => p.status === 'accepted').length || 0,
               })}
@@ -110,16 +110,16 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
           <div className="space-y-1">
             {challenge.targets.distance && (
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">{t('common.distance')}</span>
-                <span className="font-medium text-gray-900">
+                <span className="text-gray-600 dark:text-gray-400">{t('common.distance')}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">
                   {formatDistance(totalDistance)} / {formatDistance(challenge.targets.distance)}
                 </span>
               </div>
             )}
             {challenge.targets.elevation && (
               <div className="flex items-center justify-between text-xs">
-                <span className="text-gray-600">{t('common.elevation')}</span>
-                <span className="font-medium text-gray-900">
+                <span className="text-gray-600 dark:text-gray-400">{t('common.elevation')}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">
                   {Math.round(totalElevation)}m / {Math.round(challenge.targets.elevation)}m
                 </span>
               </div>
@@ -127,11 +127,11 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
           </div>
 
           {/* Footer */}
-          <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-2">
+          <div className="mt-2 flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-2">
             {statusBadge && (
               <span className={`text-xs font-medium ${getStatusColor()}`}>{statusBadge}</span>
             )}
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {isActive
                 ? t('challenges.ends', { date: formatDate(challenge.endDate) })
                 : isUpcoming

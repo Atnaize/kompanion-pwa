@@ -51,7 +51,7 @@ export const ActivityPhotos = ({ photos }: ActivityPhotosProps) => {
               key={photo.unique_id}
               type="button"
               onClick={() => setActiveIdx(i)}
-              className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-strava-orange"
+              className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-strava-orange dark:bg-gray-800"
             >
               <img
                 src={src}

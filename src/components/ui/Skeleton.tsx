@@ -11,7 +11,7 @@ export const Skeleton = ({ className, variant = 'rectangular', width, height }: 
   return (
     <div
       className={clsx(
-        'animate-shimmer bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%]',
+        'animate-shimmer bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-[length:200%_100%] dark:from-gray-800 dark:via-gray-700 dark:to-gray-800',
         {
           'rounded-full': variant === 'circular',
           'rounded-md': variant === 'rectangular',
@@ -30,7 +30,7 @@ export const Skeleton = ({ className, variant = 'rectangular', width, height }: 
 // Skeleton for activity card
 export const ActivityCardSkeleton = () => {
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md">
+    <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70">
       <div className="flex items-start justify-between">
         <div className="flex-1 space-y-3">
           <Skeleton width="70%" height="20px" />
@@ -49,7 +49,7 @@ export const ActivityCardSkeleton = () => {
 // Skeleton for stat tile
 export const StatTileSkeleton = () => {
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md">
+    <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70">
       <Skeleton width="40%" height="10px" />
       <Skeleton width="60%" height="28px" className="mt-3" />
     </div>
@@ -59,7 +59,7 @@ export const StatTileSkeleton = () => {
 // Skeleton for achievement card
 export const AchievementCardSkeleton = () => {
   return (
-    <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md">
+    <div className="rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70">
       <div className="space-y-3">
         <div className="flex items-center justify-center">
           <Skeleton variant="circular" width="60px" height="60px" />

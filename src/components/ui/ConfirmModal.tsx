@@ -34,8 +34,8 @@ export const ConfirmModal = ({
 
       {/* Modal */}
       <GlassCard className="relative z-10 w-full max-w-md p-6 shadow-2xl">
-        <h2 className="mb-4 text-xl font-bold text-gray-900">{title}</h2>
-        <div className="mb-6 text-gray-700">{message}</div>
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-gray-50">{title}</h2>
+        <div className="mb-6 text-gray-700 dark:text-gray-300">{message}</div>
 
         <div className="flex gap-3">
           <Button

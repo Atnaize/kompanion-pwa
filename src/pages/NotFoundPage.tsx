@@ -12,16 +12,16 @@ export const NotFoundPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4 dark:from-gray-950 dark:to-gray-900">
       <div className="w-full max-w-md text-center">
-        <div className="mb-8 text-8xl font-bold text-gray-300">404</div>
+        <div className="mb-8 text-8xl font-bold text-gray-300 dark:text-gray-600">404</div>
 
-        <div className="mb-8 rounded-2xl bg-white p-8 shadow-xl">
+        <div className="mb-8 rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-900">
           <div className="mb-6 text-6xl">🗺️</div>
 
-          <h1 className="mb-4 text-2xl font-bold text-gray-900">{t('notFound.title')}</h1>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-50">{t('notFound.title')}</h1>
 
-          <p className="mb-6 text-gray-600">{t('notFound.description')}</p>
+          <p className="mb-6 text-gray-600 dark:text-gray-400">{t('notFound.description')}</p>
 
           <button
             onClick={handleGoHome}
@@ -31,7 +31,7 @@ export const NotFoundPage = () => {
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">{t('notFound.help')}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t('notFound.help')}</p>
       </div>
     </div>
   );

@@ -62,26 +62,26 @@ export const SettingsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('settings.title')}
           </p>
-          <p className="mt-1 text-sm text-gray-500">{t('settings.subtitle')}</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('settings.subtitle')}</p>
         </div>
 
         {/* Language */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('settings.language.title')}
           </h3>
           <GlassCard className="p-5">
-            <p className="mb-3 text-sm text-gray-600">{t('settings.language.description')}</p>
+            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">{t('settings.language.description')}</p>
             <div className="flex gap-3">
               <button
                 onClick={() => setLocale('en')}
                 className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all ${
                   locale === 'en'
                     ? 'bg-strava-orange text-white shadow-md shadow-orange-500/25 ring-1 ring-strava-orange/30'
-                    : 'bg-white/50 text-gray-700 ring-1 ring-inset ring-gray-900/5 hover:bg-white/80'
+                    : 'bg-white/50 text-gray-700 ring-1 ring-inset ring-gray-900/5 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-900/80'
                 }`}
               >
                 {t('settings.language.en')}
@@ -91,7 +91,7 @@ export const SettingsPage = () => {
                 className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all ${
                   locale === 'fr'
                     ? 'bg-strava-orange text-white shadow-md shadow-orange-500/25 ring-1 ring-strava-orange/30'
-                    : 'bg-white/50 text-gray-700 ring-1 ring-inset ring-gray-900/5 hover:bg-white/80'
+                    : 'bg-white/50 text-gray-700 ring-1 ring-inset ring-gray-900/5 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-900/80'
                 }`}
               >
                 {t('settings.language.fr')}
@@ -102,17 +102,17 @@ export const SettingsPage = () => {
 
         {/* Push Notifications */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('settings.pushNotifications.title')}
           </h3>
           <div className="space-y-4">
             <GlassCard className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-semibold text-gray-900">
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-50">
                     {t('settings.pushNotifications.enable')}
                   </h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     {isPushSupported
                       ? t('settings.pushNotifications.descriptionSupported')
                       : t('settings.pushNotifications.descriptionUnsupported')}
@@ -135,7 +135,7 @@ export const SettingsPage = () => {
 
             {isSubscribed && preferences && (
               <GlassCard className="p-5">
-                <h4 className="mb-4 font-semibold text-gray-900">
+                <h4 className="mb-4 font-semibold text-gray-900 dark:text-gray-50">
                   {t('settings.preferences.title')}
                 </h4>
                 <div className="space-y-4">
@@ -165,7 +165,7 @@ export const SettingsPage = () => {
 
         {/* Haptic Feedback */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('settings.feedback.title')}
           </h3>
           <GlassCard className="p-5">

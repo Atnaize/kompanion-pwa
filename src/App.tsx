@@ -10,6 +10,7 @@ import { InstallPrompt } from '@components/pwa/InstallPrompt';
 import { usePwa } from '@hooks/usePwa';
 import { useServiceWorkerRegistration } from '@utils/registerServiceWorker';
 import { useOnlineStatus } from '@hooks/useOnlineStatus';
+import { useTheme } from '@hooks/useTheme';
 import {
   LoginPage,
   DashboardPage,
@@ -35,7 +36,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (isLoading) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-strava-orange/20 blur-3xl"
@@ -52,16 +53,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         <div
           role="status"
           aria-live="polite"
-          className="relative flex overflow-hidden rounded-2xl border border-white/60 bg-white/70 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-md"
+          className="relative flex overflow-hidden rounded-2xl border border-white/60 bg-white/70 shadow-xl ring-1 ring-gray-900/5 backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70 dark:ring-gray-100/10"
         >
           <div className="w-1 bg-gradient-to-b from-strava-orange to-strava-orange-dark" />
           <div className="flex items-center gap-5 px-8 py-6">
-            <Loader2 size={28} strokeWidth={1.75} className="animate-spin text-gray-800" />
+            <Loader2 size={28} strokeWidth={1.75} className="animate-spin text-gray-800 dark:text-gray-100" />
             <div className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-gray-500">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-gray-500 dark:text-gray-400">
                 {t('common.authenticating')}
               </span>
-              <span className="text-sm font-medium text-gray-900">{t('common.loading')}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-50">{t('common.loading')}</span>
             </div>
           </div>
         </div>
@@ -84,6 +85,7 @@ export const App = () => {
   // Initialize PWA features
   usePwa();
   useServiceWorkerRegistration();
+  useTheme();
 
   useEffect(() => {
     void fetchUser();

@@ -20,6 +20,31 @@
     <meta name="msapplication-tap-highlight" content="no" />
 
     <title>Kompanion - Strava Gamification</title>
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('kompanion-settings');
+          var stored = null;
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            stored = parsed && parsed.state && parsed.state.theme;
+          }
+          var isDark;
+          if (stored === 'dark') {
+            isDark = true;
+          } else if (stored === 'light') {
+            isDark = false;
+          } else {
+            isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

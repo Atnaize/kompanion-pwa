@@ -42,15 +42,15 @@ export const TimePeriodSelector = ({
   };
 
   return (
-    <div className="flex gap-1 rounded-lg bg-white/50 p-1">
+    <div className="flex gap-1 rounded-lg bg-white/50 p-1 dark:bg-gray-800/60">
       {periodKeys.map((period) => (
         <button
           key={period}
           onClick={() => handleChange(period)}
           className={`rounded-md px-2 py-1.5 text-xs font-medium transition-all sm:px-3 ${
             selectedPeriod === period
-              ? 'bg-white text-[#FF4B00] shadow-sm'
-              : 'text-gray-600 hover:bg-white/50 hover:text-gray-900'
+              ? 'bg-white text-[#FF4B00] shadow-sm dark:bg-gray-900'
+              : 'text-gray-600 hover:bg-white/50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'
           }`}
         >
           <span className="inline-flex items-center justify-center sm:hidden">

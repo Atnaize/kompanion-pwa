@@ -62,7 +62,12 @@
     "settings": "Param\u00e8tres",
     "adminPanel": "Admin Panel",
     "logout": "D\u00e9connexion",
-    "aboutKompanion": "\u00c0 propos de Kompanion"
+    "aboutKompanion": "\u00c0 propos de Kompanion",
+    "theme": {
+      "label": "Th\u00e8me",
+      "light": "Clair",
+      "dark": "Sombre"
+    }
   },
   "settings": {
     "title": "Param\u00e8tres",

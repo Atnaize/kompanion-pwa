@@ -92,10 +92,10 @@ export const InviteFriendsModal = ({
 
       <GlassCard className="relative z-10 w-full max-w-lg p-6 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Invite Friends</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">Invite Friends</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400"
             aria-label="Close"
           >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,7 +109,7 @@ export const InviteFriendsModal = ({
           </button>
         </div>
 
-        <p className="mb-4 text-sm text-gray-600">
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Search for Kompanion users by name to invite them to this challenge.
         </p>
 
@@ -119,7 +119,7 @@ export const InviteFriendsModal = ({
             placeholder="Search users by name (min 2 characters)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-gray-200 bg-white/50 px-4 py-2 text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full rounded-lg border border-gray-200 bg-white/50 px-4 py-2 text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500"
             autoFocus
           />
         </div>
@@ -127,7 +127,7 @@ export const InviteFriendsModal = ({
         <div className="mb-6">
           {searchQuery.length < 2 ? (
             <GlassCard className="p-6 text-center">
-              <p className="text-sm text-gray-500">Start typing to search for users...</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Start typing to search for users...</p>
             </GlassCard>
           ) : (
             <FriendSelector

@@ -55,7 +55,7 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
       className="fixed bottom-0 left-0 right-0 z-40"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
-      <div className="border-t border-white/20 bg-white/80 shadow-lg backdrop-blur-lg">
+      <div className="border-t border-white/20 bg-white/80 shadow-lg backdrop-blur-lg dark:border-gray-700/40 dark:bg-gray-900/85">
         <div className="mx-auto max-w-lg px-2">
           <div className="flex items-stretch justify-around">
             {visibleItems.map((item) => {
@@ -75,7 +75,7 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
                     'min-w-[56px] rounded-t-xl transition-colors duration-200',
                     isActive
                       ? 'text-strava-orange'
-                      : 'text-gray-500 hover:text-gray-900 active:bg-gray-100/60'
+                      : 'text-gray-500 hover:text-gray-900 active:bg-gray-100/60 dark:text-gray-400 dark:hover:text-gray-100 dark:active:bg-gray-800/60'
                   )}
                 >
                   <span className="relative flex h-6 w-6 items-center justify-center">
@@ -88,7 +88,7 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
                     {showBadge && (
                       <span
                         className={clsx(
-                          'absolute -right-2 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none text-white shadow-sm ring-2 ring-white',
+                          'absolute -right-2 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none text-white shadow-sm ring-2 ring-white dark:ring-gray-900',
                           badge.color || 'bg-strava-orange'
                         )}
                       >

@@ -95,7 +95,7 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
   if (friends.length === 0 && !activeSearchQuery) {
     return (
       <GlassCard className="p-6 text-center">
-        <p className="text-sm text-gray-500">{t('friendSelector.emptyHint')}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{t('friendSelector.emptyHint')}</p>
       </GlassCard>
     );
   }
@@ -115,13 +115,13 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
       {selectedFriendIds.length > 0 && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-gray-900">
+            <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-50">
               Invited ({selectedFriendIds.length})
             </h3>
             <button
               type="button"
               onClick={clearAll}
-              className="text-xs font-medium text-gray-600 hover:text-gray-700"
+              className="text-xs font-medium text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
             >
               Clear All
             </button>
@@ -141,14 +141,14 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
                     size="md"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-gray-900">
+                    <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-50">
                       {friend.firstname} {friend.lastname}
                     </p>
-                    <p className="text-xs text-gray-500">Kompanion User</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Kompanion User</p>
                   </div>
                   <button
                     type="button"
-                    className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-gray-600 transition-colors hover:bg-red-100 hover:text-red-600"
+                    className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-200 text-gray-600 transition-colors hover:bg-red-100 hover:text-red-600 dark:bg-gray-800 dark:text-gray-400"
                     onClick={(e) => {
                       e.stopPropagation();
                       toggleFriend(friend.id);
@@ -181,7 +181,7 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
             placeholder="Search by name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-gray-200 bg-white/50 px-4 py-2 text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full rounded-lg border border-gray-200 bg-white/50 px-4 py-2 text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500"
           />
         </div>
       )}
@@ -191,11 +191,11 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
         {unselectedFilteredFriends.length === 0 ? (
           activeSearchQuery.length >= 2 ? (
             <GlassCard className="p-6 text-center">
-              <p className="text-sm text-gray-500">No users match your search</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">No users match your search</p>
             </GlassCard>
           ) : selectedFriendIds.length === 0 ? (
             <GlassCard className="p-6 text-center">
-              <p className="text-sm text-gray-500">Start typing to search for users...</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Start typing to search for users...</p>
             </GlassCard>
           ) : null
         ) : (
@@ -208,7 +208,7 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
               <div className="flex items-center gap-3">
                 {/* Checkbox */}
                 <div className="flex-shrink-0">
-                  <div className="flex h-5 w-5 items-center justify-center rounded border-2 border-gray-300 bg-white transition-all group-hover:border-orange-400">
+                  <div className="flex h-5 w-5 items-center justify-center rounded border-2 border-gray-300 bg-white transition-all group-hover:border-orange-400 dark:border-gray-700 dark:bg-gray-900">
                     {/* Empty checkbox - not selected */}
                   </div>
                 </div>
@@ -223,10 +223,10 @@ export const FriendSelector: React.FC<FriendSelectorProps> = ({
 
                 {/* User Info */}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-gray-900">
+                  <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-50">
                     {friend.firstname} {friend.lastname}
                   </p>
-                  <p className="text-xs text-gray-500">Kompanion User</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Kompanion User</p>
                 </div>
 
                 {/* Add Button */}

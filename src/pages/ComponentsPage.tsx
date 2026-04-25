@@ -30,15 +30,15 @@ export const ComponentsPage = () => {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">Component Library</h2>
-          <p className="text-gray-600">Preview of all UI components</p>
+          <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">Component Library</h2>
+          <p className="text-gray-600 dark:text-gray-400">Preview of all UI components</p>
         </div>
 
         {/* Toast Notifications */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Toast Notifications</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Toast Notifications</h3>
           <GlassCard className="p-6">
-            <h4 className="mb-4 font-bold text-gray-900">Manual Toasts</h4>
+            <h4 className="mb-4 font-bold text-gray-900 dark:text-gray-50">Manual Toasts</h4>
             <div className="mb-6 flex flex-wrap gap-3">
               <Button
                 variant="primary"
@@ -57,8 +57,8 @@ export const ComponentsPage = () => {
               </Button>
             </div>
 
-            <h4 className="mb-4 font-bold text-gray-900">API Error Testing</h4>
-            <p className="mb-3 text-sm text-gray-600">
+            <h4 className="mb-4 font-bold text-gray-900 dark:text-gray-50">API Error Testing</h4>
+            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
               Test automatic error handling by triggering API errors:
             </p>
             <div className="flex flex-wrap gap-3">
@@ -72,7 +72,7 @@ export const ComponentsPage = () => {
                 Test 400 Error
               </Button>
             </div>
-            <p className="mt-3 text-xs text-gray-500">
+            <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
               Note: These trigger real API calls that will fail. Check that user-friendly error
               messages appear automatically.
             </p>
@@ -81,7 +81,7 @@ export const ComponentsPage = () => {
 
         {/* Buttons */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Buttons</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Buttons</h3>
           <div className="space-y-3">
             <div className="flex gap-3">
               <Button variant="primary">Primary</Button>
@@ -107,24 +107,24 @@ export const ComponentsPage = () => {
 
         {/* Glass Cards */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Glass Cards</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Glass Cards</h3>
           <div className="space-y-3">
             <GlassCard className="p-6">
-              <h4 className="mb-2 font-bold text-gray-900">Standard Glass Card</h4>
-              <p className="text-gray-600">
+              <h4 className="mb-2 font-bold text-gray-900 dark:text-gray-50">Standard Glass Card</h4>
+              <p className="text-gray-600 dark:text-gray-400">
                 This is a glassmorphism card with backdrop blur and transparency effects.
               </p>
             </GlassCard>
             <GlassCard className="p-6" hover>
-              <h4 className="mb-2 font-bold text-gray-900">Hoverable Glass Card</h4>
-              <p className="text-gray-600">Hover over this card to see the scale effect.</p>
+              <h4 className="mb-2 font-bold text-gray-900 dark:text-gray-50">Hoverable Glass Card</h4>
+              <p className="text-gray-600 dark:text-gray-400">Hover over this card to see the scale effect.</p>
             </GlassCard>
           </div>
         </section>
 
         {/* Stat Tiles */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Stat Tiles</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Stat Tiles</h3>
           <div className="grid grid-cols-2 gap-3">
             <StatTile label="Activities" value="42" viz={<ActivityBarsViz />} />
             <StatTile
@@ -145,26 +145,26 @@ export const ComponentsPage = () => {
 
         {/* Progress Rings */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Progress Rings</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Progress Rings</h3>
           <div className="flex justify-around gap-6">
             <div className="text-center">
               <ProgressRing progress={25} size={100} />
-              <p className="mt-2 text-sm text-gray-600">25%</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">25%</p>
             </div>
             <div className="text-center">
               <ProgressRing progress={60} size={100} />
-              <p className="mt-2 text-sm text-gray-600">60%</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">60%</p>
             </div>
             <div className="text-center">
               <ProgressRing progress={90} size={100} />
-              <p className="mt-2 text-sm text-gray-600">90%</p>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">90%</p>
             </div>
           </div>
         </section>
 
         {/* Badge Cards */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Badge Cards</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Badge Cards</h3>
           <div className="grid grid-cols-2 gap-3">
             <BadgeCard
               icon="🏃"
@@ -201,7 +201,7 @@ export const ComponentsPage = () => {
 
         {/* Colors */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900">Colors</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Colors</h3>
           <div className="grid grid-cols-3 gap-3">
             <div className="flex h-20 items-center justify-center rounded-2xl bg-strava-orange font-medium text-white">
               Strava Orange

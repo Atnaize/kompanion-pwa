@@ -87,16 +87,16 @@ export const ChallengeDetailPage = () => {
       },
       failed: { bg: 'bg-red-100', text: 'text-red-700', label: t('challengeDetail.statusFailed') },
       cancelled: {
-        bg: 'bg-gray-100',
-        text: 'text-gray-700',
+        bg: 'bg-gray-100 dark:bg-gray-800',
+        text: 'text-gray-700 dark:text-gray-300',
         label: t('challengeDetail.statusCancelled'),
       },
     };
 
     return (
       badges[status as keyof typeof badges] || {
-        bg: 'bg-gray-100',
-        text: 'text-gray-700',
+        bg: 'bg-gray-100 dark:bg-gray-800',
+        text: 'text-gray-700 dark:text-gray-300',
         label: status,
       }
     );
@@ -176,7 +176,7 @@ export const ChallengeDetailPage = () => {
             <div className="mb-2 flex items-center gap-3">
               <button
                 onClick={() => navigate('/challenges')}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
               >
                 {t('common.back')}
               </button>
@@ -188,64 +188,64 @@ export const ChallengeDetailPage = () => {
             </div>
             <div className="mb-2 flex items-center gap-2">
               <span className="text-2xl">{getTypeIcon(currentChallenge.type)}</span>
-              <h1 className="text-2xl font-bold text-gray-900">{currentChallenge.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">{currentChallenge.name}</h1>
             </div>
-            <p className="text-sm text-gray-600">{getTypeLabel(currentChallenge.type)}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{getTypeLabel(currentChallenge.type)}</p>
           </div>
         </div>
 
         {/* Description */}
         {currentChallenge.description && (
           <GlassCard className="p-4">
-            <p className="text-gray-700">{currentChallenge.description}</p>
+            <p className="text-gray-700 dark:text-gray-300">{currentChallenge.description}</p>
           </GlassCard>
         )}
 
         {/* Details */}
         <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900">
+          <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
             {t('challengeDetail.details')}
           </h2>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">{t('challengeDetail.startDate')}</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.startDate')}</span>
+              <span className="font-medium text-gray-900 dark:text-gray-50">
                 {formatDate(currentChallenge.startDate)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">{t('challengeDetail.endDate')}</span>
-              <span className="font-medium text-gray-900">
+              <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.endDate')}</span>
+              <span className="font-medium text-gray-900 dark:text-gray-50">
                 {formatDate(currentChallenge.endDate)}
               </span>
             </div>
             {currentChallenge.targets.distance && (
               <div className="flex justify-between">
-                <span className="text-gray-600">{t('challengeDetail.distanceGoal')}</span>
-                <span className="font-medium text-gray-900">
+                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.distanceGoal')}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">
                   {(currentChallenge.targets.distance / 1000).toFixed(1)} km
                 </span>
               </div>
             )}
             {currentChallenge.targets.elevation && (
               <div className="flex justify-between">
-                <span className="text-gray-600">{t('challengeDetail.elevationGoal')}</span>
-                <span className="font-medium text-gray-900">
+                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.elevationGoal')}</span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">
                   {Math.round(currentChallenge.targets.elevation)} m
                 </span>
               </div>
             )}
             {currentChallenge.targets.activityType && (
               <div className="flex justify-between">
-                <span className="text-gray-600">{t('challengeDetail.activityType')}</span>
-                <span className="font-medium capitalize text-gray-900">
+                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.activityType')}</span>
+                <span className="font-medium capitalize text-gray-900 dark:text-gray-50">
                   {currentChallenge.targets.activityType}
                 </span>
               </div>
             )}
             {currentChallenge.creator && (
-              <div className="flex items-center justify-between border-t border-gray-200 pt-2">
-                <span className="text-gray-600">{t('challengeDetail.createdBy')}</span>
+              <div className="flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-800">
+                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.createdBy')}</span>
                 <div className="flex items-center gap-2">
                   <Avatar
                     src={currentChallenge.creator.profile}
@@ -254,7 +254,7 @@ export const ChallengeDetailPage = () => {
                     size="sm"
                     className="h-6 w-6"
                   />
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-gray-900 dark:text-gray-50">
                     {currentChallenge.creator.firstname} {currentChallenge.creator.lastname}
                   </span>
                 </div>
@@ -266,7 +266,7 @@ export const ChallengeDetailPage = () => {
         {/* Participants */}
         {currentChallenge.participants && currentChallenge.participants.length > 0 && (
           <GlassCard className="p-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
               {t('challengeDetail.participants')}
             </h2>
             <div className="space-y-2">
@@ -288,20 +288,20 @@ export const ChallengeDetailPage = () => {
                     label: t('challengeDetail.statusDeclined'),
                   },
                   left: {
-                    bg: 'bg-gray-100',
-                    text: 'text-gray-700',
+                    bg: 'bg-gray-100 dark:bg-gray-800',
+                    text: 'text-gray-700 dark:text-gray-300',
                     label: t('challengeDetail.statusLeft'),
                   },
                 }[participant.status] || {
-                  bg: 'bg-gray-100',
-                  text: 'text-gray-700',
+                  bg: 'bg-gray-100 dark:bg-gray-800',
+                  text: 'text-gray-700 dark:text-gray-300',
                   label: participant.status,
                 };
 
                 return (
                   <div
                     key={participant.userId}
-                    className="flex items-center justify-between rounded-lg bg-white/30 p-3"
+                    className="flex items-center justify-between rounded-lg bg-white/30 p-3 dark:bg-gray-900/30"
                   >
                     <div className="flex items-center gap-2">
                       {participant.user && (
@@ -312,7 +312,7 @@ export const ChallengeDetailPage = () => {
                             lastname={participant.user.lastname}
                             size="sm"
                           />
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
                             {participant.user.firstname} {participant.user.lastname}
                           </span>
                         </>
@@ -333,7 +333,7 @@ export const ChallengeDetailPage = () => {
         {/* Progress - show for active and completed/failed challenges */}
         {(isActive || isFinished) && (
           <div className="space-y-4">
-            <h2 className="mb-3 text-lg font-semibold text-gray-900">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
               {t('challengeDetail.progress')}
             </h2>
             <ChallengeProgress

@@ -43,8 +43,8 @@ export const StatsPage = () => {
       <Layout>
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">{t('stats.title')}</h2>
-            <p className="text-gray-600">{t('stats.loading')}</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">{t('stats.title')}</h2>
+            <p className="text-gray-600 dark:text-gray-400">{t('stats.loading')}</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <StatTileSkeleton />
@@ -63,7 +63,7 @@ export const StatsPage = () => {
     return (
       <Layout>
         <EmptyState
-          icon={<BarChart3 className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
+          icon={<BarChart3 className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
           title={t('stats.noStats')}
           description={t('stats.noStatsDesc')}
           action={{
@@ -81,10 +81,10 @@ export const StatsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('stats.title')}
           </p>
-          <p className="mt-1 text-sm text-gray-500">{t('stats.subtitle')}</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('stats.subtitle')}</p>
         </div>
 
         {/* Tabs Navigation */}
@@ -101,7 +101,7 @@ export const StatsPage = () => {
             <div className="space-y-6">
               {/* Overall Stats */}
               <section>
-                <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
                   {t('stats.overall')}
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
@@ -152,42 +152,42 @@ export const StatsPage = () => {
               {/* By Activity Type */}
               {activityTypes.length > 0 && (
                 <section>
-                  <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                  <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
                     {t('stats.byActivityType')}
                   </h3>
                   <div className="space-y-3">
                     {activityTypes.map(([type, data]) => (
                       <GlassCard key={type} className="p-4">
                         <div className="mb-3 flex items-baseline justify-between">
-                          <h4 className="font-mono text-xs font-semibold uppercase tracking-wider text-gray-700">
+                          <h4 className="font-mono text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
                             {type}
                           </h4>
-                          <span className="font-mono text-[11px] tabular-nums text-gray-500">
+                          <span className="font-mono text-[11px] tabular-nums text-gray-500 dark:text-gray-400">
                             {t('stats.activitiesCount', { count: data.count })}
                           </span>
                         </div>
                         <div className="grid grid-cols-3 gap-2 text-sm">
                           <div>
-                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
                               {t('common.distance')}
                             </div>
-                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900">
+                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900 dark:text-gray-50">
                               {formatDistance(data.distance)}
                             </div>
                           </div>
                           <div>
-                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
                               {t('common.elevation')}
                             </div>
-                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900">
+                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900 dark:text-gray-50">
                               {formatElevation(data.elevation)}
                             </div>
                           </div>
                           <div>
-                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                            <div className="font-mono text-[10px] uppercase tracking-wider text-gray-500 dark:text-gray-400">
                               {t('common.time')}
                             </div>
-                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900">
+                            <div className="mt-0.5 font-mono font-semibold tabular-nums text-gray-900 dark:text-gray-50">
                               {formatDuration(data.time)}
                             </div>
                           </div>

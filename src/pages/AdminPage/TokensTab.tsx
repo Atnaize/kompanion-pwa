@@ -7,12 +7,12 @@ export const TokensTab = () => {
 
   return (
     <GlassCard className="p-4">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900">Token Information</h2>
+      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Token Information</h2>
       <div className="space-y-2">
         {info ? (
           <>
             <Row label="Expires at:">
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-gray-900 dark:text-gray-50">
                 {new Date((info.tokenExpiresAt || 0) * 1000).toLocaleString()}
               </span>
             </Row>
@@ -28,7 +28,7 @@ export const TokensTab = () => {
             </Row>
           </>
         ) : (
-          <p className="text-sm text-gray-500">Loading...</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
         )}
       </div>
       <div className="mt-4 flex flex-col gap-2">
@@ -48,7 +48,7 @@ export const TokensTab = () => {
 
 const Row = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="flex justify-between text-sm">
-    <span className="text-gray-600">{label}</span>
+    <span className="text-gray-600 dark:text-gray-400">{label}</span>
     {children}
   </div>
 );

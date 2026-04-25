@@ -50,8 +50,10 @@ export const Toggle = ({
         {
           'bg-gradient-to-r from-strava-orange to-strava-orange-dark shadow-md':
             enabled && !disabled,
-          'border border-gray-300 bg-gray-200 shadow-sm': !enabled && !disabled,
-          'cursor-not-allowed border border-gray-300/50 bg-gray-200/50 opacity-60': disabled,
+          'border border-gray-300 bg-gray-200 shadow-sm dark:border-gray-700 dark:bg-gray-800':
+            !enabled && !disabled,
+          'cursor-not-allowed border border-gray-300/50 bg-gray-200/50 opacity-60 dark:border-gray-700/50 dark:bg-gray-800/50':
+            disabled,
           'cursor-pointer': !disabled,
         }
       )}
@@ -74,8 +76,8 @@ export const Toggle = ({
     return (
       <div className="flex items-center justify-between gap-3">
         <div className="flex-1">
-          {label && <div className="font-bold text-gray-900">{label}</div>}
-          {description && <div className="text-sm text-gray-600">{description}</div>}
+          {label && <div className="font-bold text-gray-900 dark:text-gray-50">{label}</div>}
+          {description && <div className="text-sm text-gray-600 dark:text-gray-400">{description}</div>}
         </div>
         {toggleButton}
       </div>

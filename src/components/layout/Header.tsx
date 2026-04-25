@@ -11,13 +11,13 @@ export const Header = () => {
       <GlassCard className="p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-50">
               <Link to="/about" className="relative inline-block">
                 {t('header.title')}
                 <span className="absolute bottom-0 left-0 h-[3px] w-full bg-gradient-to-r from-transparent via-strava-orange to-transparent" />
               </Link>
             </h1>
-            <p className="mt-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-gray-500">
+            <p className="mt-1 font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
               {t('header.tagline')}
             </p>
           </div>

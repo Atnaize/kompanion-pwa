@@ -35,7 +35,7 @@ export const RecentActivitiesSection = ({
   return (
     <section>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900">{t('dashboard.recentActivities')}</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">{t('dashboard.recentActivities')}</h2>
         <SyncButton
           size="sm"
           onClick={onSync}

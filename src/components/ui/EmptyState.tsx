@@ -25,8 +25,8 @@ export const EmptyState = ({ icon, title, description, action, children }: Empty
       ) : (
         <div className="mb-4 flex justify-center">{icon}</div>
       )}
-      <h3 className="mb-2 text-xl font-bold text-gray-900">{title}</h3>
-      <p className="mb-6 text-gray-600">{description}</p>
+      <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">{title}</h3>
+      <p className="mb-6 text-gray-600 dark:text-gray-400">{description}</p>
       {action && (
         <Button onClick={action.onClick} size="md">
           {action.label}

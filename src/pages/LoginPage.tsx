@@ -100,7 +100,7 @@ export const LoginPage = () => {
       </div>
 
       {/* Right side - Login */}
-      <div className="flex w-full flex-col bg-gray-50 lg:w-1/2 lg:flex-row lg:items-center lg:justify-center lg:px-4 lg:py-12">
+      <div className="flex w-full flex-col bg-gray-50 lg:w-1/2 lg:flex-row lg:items-center lg:justify-center lg:px-4 lg:py-12 dark:bg-gray-950">
         {/* Mobile header with gradient */}
         <div className="bg-gradient-to-br from-strava-orange via-strava-orange-light to-orange-400 px-6 pb-16 pt-12 lg:hidden">
           <div className="text-center">
@@ -114,10 +114,10 @@ export const LoginPage = () => {
         {/* Content wrapper */}
         <div className="-mt-8 w-full px-4 pb-12 lg:mt-0 lg:max-w-md lg:px-0">
           {/* Main card */}
-          <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10">
+          <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10 dark:bg-gray-900">
             <div className="mb-8 text-center">
-              <h2 className="mb-2 text-2xl font-bold text-gray-900">{t('login.getStarted')}</h2>
-              <p className="text-gray-600">{t('login.connectDescription')}</p>
+              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">{t('login.getStarted')}</h2>
+              <p className="text-gray-600 dark:text-gray-400">{t('login.connectDescription')}</p>
             </div>
 
             {errorMessage && (
@@ -134,14 +134,14 @@ export const LoginPage = () => {
               {features.map((feature) => (
                 <div
                   key={feature.title}
-                  className="flex items-start gap-3 rounded-xl bg-gray-50 p-3"
+                  className="flex items-start gap-3 rounded-xl bg-gray-50 p-3 dark:bg-gray-950"
                 >
                   <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-strava-orange to-orange-400 text-xl text-white shadow-md">
                     {feature.icon}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{feature.title}</h3>
-                    <p className="text-sm text-gray-600">{feature.description}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-50">{feature.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{feature.description}</p>
                   </div>
                 </div>
               ))}
@@ -160,17 +160,17 @@ export const LoginPage = () => {
                 srcSet="/strava/btn_strava_connect_with_orange.svg 1x, /strava/btn_strava_connect_with_orange_x2.svg 2x"
               />
               {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white/80">
+                <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-900/80">
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-strava-orange border-t-transparent" />
                 </div>
               )}
             </button>
 
-            <p className="mt-6 text-center text-xs text-gray-500">{t('login.disclaimer')}</p>
+            <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">{t('login.disclaimer')}</p>
           </div>
 
           {/* Footer */}
-          <p className="mt-6 text-center text-sm text-gray-500">{t('login.footer')}</p>
+          <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">{t('login.footer')}</p>
         </div>
       </div>
     </div>

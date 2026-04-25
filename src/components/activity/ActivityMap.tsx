@@ -40,7 +40,7 @@ export const ActivityMap = ({ encodedPolyline, streamCoords, className }: Activi
   if (coordinates.length < 2) {
     return (
       <div
-        className={`flex h-64 items-center justify-center rounded-xl bg-gray-100 text-sm text-gray-500 ${className ?? ''}`}
+        className={`flex h-64 items-center justify-center rounded-xl bg-gray-100 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400 ${className ?? ''}`}
       >
         No route data for this activity
       </div>

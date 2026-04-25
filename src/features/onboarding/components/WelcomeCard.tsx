@@ -51,11 +51,11 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
           </div>
         </div>
 
-        <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+        <h2 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
           {isSyncing ? t('welcome.syncingTitle') : t('welcome.title')}
         </h2>
 
-        <p className="mb-6 text-gray-600">
+        <p className="mb-6 text-gray-600 dark:text-gray-400">
           {isSyncing ? (
             <span className="font-medium text-strava-orange">
               {isFetching && t('welcome.fetchingFromStrava', { count: current })}
@@ -68,7 +68,7 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
         </p>
 
         {percent !== null && (
-          <div className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-gray-200/60">
+          <div className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-gray-200/60 dark:bg-gray-700/60">
             <motion.div
               className="h-full rounded-full bg-gradient-to-r from-strava-orange to-amber-500"
               initial={{ width: 0 }}

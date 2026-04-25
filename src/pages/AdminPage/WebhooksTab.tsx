@@ -105,14 +105,14 @@ const DiagnosticsSection = () => {
   return (
     <GlassCard className="p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">Diagnostics & Status</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">Diagnostics & Status</h2>
         <Button onClick={refresh} variant="secondary" size="sm" disabled={loading}>
           {loading ? 'Loading…' : 'Refresh'}
         </Button>
       </div>
 
       {diag && (
-        <div className="mb-4 rounded-lg bg-gray-50 p-3 font-mono text-xs">
+        <div className="mb-4 rounded-lg bg-gray-50 p-3 font-mono text-xs dark:bg-gray-950">
           <KV k="NODE_ENV" v={diag.env.nodeEnv} />
           <KV k="VERCEL" v={diag.env.isVercel ? `yes (${diag.env.vercelEnv ?? '?'})` : 'no'} />
           <KV k="STRAVA_CLIENT_ID" v={diag.env.stravaClientId} />
@@ -121,9 +121,9 @@ const DiagnosticsSection = () => {
         </div>
       )}
 
-      <h3 className="mb-2 text-sm font-semibold text-gray-700">Active subscription on Strava</h3>
+      <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Active subscription on Strava</h3>
       {!status ? (
-        <p className="text-xs text-gray-500">Loading…</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">Loading…</p>
       ) : Array.isArray(status.strava) ? (
         status.strava.length === 0 ? (
           <p className="rounded-lg bg-yellow-50 p-3 text-xs text-yellow-800">
@@ -145,13 +145,13 @@ const DiagnosticsSection = () => {
         </p>
       )}
 
-      <h3 className="mb-2 mt-4 text-sm font-semibold text-gray-700">Local subscription history</h3>
+      <h3 className="mb-2 mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Local subscription history</h3>
       {!diag || diag.localSubscriptions.length === 0 ? (
-        <p className="text-xs text-gray-500">No local subscription records.</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">No local subscription records.</p>
       ) : (
         <div className="space-y-2">
           {diag.localSubscriptions.map((sub) => (
-            <div key={sub.id} className="rounded-lg bg-gray-50 p-3 font-mono text-xs">
+            <div key={sub.id} className="rounded-lg bg-gray-50 p-3 font-mono text-xs dark:bg-gray-950">
               <KV k="local id" v={String(sub.id)} />
               <KV k="strava id" v={sub.stravaId !== null ? String(sub.stravaId) : '—'} />
               <KV k="status" v={sub.status} />
@@ -242,8 +242,8 @@ const SubscribeSection = () => {
 
   return (
     <GlassCard className="p-4">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900">Subscribe / Unsubscribe</h2>
-      <p className="mb-3 text-xs text-gray-600">
+      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Subscribe / Unsubscribe</h2>
+      <p className="mb-3 text-xs text-gray-600 dark:text-gray-400">
         Strava only allows one webhook subscription per app. The callback URL must be reachable from
         the public internet (use ngrok or a public deploy).
       </p>
@@ -253,7 +253,7 @@ const SubscribeSection = () => {
           type="text"
           value={callbackUrl}
           onChange={(e) => setCallbackUrl(e.target.value)}
-          className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-xs"
+          className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
         />
       </Field>
 
@@ -263,7 +263,7 @@ const SubscribeSection = () => {
             type="text"
             value={verifyToken}
             onChange={(e) => setVerifyToken(e.target.value)}
-            className="flex-1 rounded border border-gray-300 px-2 py-1 font-mono text-xs"
+            className="flex-1 rounded border border-gray-300 px-2 py-1 font-mono text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           />
           <Button
             type="button"
@@ -285,7 +285,7 @@ const SubscribeSection = () => {
         {loading ? 'Working…' : 'Subscribe'}
       </Button>
 
-      <hr className="my-4 border-gray-200" />
+      <hr className="my-4 border-gray-200 dark:border-gray-800" />
 
       <Field label="Unsubscribe by Strava ID">
         <div className="flex gap-2">
@@ -294,7 +294,7 @@ const SubscribeSection = () => {
             value={unsubId}
             onChange={(e) => setUnsubId(e.target.value)}
             placeholder="e.g. 12345"
-            className="flex-1 rounded border border-gray-300 px-2 py-1 font-mono text-xs"
+            className="flex-1 rounded border border-gray-300 px-2 py-1 font-mono text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           />
           <Button
             type="button"
@@ -367,8 +367,8 @@ const SimulateSection = () => {
 
   return (
     <GlassCard className="p-4">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900">Simulate Event</h2>
-      <p className="mb-3 text-xs text-gray-600">
+      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Simulate Event</h2>
+      <p className="mb-3 text-xs text-gray-600 dark:text-gray-400">
         Inject a synthetic webhook event into the same processing pipeline (no Strava round-trip).
         Useful to test handlers locally without an active subscription.
       </p>
@@ -378,7 +378,7 @@ const SimulateSection = () => {
           <select
             value={objectType}
             onChange={(e) => setObjectType(e.target.value as 'activity' | 'athlete')}
-            className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
+            className="w-full rounded border border-gray-300 px-2 py-1 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           >
             <option value="activity">activity</option>
             <option value="athlete">athlete</option>
@@ -388,7 +388,7 @@ const SimulateSection = () => {
           <select
             value={aspectType}
             onChange={(e) => setAspectType(e.target.value as 'create' | 'update' | 'delete')}
-            className="w-full rounded border border-gray-300 px-2 py-1 text-sm"
+            className="w-full rounded border border-gray-300 px-2 py-1 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           >
             <option value="create">create</option>
             <option value="update">update</option>
@@ -400,7 +400,7 @@ const SimulateSection = () => {
             type="number"
             value={objectId}
             onChange={(e) => setObjectId(e.target.value)}
-            className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-sm"
+            className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
             placeholder="18216388859"
           />
         </Field>
@@ -409,7 +409,7 @@ const SimulateSection = () => {
             type="number"
             value={ownerId}
             onChange={(e) => setOwnerId(e.target.value)}
-            className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-sm"
+            className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
             placeholder="29120080"
           />
         </Field>
@@ -420,7 +420,7 @@ const SimulateSection = () => {
           value={updatesJson}
           onChange={(e) => setUpdatesJson(e.target.value)}
           rows={3}
-          className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-xs"
+          className="w-full rounded border border-gray-300 px-2 py-1 font-mono text-xs dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500"
           placeholder='{"title": "New name"}'
         />
       </Field>
@@ -497,7 +497,7 @@ const EventsSection = () => {
   return (
     <GlassCard className="p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900">Recent Events</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">Recent Events</h2>
         <Button onClick={refresh} variant="secondary" size="sm" disabled={loading}>
           {loading ? '…' : 'Refresh'}
         </Button>
@@ -510,19 +510,19 @@ const EventsSection = () => {
             type="button"
             onClick={() => setFilter(s)}
             className={`rounded px-2 py-1 text-xs ${
-              filter === s ? 'bg-strava-orange text-white' : 'bg-gray-100 text-gray-700'
+              filter === s ? 'bg-strava-orange text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
             }`}
           >
             {s || 'all'}
             {!!counts[s] && filter !== s && (
-              <span className="ml-1 text-gray-500">({counts[s]})</span>
+              <span className="ml-1 text-gray-500 dark:text-gray-400">({counts[s]})</span>
             )}
           </button>
         ))}
       </div>
 
       {events.length === 0 ? (
-        <p className="text-xs text-gray-500">No events.</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">No events.</p>
       ) : (
         <div className="space-y-1">
           {events.map((e) => (
@@ -530,21 +530,21 @@ const EventsSection = () => {
               key={e.id}
               type="button"
               onClick={() => setSelected(e)}
-              className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-gray-50"
+              className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-gray-50 dark:hover:bg-gray-900/50"
             >
               <StatusBadge status={e.status} />
-              <span className="font-mono text-gray-500">{shortTime(e.receivedAt)}</span>
-              <span className="font-medium text-gray-900">
+              <span className="font-mono text-gray-500 dark:text-gray-400">{shortTime(e.receivedAt)}</span>
+              <span className="font-medium text-gray-900 dark:text-gray-50">
                 {e.objectType}:{e.aspectType}
               </span>
-              <span className="font-mono text-gray-500">id={e.objectId}</span>
-              <span className="font-mono text-gray-500">owner={e.ownerId}</span>
+              <span className="font-mono text-gray-500 dark:text-gray-400">id={e.objectId}</span>
+              <span className="font-mono text-gray-500 dark:text-gray-400">owner={e.ownerId}</span>
               {e.source === 'simulated' && (
                 <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] text-purple-800">
                   sim
                 </span>
               )}
-              {e.attempts > 1 && <span className="text-gray-500">×{e.attempts}</span>}
+              {e.attempts > 1 && <span className="text-gray-500 dark:text-gray-400">×{e.attempts}</span>}
             </button>
           ))}
         </div>
@@ -581,23 +581,23 @@ const EventDetailModal = ({
       onClick={onClose}
     >
       <div
-        className="my-8 w-full max-w-3xl rounded-2xl bg-white p-5 shadow-xl"
+        className="my-8 w-full max-w-3xl rounded-2xl bg-white p-5 shadow-xl dark:bg-gray-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
             {event.objectType}:{event.aspectType}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700"
+            className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300"
           >
             Close
           </button>
         </div>
 
-        <div className="mb-3 grid grid-cols-2 gap-2 rounded-lg bg-gray-50 p-3 font-mono text-xs">
+        <div className="mb-3 grid grid-cols-2 gap-2 rounded-lg bg-gray-50 p-3 font-mono text-xs dark:bg-gray-950">
           <KV k="id" v={event.id} />
           <KV k="status" v={event.status} />
           <KV k="object_id" v={event.objectId} />
@@ -617,15 +617,15 @@ const EventDetailModal = ({
           </div>
         )}
 
-        <h4 className="mb-1 text-sm font-semibold text-gray-700">Processing log</h4>
+        <h4 className="mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">Processing log</h4>
         <pre className="mb-3 max-h-64 overflow-auto rounded-lg bg-gray-900 p-3 font-mono text-[11px] text-gray-100">
           {(event.processingLog ?? [])
             .map((entry) => `[${entry.ts}] ${entry.level.toUpperCase().padEnd(5)} ${entry.message}`)
             .join('\n') || '(empty)'}
         </pre>
 
-        <h4 className="mb-1 text-sm font-semibold text-gray-700">Raw payload</h4>
-        <pre className="max-h-64 overflow-auto rounded-lg bg-gray-100 p-3 font-mono text-[11px] text-gray-800">
+        <h4 className="mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">Raw payload</h4>
+        <pre className="max-h-64 overflow-auto rounded-lg bg-gray-100 p-3 font-mono text-[11px] text-gray-800 dark:bg-gray-800 dark:text-gray-100">
           {JSON.stringify(event.rawPayload, null, 2)}
         </pre>
 
@@ -643,21 +643,21 @@ const EventDetailModal = ({
 
 const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="mb-2">
-    <label className="mb-1 block text-xs font-medium text-gray-700">{label}</label>
+    <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">{label}</label>
     {children}
   </div>
 );
 
 const KV = ({ k, v }: { k: string; v: string }) => (
   <div className="flex gap-2">
-    <span className="shrink-0 text-gray-500">{k}:</span>
-    <span className="break-all text-gray-900">{v}</span>
+    <span className="shrink-0 text-gray-500 dark:text-gray-400">{k}:</span>
+    <span className="break-all text-gray-900 dark:text-gray-50">{v}</span>
   </div>
 );
 
 const StatusBadge = ({ status }: { status: string }) => {
   const colors: Record<string, string> = {
-    pending: 'bg-gray-100 text-gray-700',
+    pending: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
     processing: 'bg-blue-100 text-blue-700',
     processed: 'bg-green-100 text-green-700',
     failed: 'bg-red-100 text-red-700',
@@ -666,7 +666,7 @@ const StatusBadge = ({ status }: { status: string }) => {
   return (
     <span
       className={`shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${
-        colors[status] ?? 'bg-gray-100 text-gray-700'
+        colors[status] ?? 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
       }`}
     >
       {status}

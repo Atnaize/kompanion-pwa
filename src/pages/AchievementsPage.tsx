@@ -64,13 +64,13 @@ export const AchievementsPage = () => {
     <Layout>
       <div className="space-y-6">
         <div>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             Achievements
           </p>
-          <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900">
+          <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900 dark:text-gray-50">
             <AnimatedNumber value={unlocked.length} /> / {achievements?.length || 0}
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             unlocked
             {redeemableCount > 0 && (
               <span className="ml-2 text-strava-orange">• {redeemableCount} ready to unlock</span>
@@ -93,7 +93,7 @@ export const AchievementsPage = () => {
           <>
             {lockedSorted.length > 0 && (
               <section>
-                <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
                   In Progress
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
@@ -125,13 +125,13 @@ export const AchievementsPage = () => {
                   type="button"
                   onClick={() => setShowUnlocked((v) => !v)}
                   aria-expanded={showUnlocked}
-                  className="mb-4 flex w-full items-center justify-between rounded-lg text-left transition-colors hover:text-gray-700"
+                  className="mb-4 flex w-full items-center justify-between rounded-lg text-left transition-colors hover:text-gray-700 dark:hover:text-gray-300"
                 >
-                  <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+                  <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
                     Unlocked · {unlocked.length}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-gray-400 transition-transform duration-300 ${
+                    className={`h-4 w-4 text-gray-400 transition-transform duration-300 dark:text-gray-500 ${
                       showUnlocked ? 'rotate-180' : ''
                     }`}
                     strokeWidth={1.75}

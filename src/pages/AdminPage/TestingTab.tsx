@@ -31,8 +31,8 @@ export const TestingTab = () => {
   return (
     <div className="space-y-4">
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900">Challenge Sync</h2>
-        <p className="mb-4 text-sm text-gray-600">
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Challenge Sync</h2>
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Manually sync all your active challenges with current activities. This will add any
           missing activities to your challenges and update progress.
         </p>

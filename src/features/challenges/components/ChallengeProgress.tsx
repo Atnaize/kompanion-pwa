@@ -19,7 +19,7 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
   if (activeParticipants.length === 0) {
     return (
       <GlassCard className="p-4">
-        <p className="text-center text-sm text-gray-500">No active participants yet</p>
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400">No active participants yet</p>
       </GlassCard>
     );
   }
@@ -70,37 +70,37 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
           <div className="flex items-center gap-6">
             <ProgressRing progress={progress} size={80} />
             <div className="flex-1">
-              <h3 className="mb-3 text-lg font-semibold text-gray-900">Team Progress</h3>
+              <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Team Progress</h3>
               <div className="grid grid-cols-3 gap-4">
                 {challenge.targets.distance && (
                   <div>
-                    <p className="mb-1 text-xs text-gray-500">Distance</p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="mb-1 text-xs text-gray-500 dark:text-gray-400">Distance</p>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                       <AnimatedNumber value={totalDistance} format={formatDistance} /> km
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       of {formatDistance(challenge.targets.distance)} km
                     </p>
                   </div>
                 )}
                 {challenge.targets.elevation && (
                   <div>
-                    <p className="mb-1 text-xs text-gray-500">Elevation</p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="mb-1 text-xs text-gray-500 dark:text-gray-400">Elevation</p>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                       <AnimatedNumber value={totalElevation} format={formatElevation} /> m
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       of {formatElevation(challenge.targets.elevation)} m
                     </p>
                   </div>
                 )}
                 {challenge.targets.activities && (
                   <div>
-                    <p className="mb-1 text-xs text-gray-500">Activities</p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="mb-1 text-xs text-gray-500 dark:text-gray-400">Activities</p>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                       <AnimatedNumber value={totalActivities} />
                     </p>
-                    <p className="text-xs text-gray-500">of {challenge.targets.activities}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">of {challenge.targets.activities}</p>
                   </div>
                 )}
               </div>
@@ -110,7 +110,7 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
 
         {showAllParticipants && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700">Individual Contributions</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Individual Contributions</h4>
             {activeParticipants.map((participant: ChallengeParticipant) => (
               <GlassCard key={participant.id} className="p-3">
                 <div className="flex items-center gap-3">
@@ -121,14 +121,14 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                     size="sm"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="mb-1 truncate text-sm font-medium text-gray-900">
+                    <p className="mb-1 truncate text-sm font-medium text-gray-900 dark:text-gray-50">
                       {participant.user.firstname} {participant.user.lastname}
                     </p>
                     <div className="flex gap-4 text-xs">
                       {challenge.targets.distance && (
                         <div>
-                          <span className="text-gray-500">Distance: </span>
-                          <span className="font-medium text-gray-900">
+                          <span className="text-gray-500 dark:text-gray-400">Distance: </span>
+                          <span className="font-medium text-gray-900 dark:text-gray-50">
                             <AnimatedNumber
                               value={participant.totalDistance}
                               format={formatDistance}
@@ -139,8 +139,8 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                       )}
                       {challenge.targets.elevation && (
                         <div>
-                          <span className="text-gray-500">Elevation: </span>
-                          <span className="font-medium text-gray-900">
+                          <span className="text-gray-500 dark:text-gray-400">Elevation: </span>
+                          <span className="font-medium text-gray-900 dark:text-gray-50">
                             <AnimatedNumber
                               value={participant.totalElevation}
                               format={formatElevation}
@@ -151,8 +151,8 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                       )}
                       {challenge.targets.activities && (
                         <div>
-                          <span className="text-gray-500">Activities: </span>
-                          <span className="font-medium text-gray-900">
+                          <span className="text-gray-500 dark:text-gray-400">Activities: </span>
+                          <span className="font-medium text-gray-900 dark:text-gray-50">
                             <AnimatedNumber value={participant.activityCount} />
                           </span>
                         </div>
@@ -195,7 +195,7 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                     lastname={participant.user.lastname}
                     size="sm"
                   />
-                  <p className="truncate text-sm font-semibold text-gray-900">
+                  <p className="truncate text-sm font-semibold text-gray-900 dark:text-gray-50">
                     {participant.user.firstname} {participant.user.lastname}
                   </p>
                   {isLeader && challenge.status === 'active' && (
@@ -207,8 +207,8 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   {challenge.targets.distance && (
                     <div>
-                      <p className="text-gray-500">Distance</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-gray-500 dark:text-gray-400">Distance</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-50">
                         <AnimatedNumber value={participant.totalDistance} format={formatDistance} />{' '}
                         km
                       </p>
@@ -216,8 +216,8 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                   )}
                   {challenge.targets.elevation && (
                     <div>
-                      <p className="text-gray-500">Elevation</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-gray-500 dark:text-gray-400">Elevation</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-50">
                         <AnimatedNumber
                           value={participant.totalElevation}
                           format={formatElevation}
@@ -228,8 +228,8 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                   )}
                   {challenge.targets.activities && (
                     <div>
-                      <p className="text-gray-500">Activities</p>
-                      <p className="font-medium text-gray-900">
+                      <p className="text-gray-500 dark:text-gray-400">Activities</p>
+                      <p className="font-medium text-gray-900 dark:text-gray-50">
                         <AnimatedNumber value={participant.activityCount} />
                       </p>
                     </div>

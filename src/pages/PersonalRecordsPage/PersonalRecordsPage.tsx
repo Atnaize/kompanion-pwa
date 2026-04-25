@@ -40,11 +40,11 @@ export const PersonalRecordsPage = () => {
       <Layout>
         <div className="space-y-6">
           <div>
-            <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900">
+            <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
               <Trophy size={22} strokeWidth={1.75} className="text-strava-orange" />
               {t('personalRecords.title')}
             </h1>
-            <p className="text-sm text-gray-600">{t('personalRecords.subtitle')}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{t('personalRecords.subtitle')}</p>
           </div>
           <GlassCard className="relative overflow-hidden p-10 text-center">
             <span
@@ -55,10 +55,10 @@ export const PersonalRecordsPage = () => {
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-strava-orange to-amber-500 text-white shadow-lg shadow-strava-orange/30">
                 <Trophy size={32} strokeWidth={1.75} />
               </div>
-              <h3 className="mb-2 text-xl font-bold text-gray-900">
+              <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">
                 {t('personalRecords.noPrsYet')}
               </h3>
-              <p className="text-sm text-gray-600">{t('personalRecords.keepTraining')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('personalRecords.keepTraining')}</p>
             </div>
           </GlassCard>
         </div>

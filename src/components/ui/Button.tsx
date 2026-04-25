@@ -24,9 +24,10 @@ export const Button = ({
         {
           'bg-strava-orange text-white shadow-md hover:bg-strava-orange-dark hover:shadow-lg':
             variant === 'primary',
-          'bg-white/90 text-gray-900 shadow-md ring-1 ring-gray-900/5 backdrop-blur-md hover:bg-white hover:shadow-lg':
+          'bg-white/90 text-gray-900 shadow-md ring-1 ring-gray-900/5 backdrop-blur-md hover:bg-white hover:shadow-lg dark:bg-gray-800/90 dark:text-gray-50 dark:ring-gray-100/10 dark:hover:bg-gray-800':
             variant === 'secondary',
-          'bg-transparent text-gray-700 hover:bg-gray-100/50': variant === 'ghost',
+          'bg-transparent text-gray-700 hover:bg-gray-100/50 dark:text-gray-300 dark:hover:bg-gray-800/50':
+            variant === 'ghost',
           'min-h-[44px] px-4 py-2.5 text-sm': size === 'sm',
           'min-h-[48px] px-6 py-3 text-base': size === 'md',
           'min-h-[52px] px-8 py-4 text-lg': size === 'lg',

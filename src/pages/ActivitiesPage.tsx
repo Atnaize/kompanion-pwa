@@ -150,14 +150,14 @@ export const ActivitiesPage = () => {
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
               {t('activities.title')}
             </p>
-            <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900">
+            <p className="mt-1 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900 dark:text-gray-50">
               <AnimatedNumber value={filteredActivities.length} />
             </p>
             {searchQuery && (
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 {t('activities.matchingQuery', { query: searchQuery })}
               </p>
             )}
@@ -174,7 +174,7 @@ export const ActivitiesPage = () => {
             placeholder={t('activities.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border-0 bg-white/50 px-4 py-2 text-gray-900 placeholder-gray-500 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full rounded-lg border-0 bg-white/50 px-4 py-2 text-gray-900 placeholder-gray-500 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-900/50 dark:text-gray-50 dark:placeholder-gray-400"
           />
         </GlassCard>
 
@@ -204,7 +204,7 @@ export const ActivitiesPage = () => {
         {/* Activities List */}
         {displayedActivities.length === 0 ? (
           <EmptyState
-            icon={<ActivityIcon className="h-10 w-10 text-gray-400" strokeWidth={1.5} />}
+            icon={<ActivityIcon className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
             title={t('activities.noActivitiesFound')}
             description={
               searchQuery || selectedType !== 'all'
@@ -252,7 +252,7 @@ export const ActivitiesPage = () => {
 
             {/* End of List Message */}
             {!hasMore && displayedActivities.length > 0 && (
-              <div className="py-8 text-center text-sm text-gray-600">
+              <div className="py-8 text-center text-sm text-gray-600 dark:text-gray-400">
                 {t('activities.endOfList')}
               </div>
             )}
@@ -280,7 +280,7 @@ const FilterChip = ({ icon: Icon, label, count, isSelected, onClick }: FilterChi
       'inline-flex items-center gap-1.5 rounded-full py-1.5 pl-3 pr-1.5 text-sm font-medium transition-all duration-150 active:scale-95',
       isSelected
         ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-500/30'
-        : 'bg-white/70 text-gray-700 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm hover:bg-white hover:shadow-md'
+        : 'bg-white/70 text-gray-700 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm hover:bg-white hover:shadow-md dark:bg-gray-900/70 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-800'
     )}
   >
     {Icon && <Icon size={14} strokeWidth={2} aria-hidden="true" />}
@@ -288,7 +288,7 @@ const FilterChip = ({ icon: Icon, label, count, isSelected, onClick }: FilterChi
     <span
       className={clsx(
         'ml-0.5 inline-flex min-w-[22px] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums',
-        isSelected ? 'bg-white/25 text-white' : 'bg-gray-900/5 text-gray-600'
+        isSelected ? 'bg-white/25 text-white' : 'bg-gray-900/5 text-gray-600 dark:bg-gray-100/10 dark:text-gray-400'
       )}
     >
       {count}
