@@ -41,7 +41,9 @@ export const NotificationsTab = () => {
   return (
     <div className="space-y-4">
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Notification Debug Info</h2>
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+          Notification Debug Info
+        </h2>
         {debug ? (
           <DebugChecks debug={debug} isSupported={isSupported} isSubscribed={isSubscribed} />
         ) : (
@@ -60,7 +62,9 @@ export const NotificationsTab = () => {
       </GlassCard>
 
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Send Test Notification</h2>
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+          Send Test Notification
+        </h2>
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
           Send a test push notification to your device. All debug checks above should show green for
           this to work.

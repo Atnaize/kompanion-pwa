@@ -91,12 +91,16 @@ export const ProgressCharts = () => {
         <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
           {t('progressCharts.title')}
         </h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('progressCharts.subtitle')}</p>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {t('progressCharts.subtitle')}
+        </p>
       </div>
 
       {/* Metric Selector */}
       <div className="mb-4">
-        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t('common.metric')}</label>
+        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          {t('common.metric')}
+        </label>
         <div className="grid grid-cols-4 gap-2">
           {(['distance', 'elevation', 'time', 'count'] as Metric[]).map((m) => (
             <button
@@ -161,7 +165,9 @@ export const ProgressCharts = () => {
         <div className="flex h-64 items-center justify-center rounded-lg bg-gray-50 dark:bg-gray-950">
           <div className="flex flex-col items-center text-center">
             <BarChart3 className="h-8 w-8 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">{t('progressCharts.noData')}</p>
+            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+              {t('progressCharts.noData')}
+            </p>
           </div>
         </div>
       ) : (

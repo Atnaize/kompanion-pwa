@@ -184,5 +184,7 @@ export const OverviewTab = ({
 };
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">{children}</h2>
+  <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+    {children}
+  </h2>
 );

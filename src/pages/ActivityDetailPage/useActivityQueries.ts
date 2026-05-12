@@ -54,8 +54,7 @@ export const useActivityQueries = (numericId: number, validId: boolean) => {
     staleTime: 60 * 1000,
   });
 
-  const totalPhotoCount =
-    (activity?.total_photo_count ?? 0) || (activity?.photo_count ?? 0);
+  const totalPhotoCount = (activity?.total_photo_count ?? 0) || (activity?.photo_count ?? 0);
 
   const { data: photos } = useQuery({
     queryKey: ['activity', numericId, 'photos'],

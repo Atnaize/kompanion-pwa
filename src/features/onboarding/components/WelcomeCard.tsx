@@ -18,7 +18,6 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
   const { t } = useTranslation();
   const isFetching = syncProgress?.type === 'fetching';
   const isSaving = syncProgress?.type === 'saving';
-  const isProcessing = syncProgress?.type === 'processing';
 
   const current = syncProgress?.current ?? 0;
   const total = syncProgress?.total ?? 0;
@@ -60,7 +59,6 @@ export const WelcomeCard = ({ onSync, isSyncing, syncProgress }: WelcomeCardProp
             <span className="font-medium text-strava-orange">
               {isFetching && t('welcome.fetchingFromStrava', { count: current })}
               {isSaving && t('welcome.savingActivities', { current, total })}
-              {isProcessing && t('welcome.processingRecords', { current, total })}
             </span>
           ) : (
             t('welcome.description')

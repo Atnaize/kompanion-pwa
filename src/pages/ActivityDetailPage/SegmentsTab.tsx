@@ -16,7 +16,9 @@ export const SegmentsTab = ({ prSegments }: SegmentsTabProps) => {
       <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
         {t('activityDetail.segmentPrs')}
       </h2>
-      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t('activityDetail.segmentPrsHint')}</p>
+      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        {t('activityDetail.segmentPrsHint')}
+      </p>
       <div className="mt-4 space-y-3">
         {sorted.map((effort) => (
           <SegmentRow key={effort.id} effort={effort} />
@@ -49,7 +51,9 @@ const SegmentRow = ({ effort }: { effort: SegmentEffort }) => {
     >
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">{effort.segment.name}</h3>
+          <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">
+            {effort.segment.name}
+          </h3>
           {isNewPr && (
             <span className="shrink-0 rounded-full bg-gradient-to-r from-strava-orange to-orange-600 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
               {t('activityDetail.newPr')}
@@ -70,12 +74,18 @@ const SegmentRow = ({ effort }: { effort: SegmentEffort }) => {
       <div className="shrink-0 text-center">
         <div
           className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-lg ${
-            isNewPr ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 shadow' : 'bg-gray-100 dark:bg-gray-800'
+            isNewPr
+              ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 shadow'
+              : 'bg-gray-100 dark:bg-gray-800'
           }`}
         >
           {RANK_MEDALS[effort.pr_rank ?? 0] ?? '🎖️'}
         </div>
-        {rankKey && <p className="mt-1 text-[10px] font-medium text-gray-500 dark:text-gray-400">{t(rankKey)}</p>}
+        {rankKey && (
+          <p className="mt-1 text-[10px] font-medium text-gray-500 dark:text-gray-400">
+            {t(rankKey)}
+          </p>
+        )}
       </div>
     </div>
   );

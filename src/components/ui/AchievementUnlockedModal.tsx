@@ -136,7 +136,9 @@ export const AchievementUnlockedModal = ({
             <p className="text-sm font-medium uppercase tracking-wide text-strava-orange">
               {t('achievements.achievementUnlocked')}
             </p>
-            <h2 className="mt-2 text-2xl font-bold text-gray-900 dark:text-gray-50">{achievement.name}</h2>
+            <h2 className="mt-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
+              {achievement.name}
+            </h2>
             <p className="mt-2 text-gray-600 dark:text-gray-400">{achievement.description}</p>
             <span
               className={clsx(

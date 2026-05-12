@@ -19,7 +19,9 @@ export const NotFoundPage = () => {
         <div className="mb-8 rounded-2xl bg-white p-8 shadow-xl dark:bg-gray-900">
           <div className="mb-6 text-6xl">🗺️</div>
 
-          <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-50">{t('notFound.title')}</h1>
+          <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-50">
+            {t('notFound.title')}
+          </h1>
 
           <p className="mb-6 text-gray-600 dark:text-gray-400">{t('notFound.description')}</p>
 

@@ -74,7 +74,9 @@ export const SettingsPage = () => {
             {t('settings.language.title')}
           </h3>
           <GlassCard className="p-5">
-            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">{t('settings.language.description')}</p>
+            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+              {t('settings.language.description')}
+            </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setLocale('en')}

@@ -7,7 +7,9 @@ export const TokensTab = () => {
 
   return (
     <GlassCard className="p-4">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Token Information</h2>
+      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+        Token Information
+      </h2>
       <div className="space-y-2">
         {info ? (
           <>

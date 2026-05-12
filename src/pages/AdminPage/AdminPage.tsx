@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Layout } from '@components/layout';
 import { Tabs, TabList, Tab, TabPanel } from '@components/ui';
 import { TokensTab } from './TokensTab';
-import { TestingTab } from './TestingTab';
 import { NotificationsTab } from './NotificationsTab';
 import { ApiTestsTab } from './ApiTestsTab';
 import { StorageTab } from './StorageTab';
 import { WebhooksTab } from './WebhooksTab';
+import { QuotaTab } from './QuotaTab';
 
 export const AdminPage = () => {
   const [activeTab, setActiveTab] = useState('tokens');
@@ -22,9 +22,9 @@ export const AdminPage = () => {
         <Tabs value={activeTab} onChange={setActiveTab}>
           <TabList className="mb-6">
             <Tab value="tokens" label="Tokens" />
-            <Tab value="testing" label="Testing" />
             <Tab value="notifications" label="Notifications" />
             <Tab value="webhooks" label="Webhooks" />
+            <Tab value="quota" label="Quota" />
             <Tab value="api" label="API Tests" />
             <Tab value="storage" label="Storage" />
           </TabList>
@@ -32,14 +32,14 @@ export const AdminPage = () => {
           <TabPanel value="tokens">
             <TokensTab />
           </TabPanel>
-          <TabPanel value="testing">
-            <TestingTab />
-          </TabPanel>
           <TabPanel value="notifications">
             <NotificationsTab />
           </TabPanel>
           <TabPanel value="webhooks">
             <WebhooksTab />
+          </TabPanel>
+          <TabPanel value="quota">
+            <QuotaTab />
           </TabPanel>
           <TabPanel value="api">
             <ApiTestsTab />

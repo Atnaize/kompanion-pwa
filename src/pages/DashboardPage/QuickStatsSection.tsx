@@ -30,7 +30,9 @@ export const QuickStatsSection = () => {
   return (
     <section>
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">{t('dashboard.quickStats')}</h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">
+          {t('dashboard.quickStats')}
+        </h2>
         <TimePeriodSelector
           value={period}
           onChange={setPeriod}

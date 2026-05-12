@@ -77,7 +77,9 @@ export const Toggle = ({
       <div className="flex items-center justify-between gap-3">
         <div className="flex-1">
           {label && <div className="font-bold text-gray-900 dark:text-gray-50">{label}</div>}
-          {description && <div className="text-sm text-gray-600 dark:text-gray-400">{description}</div>}
+          {description && (
+            <div className="text-sm text-gray-600 dark:text-gray-400">{description}</div>
+          )}
         </div>
         {toggleButton}
       </div>

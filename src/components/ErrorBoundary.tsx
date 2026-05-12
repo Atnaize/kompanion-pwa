@@ -33,7 +33,9 @@ export class ErrorBoundary extends Component<Props, State> {
             <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-50">
               {i18n.t('errors.somethingWentWrong')}
             </h1>
-            <p className="mb-6 text-gray-600 dark:text-gray-400">{i18n.t('errors.unexpectedError')}</p>
+            <p className="mb-6 text-gray-600 dark:text-gray-400">
+              {i18n.t('errors.unexpectedError')}
+            </p>
             {this.state.error && (
               <details className="mb-6 rounded-lg bg-gray-50 p-4 text-left text-sm dark:bg-gray-950">
                 <summary className="cursor-pointer font-semibold text-gray-700 dark:text-gray-300">

@@ -57,12 +57,18 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
         >
           <div className="w-1 bg-gradient-to-b from-strava-orange to-strava-orange-dark" />
           <div className="flex items-center gap-5 px-8 py-6">
-            <Loader2 size={28} strokeWidth={1.75} className="animate-spin text-gray-800 dark:text-gray-100" />
+            <Loader2
+              size={28}
+              strokeWidth={1.75}
+              className="animate-spin text-gray-800 dark:text-gray-100"
+            />
             <div className="flex flex-col gap-1">
               <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-gray-500 dark:text-gray-400">
                 {t('common.authenticating')}
               </span>
-              <span className="text-sm font-medium text-gray-900 dark:text-gray-50">{t('common.loading')}</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
+                {t('common.loading')}
+              </span>
             </div>
           </div>
         </div>

@@ -69,7 +69,9 @@ export const ChallengeSummaryModal = ({
           <div className="mb-6 grid grid-cols-3 gap-3 text-center">
             {challenge.targets.distance && (
               <div>
-                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">{formatDistance(totalDistance)}</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">
+                  {formatDistance(totalDistance)}
+                </p>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   of {formatDistance(challenge.targets.distance)}
                 </p>
@@ -77,7 +79,9 @@ export const ChallengeSummaryModal = ({
             )}
             {challenge.targets.elevation && (
               <div>
-                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">{Math.round(totalElevation)}m</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-gray-50">
+                  {Math.round(totalElevation)}m
+                </p>
                 <p className="text-xs text-gray-600 dark:text-gray-400">
                   of {Math.round(challenge.targets.elevation)}m
                 </p>
@@ -94,7 +98,9 @@ export const ChallengeSummaryModal = ({
           {/* Collaborative: Individual Contributions */}
           {isCollaborative && (
             <div className="mb-6">
-              <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Team Contributions</h3>
+              <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Team Contributions
+              </h3>
               <div className="space-y-2">
                 {sortedParticipants.map((participant) => (
                   <div
@@ -130,7 +136,9 @@ export const ChallengeSummaryModal = ({
           {/* Competitive: Leaderboard */}
           {!isCollaborative && (
             <div className="mb-6">
-              <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Final Rankings</h3>
+              <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Final Rankings
+              </h3>
               <div className="space-y-2">
                 {sortedParticipants.map((participant, index) => {
                   const rank = index + 1;

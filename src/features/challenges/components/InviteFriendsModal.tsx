@@ -127,7 +127,9 @@ export const InviteFriendsModal = ({
         <div className="mb-6">
           {searchQuery.length < 2 ? (
             <GlassCard className="p-6 text-center">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Start typing to search for users...</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Start typing to search for users...
+              </p>
             </GlassCard>
           ) : (
             <FriendSelector

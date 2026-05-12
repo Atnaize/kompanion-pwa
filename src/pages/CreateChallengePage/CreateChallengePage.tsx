@@ -114,7 +114,9 @@ export const CreateChallengePage = () => {
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
               {t('createChallenge.title')}
             </p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('createChallenge.subtitle')}</p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {t('createChallenge.subtitle')}
+            </p>
           </div>
         </div>
 
@@ -131,7 +133,7 @@ export const CreateChallengePage = () => {
                 <input
                   type="text"
                   {...register('name')}
-                  className={`w-full rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500 focus:outline-none focus:ring-2 ${errors.name ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
+                  className={`w-full rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm focus:outline-none focus:ring-2 dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500 ${errors.name ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
                   placeholder={t('createChallenge.namePlaceholder')}
                 />
                 {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>}
@@ -144,7 +146,7 @@ export const CreateChallengePage = () => {
                 <textarea
                   {...register('description')}
                   rows={3}
-                  className={`w-full resize-none rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500 focus:outline-none focus:ring-2 ${errors.description ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
+                  className={`w-full resize-none rounded-lg border ${errors.description ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm focus:outline-none focus:ring-2 dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500 ${errors.description ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
                   placeholder={t('createChallenge.descriptionPlaceholder')}
                 />
                 {errors.description && (
@@ -230,7 +232,7 @@ export const CreateChallengePage = () => {
                 <input
                   type="date"
                   {...register('startDate')}
-                  className={`w-full rounded-lg border ${errors.startDate ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm dark:bg-gray-900/50 dark:text-gray-100 focus:outline-none focus:ring-2 ${errors.startDate ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
+                  className={`w-full rounded-lg border ${errors.startDate ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm focus:outline-none focus:ring-2 dark:bg-gray-900/50 dark:text-gray-100 ${errors.startDate ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
                 />
                 {errors.startDate && (
                   <p className="mt-1 text-sm text-red-600">{errors.startDate.message}</p>
@@ -243,7 +245,7 @@ export const CreateChallengePage = () => {
                 <input
                   type="date"
                   {...register('endDate')}
-                  className={`w-full rounded-lg border ${errors.endDate ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm dark:bg-gray-900/50 dark:text-gray-100 focus:outline-none focus:ring-2 ${errors.endDate ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
+                  className={`w-full rounded-lg border ${errors.endDate ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm focus:outline-none focus:ring-2 dark:bg-gray-900/50 dark:text-gray-100 ${errors.endDate ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
                 />
                 {errors.endDate && (
                   <p className="mt-1 text-sm text-red-600">{errors.endDate.message}</p>
@@ -257,7 +259,9 @@ export const CreateChallengePage = () => {
               <h2 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
                 {t('createChallenge.goals')}
               </h2>
-              <span className="text-xs text-gray-500 dark:text-gray-400">{t('createChallenge.goalsRequired')}</span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                {t('createChallenge.goalsRequired')}
+              </span>
             </div>
             <div className="space-y-4">
               <div>
@@ -269,7 +273,7 @@ export const CreateChallengePage = () => {
                   step="0.1"
                   min="0"
                   {...register('distanceTarget')}
-                  className={`w-full rounded-lg border ${errors.distanceTarget ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500 focus:outline-none focus:ring-2 ${errors.distanceTarget ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
+                  className={`w-full rounded-lg border ${errors.distanceTarget ? 'border-red-500' : 'border-gray-200 dark:border-gray-800'} bg-white/50 px-4 py-2 backdrop-blur-sm focus:outline-none focus:ring-2 dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500 ${errors.distanceTarget ? 'focus:ring-red-500' : 'focus:ring-orange-500'}`}
                   placeholder={t('createChallenge.distancePlaceholder')}
                 />
                 {errors.distanceTarget && (
@@ -314,7 +318,9 @@ export const CreateChallengePage = () => {
             <h2 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
               {t('createChallenge.inviteFriends')}
             </h2>
-            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">{t('createChallenge.inviteDescription')}</p>
+            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+              {t('createChallenge.inviteDescription')}
+            </p>
             <div className="mb-4">
               <input
                 type="text"

@@ -204,7 +204,12 @@ export const ActivitiesPage = () => {
         {/* Activities List */}
         {displayedActivities.length === 0 ? (
           <EmptyState
-            icon={<ActivityIcon className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
+            icon={
+              <ActivityIcon
+                className="h-10 w-10 text-gray-400 dark:text-gray-500"
+                strokeWidth={1.5}
+              />
+            }
             title={t('activities.noActivitiesFound')}
             description={
               searchQuery || selectedType !== 'all'
@@ -288,7 +293,9 @@ const FilterChip = ({ icon: Icon, label, count, isSelected, onClick }: FilterChi
     <span
       className={clsx(
         'ml-0.5 inline-flex min-w-[22px] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums',
-        isSelected ? 'bg-white/25 text-white' : 'bg-gray-900/5 text-gray-600 dark:bg-gray-100/10 dark:text-gray-400'
+        isSelected
+          ? 'bg-white/25 text-white'
+          : 'bg-gray-900/5 text-gray-600 dark:bg-gray-100/10 dark:text-gray-400'
       )}
     >
       {count}

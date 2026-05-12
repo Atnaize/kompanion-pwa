@@ -14,7 +14,9 @@ export const ApiTestsTab = () => {
   return (
     <div className="space-y-4">
       <GlassCard className="p-4">
-        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">API Endpoint Tests</h2>
+        <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+          API Endpoint Tests
+        </h2>
         <div className="space-y-2">
           {ENDPOINTS.map((ep) => (
             <Button
@@ -32,7 +34,9 @@ export const ApiTestsTab = () => {
 
       {Object.keys(results).length > 0 && (
         <GlassCard className="p-4">
-          <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Test Results</h2>
+          <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+            Test Results
+          </h2>
           <div className="space-y-3">
             {Object.entries(results).map(([name, result]) => (
               <ResultCard key={name} name={name} result={result} />
@@ -59,7 +63,9 @@ const ResultCard = ({ name, result }: { name: string; result: ApiTestResult }) =
       {dataStr && (
         <details className="text-xs">
           <summary className="cursor-pointer text-gray-600 dark:text-gray-400">View Data</summary>
-          <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-gray-900 dark:bg-gray-800 dark:text-gray-50">{dataStr}</pre>
+          <pre className="mt-2 overflow-auto rounded bg-gray-100 p-2 text-gray-900 dark:bg-gray-800 dark:text-gray-50">
+            {dataStr}
+          </pre>
         </details>
       )}
     </div>

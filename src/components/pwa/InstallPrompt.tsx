@@ -29,7 +29,9 @@ export const InstallPrompt = () => {
         <div className="flex items-start gap-3">
           <div className="text-2xl">📱</div>
           <div className="flex-1">
-            <h3 className="mb-1 font-semibold text-gray-800 dark:text-gray-100">{t('pwa.install.title')}</h3>
+            <h3 className="mb-1 font-semibold text-gray-800 dark:text-gray-100">
+              {t('pwa.install.title')}
+            </h3>
             {isIos ? (
               <>
                 <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
@@ -48,7 +50,9 @@ export const InstallPrompt = () => {
               </>
             ) : (
               <>
-                <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">{t('pwa.install.androidDescription')}</p>
+                <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
+                  {t('pwa.install.androidDescription')}
+                </p>
                 <div className="flex gap-2">
                   <button
                     onClick={() => void showInstallPrompt()}

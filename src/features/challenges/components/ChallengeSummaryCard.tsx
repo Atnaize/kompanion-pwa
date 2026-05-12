@@ -71,7 +71,9 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
         <div className="min-w-0 flex-1">
           {/* Header */}
           <div className="mb-1 flex items-start justify-between gap-2">
-            <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">{challenge.name}</h3>
+            <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">
+              {challenge.name}
+            </h3>
             {challenge.type === 'collaborative' ? (
               <Users className="h-4 w-4 shrink-0 text-strava-orange" strokeWidth={1.75} />
             ) : (
@@ -81,7 +83,9 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
 
           {/* Description */}
           {challenge.description && (
-            <p className="mb-2 line-clamp-1 text-sm text-gray-600 dark:text-gray-400">{challenge.description}</p>
+            <p className="mb-2 line-clamp-1 text-sm text-gray-600 dark:text-gray-400">
+              {challenge.description}
+            </p>
           )}
 
           {/* Participants */}
@@ -127,7 +131,7 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
           </div>
 
           {/* Footer */}
-          <div className="mt-2 flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-2">
+          <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-2 dark:border-gray-800">
             {statusBadge && (
               <span className={`text-xs font-medium ${getStatusColor()}`}>{statusBadge}</span>
             )}

@@ -37,8 +37,12 @@ const formatRelative = (iso: string, locale: string): string => {
 
 const SectionHeader = ({ title, count }: { title: string; count: number }) => (
   <div className="mb-3 flex items-baseline gap-2">
-    <h3 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">{title}</h3>
-    <span className="text-[11px] font-semibold tabular-nums text-gray-400 dark:text-gray-500">{count}</span>
+    <h3 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
+      {title}
+    </h3>
+    <span className="text-[11px] font-semibold tabular-nums text-gray-400 dark:text-gray-500">
+      {count}
+    </span>
     <span className="ml-1 h-px flex-1 bg-gradient-to-r from-gray-200 to-transparent dark:from-gray-700" />
   </div>
 );
@@ -75,7 +79,10 @@ export const ActivityEngagement = ({
         {isLoading && actualKudoers.length === 0 ? (
           <div className="flex gap-1.5">
             {Array.from({ length: Math.min(5, Math.max(1, kudosCount)) }).map((_, i) => (
-              <div key={i} className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800" />
+              <div
+                key={i}
+                className="h-9 w-9 animate-pulse rounded-full bg-gray-200 dark:bg-gray-800"
+              />
             ))}
           </div>
         ) : actualKudoers.length === 0 ? (

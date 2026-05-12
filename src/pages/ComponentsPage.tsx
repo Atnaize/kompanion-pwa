@@ -30,13 +30,17 @@ export const ComponentsPage = () => {
     <Layout>
       <div className="space-y-8">
         <div>
-          <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">Component Library</h2>
+          <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
+            Component Library
+          </h2>
           <p className="text-gray-600 dark:text-gray-400">Preview of all UI components</p>
         </div>
 
         {/* Toast Notifications */}
         <section>
-          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Toast Notifications</h3>
+          <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">
+            Toast Notifications
+          </h3>
           <GlassCard className="p-6">
             <h4 className="mb-4 font-bold text-gray-900 dark:text-gray-50">Manual Toasts</h4>
             <div className="mb-6 flex flex-wrap gap-3">
@@ -110,14 +114,20 @@ export const ComponentsPage = () => {
           <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-gray-50">Glass Cards</h3>
           <div className="space-y-3">
             <GlassCard className="p-6">
-              <h4 className="mb-2 font-bold text-gray-900 dark:text-gray-50">Standard Glass Card</h4>
+              <h4 className="mb-2 font-bold text-gray-900 dark:text-gray-50">
+                Standard Glass Card
+              </h4>
               <p className="text-gray-600 dark:text-gray-400">
                 This is a glassmorphism card with backdrop blur and transparency effects.
               </p>
             </GlassCard>
             <GlassCard className="p-6" hover>
-              <h4 className="mb-2 font-bold text-gray-900 dark:text-gray-50">Hoverable Glass Card</h4>
-              <p className="text-gray-600 dark:text-gray-400">Hover over this card to see the scale effect.</p>
+              <h4 className="mb-2 font-bold text-gray-900 dark:text-gray-50">
+                Hoverable Glass Card
+              </h4>
+              <p className="text-gray-600 dark:text-gray-400">
+                Hover over this card to see the scale effect.
+              </p>
             </GlassCard>
           </div>
         </section>

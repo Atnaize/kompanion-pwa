@@ -521,6 +521,26 @@
       "15km": "15K",
       "half_marathon": "21.1K",
       "marathon": "42.2K"
+    },
+    "analysing": {
+      "title": "Analyse de vos courses",
+      "progress": "{{current}} courses analysées sur {{total}}",
+      "eta": "environ {{days}} jours pour tout rattraper",
+      "budgetRemaining": "Quota d'appels Strava aujourd'hui : {{remaining}}/{{cap}} restants"
+    },
+    "paused": {
+      "userCap": {
+        "title": "Quota d'analyse quotidien atteint",
+        "body": "Revenez demain pour voir d'autres records — vos données sont en sécurité."
+      },
+      "appCap": {
+        "title": "Les serveurs sont saturés aujourd'hui",
+        "body": "Nous reprendrons demain. Besoin d'aller plus vite ? Contactez le support."
+      },
+      "rateLimit": {
+        "title": "Limite d'API Strava atteinte",
+        "body": "Nous reprendrons automatiquement dans quelques minutes."
+      }
     }
   },
   "about": {

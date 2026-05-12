@@ -71,7 +71,9 @@ export const ChallengesPage = () => {
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
               {t('challenges.title')}
             </p>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('challenges.subtitle')}</p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {t('challenges.subtitle')}
+            </p>
           </div>
           <Button onClick={() => navigate('/challenges/create')}>{t('challenges.create')}</Button>
         </div>
@@ -111,7 +113,12 @@ export const ChallengesPage = () => {
                   </div>
                 ) : (
                   <EmptyState
-                    icon={<Target className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
+                    icon={
+                      <Target
+                        className="h-10 w-10 text-gray-400 dark:text-gray-500"
+                        strokeWidth={1.5}
+                      />
+                    }
                     title={t('challenges.noActive')}
                     description={t('challenges.noActiveDesc')}
                     action={{
@@ -136,7 +143,12 @@ export const ChallengesPage = () => {
                   </div>
                 ) : (
                   <EmptyState
-                    icon={<Trophy className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
+                    icon={
+                      <Trophy
+                        className="h-10 w-10 text-gray-400 dark:text-gray-500"
+                        strokeWidth={1.5}
+                      />
+                    }
                     title={t('challenges.noCompleted')}
                     description={t('challenges.noCompletedDesc')}
                   />
@@ -158,7 +170,12 @@ export const ChallengesPage = () => {
                   </div>
                 ) : (
                   <EmptyState
-                    icon={<Inbox className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
+                    icon={
+                      <Inbox
+                        className="h-10 w-10 text-gray-400 dark:text-gray-500"
+                        strokeWidth={1.5}
+                      />
+                    }
                     title={t('challenges.noInvitations')}
                     description={t('challenges.noInvitationsDesc')}
                   />

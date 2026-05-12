@@ -167,7 +167,9 @@ const Stat = ({ icon, label, value }: StatProps) => (
       <span className="text-gray-400 dark:text-gray-500">{icon}</span>
       {label}
     </div>
-    <div className="mt-1 font-mono text-3xl font-semibold tabular-nums text-gray-900 dark:text-gray-50">{value}</div>
+    <div className="mt-1 font-mono text-3xl font-semibold tabular-nums text-gray-900 dark:text-gray-50">
+      {value}
+    </div>
   </div>
 );
 
@@ -268,7 +270,9 @@ const BandTile = ({
               <div className="mt-4 truncate text-xs text-gray-600 dark:text-gray-400">
                 <span className="truncate">{best.activity.name}</span>
                 <span className="mx-1.5 text-gray-300 dark:text-gray-600">·</span>
-                <span className="text-gray-500 dark:text-gray-400">{formatDate(best.achievedAt)}</span>
+                <span className="text-gray-500 dark:text-gray-400">
+                  {formatDate(best.achievedAt)}
+                </span>
               </div>
             </button>
 
@@ -290,7 +294,9 @@ const BandTile = ({
           </>
         ) : (
           <div className="mt-5">
-            <div className="font-mono text-4xl font-semibold leading-none text-gray-300 dark:text-gray-600">—:—</div>
+            <div className="font-mono text-4xl font-semibold leading-none text-gray-300 dark:text-gray-600">
+              —:—
+            </div>
             <div className="mt-3 font-mono text-[10px] uppercase tracking-widest text-gray-400 dark:text-gray-500">
               {emptyLabel}
             </div>
@@ -332,11 +338,18 @@ const AttemptRow = ({ rank, tier, time, activityName, achievedAt, onClick }: Att
       >
         {rank.toString().padStart(2, '0')}
       </span>
-      <span className="font-mono text-sm font-semibold tabular-nums text-gray-900 dark:text-gray-50">{time}</span>
-      <div className="min-w-0 flex-1 truncate text-[11px] text-gray-500 dark:text-gray-400" title={activityName}>
+      <span className="font-mono text-sm font-semibold tabular-nums text-gray-900 dark:text-gray-50">
+        {time}
+      </span>
+      <div
+        className="min-w-0 flex-1 truncate text-[11px] text-gray-500 dark:text-gray-400"
+        title={activityName}
+      >
         {activityName}
       </div>
-      <span className="shrink-0 font-mono text-[10px] text-gray-400 dark:text-gray-500">{formatDate(achievedAt)}</span>
+      <span className="shrink-0 font-mono text-[10px] text-gray-400 dark:text-gray-500">
+        {formatDate(achievedAt)}
+      </span>
       <ChevronRight
         size={14}
         strokeWidth={1.75}

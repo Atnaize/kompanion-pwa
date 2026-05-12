@@ -19,7 +19,9 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
   if (activeParticipants.length === 0) {
     return (
       <GlassCard className="p-4">
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400">No active participants yet</p>
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+          No active participants yet
+        </p>
       </GlassCard>
     );
   }
@@ -70,7 +72,9 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
           <div className="flex items-center gap-6">
             <ProgressRing progress={progress} size={80} />
             <div className="flex-1">
-              <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Team Progress</h3>
+              <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+                Team Progress
+              </h3>
               <div className="grid grid-cols-3 gap-4">
                 {challenge.targets.distance && (
                   <div>
@@ -100,7 +104,9 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
                     <p className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                       <AnimatedNumber value={totalActivities} />
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">of {challenge.targets.activities}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      of {challenge.targets.activities}
+                    </p>
                   </div>
                 )}
               </div>
@@ -110,7 +116,9 @@ export const ChallengeProgress: React.FC<ChallengeProgressProps> = ({
 
         {showAllParticipants && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">Individual Contributions</h4>
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Individual Contributions
+            </h4>
             {activeParticipants.map((participant: ChallengeParticipant) => (
               <GlassCard key={participant.id} className="p-3">
                 <div className="flex items-center gap-3">

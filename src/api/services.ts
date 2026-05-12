@@ -229,8 +229,118 @@ export const challengesService = {
   },
 };
 
+export interface PersonalRecordsStatus {
+  processed: number;
+  total: number;
+  userDailyUsed: number;
+  userDailyCap: number;
+  userDailyRemaining: number;
+  appDailyUsed: number;
+  appDailyBudget: number;
+  appDailyRemaining: number;
+}
+
+export type PersonalRecordsPausedReason = 'user_daily_cap' | 'app_daily_cap' | 'strava_rate_limit';
+
+export interface PersonalRecordsBacklogEvent {
+  type: 'processing' | 'paused' | 'complete' | 'error';
+  current?: number;
+  total?: number;
+  reason?: PersonalRecordsPausedReason;
+  message?: string;
+}
+
 export const personalRecordsService = {
   list: () => apiClient.get<PersonalRecordBandGroup[]>('/personal-records'),
+  status: () => apiClient.get<PersonalRecordsStatus>('/personal-records/status'),
+  processStream: (onEvent: (event: PersonalRecordsBacklogEvent) => void): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const baseURL = apiClient.getBaseURL();
+      const token = localStorage.getItem('access_token');
+      if (!token) {
+        reject(new Error('Not authenticated'));
+        return;
+      }
+      const url = `${baseURL}/personal-records/process/stream?token=${token}`;
+      const eventSource = new EventSource(url);
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data) as PersonalRecordsBacklogEvent;
+        onEvent(data);
+        if (data.type === 'complete' || data.type === 'paused' || data.type === 'error') {
+          eventSource.close();
+          if (data.type === 'error') {
+            reject(new Error(data.message || 'PR processing failed'));
+          } else {
+            resolve();
+          }
+        }
+      };
+      eventSource.onerror = () => {
+        eventSource.close();
+        reject(new Error('Connection failed'));
+      };
+    });
+  },
+};
+
+export interface AdminQuotaOverview {
+  date: string;
+  appDailyUsed: number;
+  appDailyBudget: number;
+  appDailyRemaining: number;
+  byKind: { pr_fetch: number; webhook_fetch: number; activity_sync: number };
+  sparkline: Array<{ date: string; total: number }>;
+}
+
+export interface AdminQuotaUserRow {
+  userId: number;
+  username: string | null;
+  firstname: string;
+  lastname: string;
+  prFetch: number;
+  webhookFetch: number;
+  activitySync: number;
+  userDailyCap: number;
+  userDailyRemaining: number;
+  unprocessedRuns: number;
+}
+
+export interface AdminQuotaBacklogRow {
+  userId: number;
+  username: string | null;
+  firstname: string;
+  lastname: string;
+  unprocessedRuns: number;
+}
+
+export interface AdminQuotaGrant {
+  id: number;
+  userId: number;
+  kind: string;
+  amount: number;
+  validFrom: string;
+  validUntil: string;
+  grantedBy: number;
+  grantedByName: string;
+  note: string | null;
+  createdAt: string;
+}
+
+export const adminQuotaService = {
+  overview: () => apiClient.get<AdminQuotaOverview>('/admin/quota/overview'),
+  users: (params: { date?: string; activeOnly?: boolean } = {}) => {
+    const q = new URLSearchParams();
+    if (params.date) q.set('date', params.date);
+    if (params.activeOnly) q.set('activeOnly', 'true');
+    const qs = q.toString();
+    return apiClient.get<AdminQuotaUserRow[]>(`/admin/quota/users${qs ? `?${qs}` : ''}`);
+  },
+  backlog: () => apiClient.get<AdminQuotaBacklogRow[]>('/admin/quota/backlog'),
+  listGrants: (userId: number) =>
+    apiClient.get<AdminQuotaGrant[]>(`/admin/quota/grants?userId=${userId}`),
+  createGrant: (body: { userId: number; amount: number; validUntil?: string; note?: string }) =>
+    apiClient.post<AdminQuotaGrant>('/admin/quota/grants', body),
+  revokeGrant: (id: number) => apiClient.delete(`/admin/quota/grants/${id}`),
 };
 
 export const friendsService = {

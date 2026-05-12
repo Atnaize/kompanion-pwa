@@ -105,7 +105,9 @@ const DiagnosticsSection = () => {
   return (
     <GlassCard className="p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">Diagnostics & Status</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
+          Diagnostics & Status
+        </h2>
         <Button onClick={refresh} variant="secondary" size="sm" disabled={loading}>
           {loading ? 'Loading…' : 'Refresh'}
         </Button>
@@ -121,7 +123,9 @@ const DiagnosticsSection = () => {
         </div>
       )}
 
-      <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">Active subscription on Strava</h3>
+      <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+        Active subscription on Strava
+      </h3>
       {!status ? (
         <p className="text-xs text-gray-500 dark:text-gray-400">Loading…</p>
       ) : Array.isArray(status.strava) ? (
@@ -145,13 +149,18 @@ const DiagnosticsSection = () => {
         </p>
       )}
 
-      <h3 className="mb-2 mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Local subscription history</h3>
+      <h3 className="mb-2 mt-4 text-sm font-semibold text-gray-700 dark:text-gray-300">
+        Local subscription history
+      </h3>
       {!diag || diag.localSubscriptions.length === 0 ? (
         <p className="text-xs text-gray-500 dark:text-gray-400">No local subscription records.</p>
       ) : (
         <div className="space-y-2">
           {diag.localSubscriptions.map((sub) => (
-            <div key={sub.id} className="rounded-lg bg-gray-50 p-3 font-mono text-xs dark:bg-gray-950">
+            <div
+              key={sub.id}
+              className="rounded-lg bg-gray-50 p-3 font-mono text-xs dark:bg-gray-950"
+            >
               <KV k="local id" v={String(sub.id)} />
               <KV k="strava id" v={sub.stravaId !== null ? String(sub.stravaId) : '—'} />
               <KV k="status" v={sub.status} />
@@ -242,7 +251,9 @@ const SubscribeSection = () => {
 
   return (
     <GlassCard className="p-4">
-      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">Subscribe / Unsubscribe</h2>
+      <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
+        Subscribe / Unsubscribe
+      </h2>
       <p className="mb-3 text-xs text-gray-600 dark:text-gray-400">
         Strava only allows one webhook subscription per app. The callback URL must be reachable from
         the public internet (use ngrok or a public deploy).
@@ -510,7 +521,9 @@ const EventsSection = () => {
             type="button"
             onClick={() => setFilter(s)}
             className={`rounded px-2 py-1 text-xs ${
-              filter === s ? 'bg-strava-orange text-white' : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+              filter === s
+                ? 'bg-strava-orange text-white'
+                : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
             }`}
           >
             {s || 'all'}
@@ -533,7 +546,9 @@ const EventsSection = () => {
               className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs hover:bg-gray-50 dark:hover:bg-gray-900/50"
             >
               <StatusBadge status={e.status} />
-              <span className="font-mono text-gray-500 dark:text-gray-400">{shortTime(e.receivedAt)}</span>
+              <span className="font-mono text-gray-500 dark:text-gray-400">
+                {shortTime(e.receivedAt)}
+              </span>
               <span className="font-medium text-gray-900 dark:text-gray-50">
                 {e.objectType}:{e.aspectType}
               </span>
@@ -544,7 +559,9 @@ const EventsSection = () => {
                   sim
                 </span>
               )}
-              {e.attempts > 1 && <span className="text-gray-500 dark:text-gray-400">×{e.attempts}</span>}
+              {e.attempts > 1 && (
+                <span className="text-gray-500 dark:text-gray-400">×{e.attempts}</span>
+              )}
             </button>
           ))}
         </div>
@@ -617,7 +634,9 @@ const EventDetailModal = ({
           </div>
         )}
 
-        <h4 className="mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">Processing log</h4>
+        <h4 className="mb-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+          Processing log
+        </h4>
         <pre className="mb-3 max-h-64 overflow-auto rounded-lg bg-gray-900 p-3 font-mono text-[11px] text-gray-100">
           {(event.processingLog ?? [])
             .map((entry) => `[${entry.ts}] ${entry.level.toUpperCase().padEnd(5)} ${entry.message}`)
@@ -643,7 +662,9 @@ const EventDetailModal = ({
 
 const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <div className="mb-2">
-    <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">{label}</label>
+    <label className="mb-1 block text-xs font-medium text-gray-700 dark:text-gray-300">
+      {label}
+    </label>
     {children}
   </div>
 );

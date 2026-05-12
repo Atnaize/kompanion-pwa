@@ -159,7 +159,9 @@ export const PeriodComparison = () => {
         <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
           {t('periodComparison.title')}
         </h3>
-        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('periodComparison.subtitle')}</p>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          {t('periodComparison.subtitle')}
+        </p>
       </div>
 
       {/* Period Selector */}
@@ -197,7 +199,10 @@ export const PeriodComparison = () => {
             </h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="currentStart" className="mb-1 block text-xs text-gray-600 dark:text-gray-400">
+                <label
+                  htmlFor="currentStart"
+                  className="mb-1 block text-xs text-gray-600 dark:text-gray-400"
+                >
                   {t('common.startDate')}
                 </label>
                 <input
@@ -209,7 +214,10 @@ export const PeriodComparison = () => {
                 />
               </div>
               <div>
-                <label htmlFor="currentEnd" className="mb-1 block text-xs text-gray-600 dark:text-gray-400">
+                <label
+                  htmlFor="currentEnd"
+                  className="mb-1 block text-xs text-gray-600 dark:text-gray-400"
+                >
                   {t('common.endDate')}
                 </label>
                 <input
@@ -229,7 +237,10 @@ export const PeriodComparison = () => {
             </h4>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="previousStart" className="mb-1 block text-xs text-gray-600 dark:text-gray-400">
+                <label
+                  htmlFor="previousStart"
+                  className="mb-1 block text-xs text-gray-600 dark:text-gray-400"
+                >
                   {t('common.startDate')}
                 </label>
                 <input
@@ -241,7 +252,10 @@ export const PeriodComparison = () => {
                 />
               </div>
               <div>
-                <label htmlFor="previousEnd" className="mb-1 block text-xs text-gray-600 dark:text-gray-400">
+                <label
+                  htmlFor="previousEnd"
+                  className="mb-1 block text-xs text-gray-600 dark:text-gray-400"
+                >
                   {t('common.endDate')}
                 </label>
                 <input
@@ -287,7 +301,9 @@ export const PeriodComparison = () => {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     {getMetricIcon(metric)}
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-50">{getMetricLabel(metric)}</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-50">
+                      {getMetricLabel(metric)}
+                    </h4>
                   </div>
                   {renderDeltaBadge(change)}
                 </div>
@@ -296,7 +312,9 @@ export const PeriodComparison = () => {
                 <div className="mt-4 space-y-3">
                   <div>
                     <div className="flex items-baseline justify-between gap-2 text-xs">
-                      <span className="truncate text-gray-600 dark:text-gray-400">{getPeriodLabel(true)}</span>
+                      <span className="truncate text-gray-600 dark:text-gray-400">
+                        {getPeriodLabel(true)}
+                      </span>
                       <span className="shrink-0 font-mono text-base font-bold tabular-nums text-gray-900 dark:text-gray-50">
                         {formatMetricValue(metric, currentValue)}
                       </span>
@@ -314,7 +332,9 @@ export const PeriodComparison = () => {
 
                   <div>
                     <div className="flex items-baseline justify-between gap-2 text-xs">
-                      <span className="truncate text-gray-500 dark:text-gray-400">{getPeriodLabel(false)}</span>
+                      <span className="truncate text-gray-500 dark:text-gray-400">
+                        {getPeriodLabel(false)}
+                      </span>
                       <span className="shrink-0 font-mono text-sm font-medium tabular-nums text-gray-500 dark:text-gray-400">
                         {formatMetricValue(metric, previousValue)}
                       </span>

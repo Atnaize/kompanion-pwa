@@ -43,7 +43,9 @@ export const StatsPage = () => {
       <Layout>
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">{t('stats.title')}</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
+              {t('stats.title')}
+            </h2>
             <p className="text-gray-600 dark:text-gray-400">{t('stats.loading')}</p>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -63,7 +65,9 @@ export const StatsPage = () => {
     return (
       <Layout>
         <EmptyState
-          icon={<BarChart3 className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />}
+          icon={
+            <BarChart3 className="h-10 w-10 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
+          }
           title={t('stats.noStats')}
           description={t('stats.noStatsDesc')}
           action={{

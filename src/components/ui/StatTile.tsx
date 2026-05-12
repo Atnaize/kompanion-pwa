@@ -20,7 +20,9 @@ export const StatTile = ({ label, value, subValue, viz }: StatTileProps) => {
         <div className="mt-2 font-mono text-2xl font-semibold tabular-nums tracking-tight text-gray-900 dark:text-gray-50">
           {value}
         </div>
-        {subValue && <div className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{subValue}</div>}
+        {subValue && (
+          <div className="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{subValue}</div>
+        )}
       </div>
     </GlassCard>
   );

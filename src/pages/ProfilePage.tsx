@@ -74,11 +74,17 @@ export const ProfilePage = () => {
 
             <div className="space-y-3">
               <div className="flex items-center justify-between border-b border-gray-200 py-2 dark:border-gray-800">
-                <span className="text-sm text-gray-600 dark:text-gray-400">{t('profile.accountType')}</span>
-                <span className="font-medium text-gray-900 dark:text-gray-50">{t('profile.stravaConnected')}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('profile.accountType')}
+                </span>
+                <span className="font-medium text-gray-900 dark:text-gray-50">
+                  {t('profile.stravaConnected')}
+                </span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">{t('profile.userId')}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('profile.userId')}
+                </span>
                 <span className="font-medium text-gray-900 dark:text-gray-50">{user.userId}</span>
               </div>
             </div>
@@ -95,8 +101,12 @@ export const ProfilePage = () => {
             <GlassCard className="p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-gray-50">{t('profile.logout.title')}</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">{t('profile.logout.description')}</p>
+                  <h4 className="font-bold text-gray-900 dark:text-gray-50">
+                    {t('profile.logout.title')}
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    {t('profile.logout.description')}
+                  </p>
                 </div>
                 <Button variant="secondary" onClick={handleLogout}>
                   {t('profile.logout.button')}

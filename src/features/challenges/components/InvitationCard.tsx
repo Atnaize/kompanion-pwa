@@ -67,14 +67,18 @@ export const InvitationCard: React.FC<InvitationCardProps> = ({
                 const Icon = getTypeIcon(challenge.type);
                 return <Icon className="h-4 w-4 shrink-0 text-strava-orange" strokeWidth={1.75} />;
               })()}
-              <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">{challenge.name}</h3>
+              <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">
+                {challenge.name}
+              </h3>
             </div>
             <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
               {getTypeLabel(challenge.type)} • {formatDate(challenge.startDate)} -{' '}
               {formatDate(challenge.endDate)}
             </p>
             {challenge.description && (
-              <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">{challenge.description}</p>
+              <p className="line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+                {challenge.description}
+              </p>
             )}
           </div>
         </div>

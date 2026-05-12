@@ -40,7 +40,9 @@ export const PersonalRecordsPreview = ({ disabled = false }: PersonalRecordsPrev
           <h3 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
             {t('dashboard.personalRecords')}
           </h3>
-          <span className="text-gray-400 transition-transform group-hover:translate-x-0.5 dark:text-gray-500">›</span>
+          <span className="text-gray-400 transition-transform group-hover:translate-x-0.5 dark:text-gray-500">
+            ›
+          </span>
         </div>
 
         <div

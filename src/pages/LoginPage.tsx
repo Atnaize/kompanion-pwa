@@ -100,7 +100,7 @@ export const LoginPage = () => {
       </div>
 
       {/* Right side - Login */}
-      <div className="flex w-full flex-col bg-gray-50 lg:w-1/2 lg:flex-row lg:items-center lg:justify-center lg:px-4 lg:py-12 dark:bg-gray-950">
+      <div className="flex w-full flex-col bg-gray-50 dark:bg-gray-950 lg:w-1/2 lg:flex-row lg:items-center lg:justify-center lg:px-4 lg:py-12">
         {/* Mobile header with gradient */}
         <div className="bg-gradient-to-br from-strava-orange via-strava-orange-light to-orange-400 px-6 pb-16 pt-12 lg:hidden">
           <div className="text-center">
@@ -114,9 +114,11 @@ export const LoginPage = () => {
         {/* Content wrapper */}
         <div className="-mt-8 w-full px-4 pb-12 lg:mt-0 lg:max-w-md lg:px-0">
           {/* Main card */}
-          <div className="rounded-2xl bg-white p-8 shadow-2xl lg:p-10 dark:bg-gray-900">
+          <div className="rounded-2xl bg-white p-8 shadow-2xl dark:bg-gray-900 lg:p-10">
             <div className="mb-8 text-center">
-              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">{t('login.getStarted')}</h2>
+              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
+                {t('login.getStarted')}
+              </h2>
               <p className="text-gray-600 dark:text-gray-400">{t('login.connectDescription')}</p>
             </div>
 
@@ -140,8 +142,12 @@ export const LoginPage = () => {
                     {feature.icon}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-50">{feature.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{feature.description}</p>
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-50">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {feature.description}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -166,11 +172,15 @@ export const LoginPage = () => {
               )}
             </button>
 
-            <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">{t('login.disclaimer')}</p>
+            <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400">
+              {t('login.disclaimer')}
+            </p>
           </div>
 
           {/* Footer */}
-          <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">{t('login.footer')}</p>
+          <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+            {t('login.footer')}
+          </p>
         </div>
       </div>
     </div>

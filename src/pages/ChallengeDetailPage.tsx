@@ -188,9 +188,13 @@ export const ChallengeDetailPage = () => {
             </div>
             <div className="mb-2 flex items-center gap-2">
               <span className="text-2xl">{getTypeIcon(currentChallenge.type)}</span>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">{currentChallenge.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
+                {currentChallenge.name}
+              </h1>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">{getTypeLabel(currentChallenge.type)}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {getTypeLabel(currentChallenge.type)}
+            </p>
           </div>
         </div>
 
@@ -208,20 +212,26 @@ export const ChallengeDetailPage = () => {
           </h2>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.startDate')}</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                {t('challengeDetail.startDate')}
+              </span>
               <span className="font-medium text-gray-900 dark:text-gray-50">
                 {formatDate(currentChallenge.startDate)}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.endDate')}</span>
+              <span className="text-gray-600 dark:text-gray-400">
+                {t('challengeDetail.endDate')}
+              </span>
               <span className="font-medium text-gray-900 dark:text-gray-50">
                 {formatDate(currentChallenge.endDate)}
               </span>
             </div>
             {currentChallenge.targets.distance && (
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.distanceGoal')}</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  {t('challengeDetail.distanceGoal')}
+                </span>
                 <span className="font-medium text-gray-900 dark:text-gray-50">
                   {(currentChallenge.targets.distance / 1000).toFixed(1)} km
                 </span>
@@ -229,7 +239,9 @@ export const ChallengeDetailPage = () => {
             )}
             {currentChallenge.targets.elevation && (
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.elevationGoal')}</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  {t('challengeDetail.elevationGoal')}
+                </span>
                 <span className="font-medium text-gray-900 dark:text-gray-50">
                   {Math.round(currentChallenge.targets.elevation)} m
                 </span>
@@ -237,7 +249,9 @@ export const ChallengeDetailPage = () => {
             )}
             {currentChallenge.targets.activityType && (
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.activityType')}</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  {t('challengeDetail.activityType')}
+                </span>
                 <span className="font-medium capitalize text-gray-900 dark:text-gray-50">
                   {currentChallenge.targets.activityType}
                 </span>
@@ -245,7 +259,9 @@ export const ChallengeDetailPage = () => {
             )}
             {currentChallenge.creator && (
               <div className="flex items-center justify-between border-t border-gray-200 pt-2 dark:border-gray-800">
-                <span className="text-gray-600 dark:text-gray-400">{t('challengeDetail.createdBy')}</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  {t('challengeDetail.createdBy')}
+                </span>
                 <div className="flex items-center gap-2">
                   <Avatar
                     src={currentChallenge.creator.profile}

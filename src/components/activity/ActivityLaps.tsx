@@ -50,7 +50,9 @@ export const ActivityLaps = ({ laps, showPace = false }: ActivityLapsProps) => {
                 style={{ width: `${speedPct}%` }}
                 aria-hidden
               />
-              <div className="relative col-span-1 font-semibold text-gray-900 dark:text-gray-50">{lap.lap_index}</div>
+              <div className="relative col-span-1 font-semibold text-gray-900 dark:text-gray-50">
+                {lap.lap_index}
+              </div>
               <div className="relative col-span-3 text-gray-900 dark:text-gray-50">
                 {formatDistance(lap.distance)}
               </div>
