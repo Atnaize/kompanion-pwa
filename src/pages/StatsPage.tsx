@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -24,19 +24,53 @@ import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 import { ProgressCharts } from './StatsPage/ProgressCharts';
 import { PeriodComparison } from './StatsPage/PeriodComparison';
 import { HeatmapCalendar } from './StatsPage/HeatmapCalendar';
+import { ActivityTypeFilter } from './StatsPage/ActivityTypeFilter';
+
+const STATS_ACTIVITY_TYPE_KEY = 'stats-activity-type';
 
 export const StatsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedType, setSelectedType] = useState<string | null>(() => {
+    // Mirrors the DashboardPage period selector's persistence approach
+    // (raw localStorage, kebab-cased key). Lazy init so the first render
+    // already uses the saved value.
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(STATS_ACTIVITY_TYPE_KEY);
+  });
 
-  const { data: stats, isLoading } = useQuery({
+  useEffect(() => {
+    if (selectedType === null) {
+      localStorage.removeItem(STATS_ACTIVITY_TYPE_KEY);
+    } else {
+      localStorage.setItem(STATS_ACTIVITY_TYPE_KEY, selectedType);
+    }
+  }, [selectedType]);
+
+  // Unfiltered query — always runs, drives the chip list (so chips don't
+  // disappear when the user filters) and the overview when nothing is
+  // selected.
+  const { data: allStats, isLoading } = useQuery({
     queryKey: ['stats'],
     queryFn: async () => {
       const response = await statsService.getUserStats();
       return response.data!;
     },
   });
+
+  // Filtered query — runs only when a type is selected. Returns stats
+  // scoped to that activity type without overwriting the canonical totals.
+  const { data: filteredStats } = useQuery({
+    queryKey: ['stats', { activityType: selectedType }],
+    queryFn: async () => {
+      const response = await statsService.getUserStats(undefined, selectedType);
+      return response.data!;
+    },
+    enabled: selectedType !== null,
+  });
+
+  const stats = selectedType === null ? allStats : filteredStats;
 
   if (isLoading) {
     return (
@@ -90,6 +124,14 @@ export const StatsPage = () => {
           </p>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('stats.subtitle')}</p>
         </div>
+
+        {allStats && (
+          <ActivityTypeFilter
+            byActivityType={allStats.byActivityType}
+            selected={selectedType}
+            onChange={setSelectedType}
+          />
+        )}
 
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onChange={setActiveTab}>
@@ -153,8 +195,10 @@ export const StatsPage = () => {
                 </div>
               </section>
 
-              {/* By Activity Type */}
-              {activityTypes.length > 0 && (
+              {/* By Activity Type — only shown in the unfiltered view; when
+                  a single type is selected this section would just repeat
+                  the totals above. */}
+              {selectedType === null && activityTypes.length > 0 && (
                 <section>
                   <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
                     {t('stats.byActivityType')}
@@ -206,17 +250,17 @@ export const StatsPage = () => {
 
           {/* Calendar Tab */}
           <TabPanel value="calendar">
-            <HeatmapCalendar />
+            <HeatmapCalendar activityType={selectedType} />
           </TabPanel>
 
           {/* Charts Tab */}
           <TabPanel value="charts">
-            <ProgressCharts />
+            <ProgressCharts activityType={selectedType} />
           </TabPanel>
 
           {/* Comparison Tab */}
           <TabPanel value="comparison">
-            <PeriodComparison />
+            <PeriodComparison activityType={selectedType} />
           </TabPanel>
         </Tabs>
       </div>

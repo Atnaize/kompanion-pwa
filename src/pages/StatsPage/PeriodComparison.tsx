@@ -9,7 +9,11 @@ import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 
 type Period = 'week' | 'month' | 'year' | 'custom';
 
-export const PeriodComparison = () => {
+interface PeriodComparisonProps {
+  activityType?: string | null;
+}
+
+export const PeriodComparison = ({ activityType = null }: PeriodComparisonProps) => {
   const { t } = useTranslation();
   const [period, setPeriod] = useState<Period>('week');
 
@@ -23,7 +27,16 @@ export const PeriodComparison = () => {
     period !== 'custom' || Boolean(currentStart && currentEnd && previousStart && previousEnd);
 
   const { data: comparisonData, isLoading } = useQuery({
-    queryKey: ['stats', 'compare', period, currentStart, currentEnd, previousStart, previousEnd],
+    queryKey: [
+      'stats',
+      'compare',
+      period,
+      currentStart,
+      currentEnd,
+      previousStart,
+      previousEnd,
+      activityType,
+    ],
     queryFn: async () => {
       if (period === 'custom') {
         const response = await statsService.compareCustomRanges({
@@ -31,10 +44,14 @@ export const PeriodComparison = () => {
           currentEnd,
           previousStart,
           previousEnd,
+          activityType,
         });
         return response.data;
       } else {
-        const response = await statsService.comparePeriods(period as 'week' | 'month' | 'year');
+        const response = await statsService.comparePeriods(
+          period as 'week' | 'month' | 'year',
+          activityType
+        );
         return response.data;
       }
     },

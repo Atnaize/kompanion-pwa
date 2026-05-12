@@ -458,7 +458,12 @@
     "currentStreak": "Current Streak",
     "bestStreak": "Best Streak",
     "byActivityType": "By Activity Type",
-    "activitiesCount": "{{count}} activities"
+    "activitiesCount": "{{count}} activities",
+    "filter": {
+      "all": "All",
+      "more": "+{{count}} more",
+      "less": "Show less"
+    }
   },
   "progressCharts": {
     "title": "Progress Over Time",

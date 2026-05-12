@@ -14,14 +14,18 @@ interface DayData {
   weekIndex: number;
 }
 
-export const HeatmapCalendar = () => {
+interface HeatmapCalendarProps {
+  activityType?: string | null;
+}
+
+export const HeatmapCalendar = ({ activityType = null }: HeatmapCalendarProps) => {
   const { t } = useTranslation();
   const [metric, setMetric] = useState<Metric>('count');
 
   const { data: heatmapData = [], isLoading } = useQuery({
-    queryKey: ['stats', 'heatmap', metric],
+    queryKey: ['stats', 'heatmap', metric, activityType],
     queryFn: async () => {
-      const response = await statsService.getHeatmapData(metric);
+      const response = await statsService.getHeatmapData(metric, activityType);
       return response.data;
     },
   });

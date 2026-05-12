@@ -19,16 +19,25 @@ type Metric = 'distance' | 'elevation' | 'count' | 'time';
 type Period = 'week' | 'month' | 'year' | 'all';
 type GroupBy = 'day' | 'week' | 'month';
 
-export const ProgressCharts = () => {
+interface ProgressChartsProps {
+  activityType?: string | null;
+}
+
+export const ProgressCharts = ({ activityType = null }: ProgressChartsProps) => {
   const { t } = useTranslation();
   const [metric, setMetric] = useState<Metric>('distance');
   const [period, setPeriod] = useState<Period>('month');
   const [groupBy, setGroupBy] = useState<GroupBy>('week');
 
   const { data: progressData = [], isLoading } = useQuery({
-    queryKey: ['stats', 'progress', metric, period, groupBy],
+    queryKey: ['stats', 'progress', metric, period, groupBy, activityType],
     queryFn: async () => {
-      const response = await statsService.getProgressData({ metric, period, groupBy });
+      const response = await statsService.getProgressData({
+        metric,
+        period,
+        groupBy,
+        activityType,
+      });
       return response.data;
     },
   });

@@ -83,25 +83,39 @@ export const activitiesService = {
   getPhotos: (id: number) => apiClient.get<ActivityPhoto[]>(`/activities/${id}/photos`),
 };
 
+const appendType = (params: URLSearchParams, activityType: string | null | undefined): void => {
+  if (activityType && activityType !== 'all') {
+    params.set('activityType', activityType);
+  }
+};
+
 export const statsService = {
-  getUserStats: (period?: 'week' | 'month' | 'year') => {
-    const query = period ? `?period=${period}` : '';
-    return apiClient.get<Stats>(`/stats${query}`);
+  getUserStats: (period?: 'week' | 'month' | 'year', activityType?: string | null) => {
+    const params = new URLSearchParams();
+    if (period) params.set('period', period);
+    appendType(params, activityType);
+    const qs = params.toString();
+    return apiClient.get<Stats>(`/stats${qs ? `?${qs}` : ''}`);
   },
   getProgressData: (params: {
     metric: 'distance' | 'elevation' | 'count' | 'time';
     period: 'week' | 'month' | 'year' | 'all';
     groupBy: 'day' | 'week' | 'month';
+    activityType?: string | null;
   }) => {
     const query = new URLSearchParams({
       metric: params.metric,
       period: params.period,
       groupBy: params.groupBy,
-    }).toString();
-    return apiClient.get<Array<{ date: string; value: number }>>(`/stats/progress?${query}`);
+    });
+    appendType(query, params.activityType);
+    return apiClient.get<Array<{ date: string; value: number }>>(
+      `/stats/progress?${query.toString()}`
+    );
   },
-  comparePeriods: (period: 'week' | 'month' | 'year') => {
-    const query = new URLSearchParams({ period }).toString();
+  comparePeriods: (period: 'week' | 'month' | 'year', activityType?: string | null) => {
+    const query = new URLSearchParams({ period });
+    appendType(query, activityType);
     return apiClient.get<{
       current: {
         distance: number;
@@ -121,20 +135,22 @@ export const statsService = {
         time: number;
         count: number;
       };
-    }>(`/stats/compare?${query}`);
+    }>(`/stats/compare?${query.toString()}`);
   },
   compareCustomRanges: (params: {
     currentStart: string;
     currentEnd: string;
     previousStart: string;
     previousEnd: string;
+    activityType?: string | null;
   }) => {
     const query = new URLSearchParams({
       currentStart: params.currentStart,
       currentEnd: params.currentEnd,
       previousStart: params.previousStart,
       previousEnd: params.previousEnd,
-    }).toString();
+    });
+    appendType(query, params.activityType);
     return apiClient.get<{
       current: {
         distance: number;
@@ -154,10 +170,11 @@ export const statsService = {
         time: number;
         count: number;
       };
-    }>(`/stats/compare-custom?${query}`);
+    }>(`/stats/compare-custom?${query.toString()}`);
   },
-  getHeatmapData: (metric: 'count' | 'distance' = 'count') => {
-    const query = new URLSearchParams({ metric }).toString();
+  getHeatmapData: (metric: 'count' | 'distance' = 'count', activityType?: string | null) => {
+    const query = new URLSearchParams({ metric });
+    appendType(query, activityType);
     return apiClient.get<Array<{ date: string; value: number }>>(`/stats/heatmap?${query}`);
   },
 };

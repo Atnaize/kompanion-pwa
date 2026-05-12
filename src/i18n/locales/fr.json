@@ -458,7 +458,12 @@
     "currentStreak": "S\u00e9rie actuelle",
     "bestStreak": "Meilleure s\u00e9rie",
     "byActivityType": "Par type d'activit\u00e9",
-    "activitiesCount": "{{count}} activit\u00e9s"
+    "activitiesCount": "{{count}} activit\u00e9s",
+    "filter": {
+      "all": "Toutes",
+      "more": "+{{count}} autres",
+      "less": "R\u00e9duire"
+    }
   },
   "progressCharts": {
     "title": "Progression dans le temps",
