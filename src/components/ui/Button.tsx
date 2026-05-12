@@ -22,7 +22,7 @@ export const Button = ({
         'rounded-2xl font-medium transition-all duration-200',
         'active:scale-95 disabled:cursor-not-allowed disabled:opacity-50',
         {
-          'bg-strava-orange text-white shadow-md hover:bg-strava-orange-dark hover:shadow-lg':
+          'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-500/30 hover:from-orange-500 hover:to-orange-700 hover:shadow-lg hover:shadow-orange-500/30':
             variant === 'primary',
           'bg-white/90 text-gray-900 shadow-md ring-1 ring-gray-900/5 backdrop-blur-md hover:bg-white hover:shadow-lg dark:bg-gray-800/90 dark:text-gray-50 dark:ring-gray-100/10 dark:hover:bg-gray-800':
             variant === 'secondary',

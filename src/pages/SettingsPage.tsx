@@ -47,7 +47,13 @@ export const SettingsPage = () => {
   };
 
   const handlePreferenceToggle = async (
-    key: 'challengeInvites' | 'challengeProgress' | 'challengeReminders',
+    key:
+      | 'challengeInvites'
+      | 'challengeProgress'
+      | 'challengeReminders'
+      | 'friendRequests'
+      | 'friendAccepted'
+      | 'achievementUnlocked',
     value: boolean
   ) => {
     try {
@@ -137,9 +143,49 @@ export const SettingsPage = () => {
 
             {isSubscribed && preferences && (
               <GlassCard className="p-5">
-                <h4 className="mb-4 font-semibold text-gray-900 dark:text-gray-50">
+                <h4 className="mb-1 font-semibold text-gray-900 dark:text-gray-50">
                   {t('settings.preferences.title')}
                 </h4>
+                <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">
+                  {t('settings.preferences.activeHint')}
+                </p>
+
+                {/* Friends */}
+                <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+                  {t('settings.preferences.friendsGroup')}
+                </p>
+                <div className="space-y-4">
+                  <Toggle
+                    enabled={preferences.friendRequests}
+                    onChange={(value) => handlePreferenceToggle('friendRequests', value)}
+                    label={t('settings.preferences.friendRequests')}
+                    description={t('settings.preferences.friendRequestsDesc')}
+                  />
+                  <Toggle
+                    enabled={preferences.friendAccepted}
+                    onChange={(value) => handlePreferenceToggle('friendAccepted', value)}
+                    label={t('settings.preferences.friendAccepted')}
+                    description={t('settings.preferences.friendAcceptedDesc')}
+                  />
+                </div>
+
+                {/* Achievements */}
+                <p className="mb-3 mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+                  {t('settings.preferences.achievementsGroup')}
+                </p>
+                <div className="space-y-4">
+                  <Toggle
+                    enabled={preferences.achievementUnlocked}
+                    onChange={(value) => handlePreferenceToggle('achievementUnlocked', value)}
+                    label={t('settings.preferences.achievementUnlocked')}
+                    description={t('settings.preferences.achievementUnlockedDesc')}
+                  />
+                </div>
+
+                {/* Challenges */}
+                <p className="mb-3 mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+                  {t('settings.preferences.challengesGroup')}
+                </p>
                 <div className="space-y-4">
                   <Toggle
                     enabled={preferences.challengeInvites}

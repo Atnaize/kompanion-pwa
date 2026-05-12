@@ -41,9 +41,14 @@ interface TabListProps {
 }
 
 export const TabList = ({ children, className, wrap = false, fade = false }: TabListProps) => {
+  const segmentedBg =
+    'rounded-xl bg-gray-100/80 p-1 ring-1 ring-gray-900/5 dark:bg-gray-800/60 dark:ring-gray-100/5';
+
   if (wrap) {
     return (
-      <div className={clsx('flex flex-wrap justify-center gap-1.5', className)}>{children}</div>
+      <div className={clsx('flex flex-wrap justify-center gap-1', segmentedBg, className)}>
+        {children}
+      </div>
     );
   }
   if (fade) {
@@ -57,14 +62,16 @@ export const TabList = ({ children, className, wrap = false, fade = false }: Tab
           aria-hidden
           className="pointer-events-none absolute inset-y-0 right-0 z-10 w-6 bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-950"
         />
-        <div className="no-scrollbar flex gap-1.5 overflow-x-auto scroll-smooth px-1">
+        <div className={clsx('no-scrollbar flex gap-1 overflow-x-auto scroll-smooth', segmentedBg)}>
           {children}
         </div>
       </div>
     );
   }
   return (
-    <div className={clsx('no-scrollbar flex gap-2 overflow-x-auto', className)}>{children}</div>
+    <div className={clsx('no-scrollbar flex gap-1 overflow-x-auto', segmentedBg, className)}>
+      {children}
+    </div>
   );
 };
 
@@ -86,11 +93,11 @@ export const Tab = ({ value, label, count, icon, className, compact }: TabProps)
     <button
       onClick={() => onChange(value)}
       className={clsx(
-        'inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg font-medium transition-all',
+        'flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg font-medium transition-all',
         compact ? 'px-2.5 py-1.5 text-[13px]' : 'px-4 py-2 text-sm',
         isActive
-          ? 'bg-gradient-to-br from-strava-orange to-orange-600 text-white shadow-md'
-          : 'bg-white/60 text-gray-700 backdrop-blur-sm hover:bg-white/90 dark:bg-gray-900/60 dark:text-gray-300 dark:hover:bg-gray-900/90',
+          ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-sm shadow-orange-500/30'
+          : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50',
         className
       )}
     >
@@ -112,7 +119,9 @@ export const Tab = ({ value, label, count, icon, className, compact }: TabProps)
           className={clsx(
             'rounded-full px-1.5 text-[10px] font-semibold leading-[18px]',
             compact ? 'min-w-[18px] text-center' : 'min-w-[20px] px-2 text-xs leading-5',
-            isActive ? 'bg-white/25 text-white' : 'bg-orange-100 text-orange-700'
+            isActive
+              ? 'bg-white/25 text-white'
+              : 'bg-gray-900/5 text-gray-600 dark:bg-gray-100/10 dark:text-gray-400'
           )}
         >
           {count}

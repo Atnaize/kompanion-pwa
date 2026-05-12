@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { BarChart3 } from 'lucide-react';
-import { GlassCard, Skeleton } from '@components/ui';
+import { GlassCard, Skeleton, Tabs, TabList, Tab } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 
@@ -110,27 +110,14 @@ export const ProgressCharts = ({ activityType = null }: ProgressChartsProps) => 
         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
           {t('common.metric')}
         </label>
-        <div className="grid grid-cols-4 gap-2">
-          {(['distance', 'elevation', 'time', 'count'] as Metric[]).map((m) => (
-            <button
-              key={m}
-              onClick={() => setMetric(m)}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
-                metric === m
-                  ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                  : 'bg-white/50 text-gray-700 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:hover:bg-gray-900/80'
-              }`}
-            >
-              {m === 'distance'
-                ? t('common.distance')
-                : m === 'elevation'
-                  ? t('common.elevation')
-                  : m === 'time'
-                    ? t('common.time')
-                    : t('progressCharts.count')}
-            </button>
-          ))}
-        </div>
+        <Tabs value={metric} onChange={(v) => setMetric(v as Metric)}>
+          <TabList>
+            <Tab value="distance" label={t('common.distance')} compact />
+            <Tab value="elevation" label={t('common.elevation')} compact />
+            <Tab value="time" label={t('common.time')} compact />
+            <Tab value="count" label={t('progressCharts.count')} compact />
+          </TabList>
+        </Tabs>
       </div>
 
       {/* Period Selector */}
@@ -138,33 +125,24 @@ export const ProgressCharts = ({ activityType = null }: ProgressChartsProps) => 
         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
           {t('common.timePeriod')}
         </label>
-        <div className="grid grid-cols-4 gap-2">
-          {(['week', 'month', 'year', 'all'] as Period[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => {
-                setPeriod(p);
-                // Auto-adjust groupBy based on period
-                if (p === 'week') setGroupBy('day');
-                else if (p === 'month') setGroupBy('week');
-                else setGroupBy('month');
-              }}
-              className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
-                period === p
-                  ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                  : 'bg-white/50 text-gray-700 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:hover:bg-gray-900/80'
-              }`}
-            >
-              {p === 'week'
-                ? t('progressCharts.week')
-                : p === 'month'
-                  ? t('progressCharts.month')
-                  : p === 'year'
-                    ? t('progressCharts.year')
-                    : t('progressCharts.allTime')}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          value={period}
+          onChange={(v) => {
+            const p = v as Period;
+            setPeriod(p);
+            // Auto-adjust groupBy based on period
+            if (p === 'week') setGroupBy('day');
+            else if (p === 'month') setGroupBy('week');
+            else setGroupBy('month');
+          }}
+        >
+          <TabList>
+            <Tab value="week" label={t('progressCharts.week')} compact />
+            <Tab value="month" label={t('progressCharts.month')} compact />
+            <Tab value="year" label={t('progressCharts.year')} compact />
+            <Tab value="all" label={t('progressCharts.allTime')} compact />
+          </TabList>
+        </Tabs>
       </div>
 
       {/* Chart */}

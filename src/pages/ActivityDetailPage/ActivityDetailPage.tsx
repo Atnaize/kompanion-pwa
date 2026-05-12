@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { BarChart3, Camera, ClipboardList, Map as MapIcon, Timer, Trophy } from 'lucide-react';
 import { Layout } from '@components/layout';
 import { Button, GlassCard, Skeleton, Tab, TabList, TabPanel, Tabs } from '@components/ui';
 import { ActivityMap, ActivityLaps, ActivityPhotos } from '@components/activity';
@@ -74,17 +75,34 @@ export const ActivityDetailPage = () => {
 
         <Tabs value={tab} onChange={(v) => setTab(v as TabKey)}>
           <TabList wrap>
-            <Tab value="overview" label={t('activityDetail.tabs.overview')} icon="📋" compact />
-            {hasMap && <Tab value="map" label={t('activityDetail.tabs.map')} icon="🗺️" compact />}
+            <Tab
+              value="overview"
+              label={t('activityDetail.tabs.overview')}
+              icon={<ClipboardList size={14} strokeWidth={2.25} aria-hidden="true" />}
+              compact
+            />
+            {hasMap && (
+              <Tab
+                value="map"
+                label={t('activityDetail.tabs.map')}
+                icon={<MapIcon size={14} strokeWidth={2.25} aria-hidden="true" />}
+                compact
+              />
+            )}
             {hasStreams && (
-              <Tab value="charts" label={t('activityDetail.tabs.charts')} icon="📊" compact />
+              <Tab
+                value="charts"
+                label={t('activityDetail.tabs.charts')}
+                icon={<BarChart3 size={14} strokeWidth={2.25} aria-hidden="true" />}
+                compact
+              />
             )}
             {hasLaps && (
               <Tab
                 value="laps"
                 label={t('activityDetail.tabs.laps')}
                 count={laps?.length}
-                icon="⏱️"
+                icon={<Timer size={14} strokeWidth={2.25} aria-hidden="true" />}
                 compact
               />
             )}
@@ -93,7 +111,7 @@ export const ActivityDetailPage = () => {
                 value="segments"
                 label={t('activityDetail.tabs.prs')}
                 count={prSegments.length}
-                icon="🏆"
+                icon={<Trophy size={14} strokeWidth={2.25} aria-hidden="true" />}
                 compact
               />
             )}
@@ -102,7 +120,7 @@ export const ActivityDetailPage = () => {
                 value="photos"
                 label={t('activityDetail.tabs.photos')}
                 count={photos?.length}
-                icon="📸"
+                icon={<Camera size={14} strokeWidth={2.25} aria-hidden="true" />}
                 compact
               />
             )}

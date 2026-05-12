@@ -21,10 +21,10 @@ import {
 } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
+import { ActivityTypePicker } from '@components/activity';
 import { ProgressCharts } from './StatsPage/ProgressCharts';
 import { PeriodComparison } from './StatsPage/PeriodComparison';
 import { HeatmapCalendar } from './StatsPage/HeatmapCalendar';
-import { ActivityTypeFilter } from './StatsPage/ActivityTypeFilter';
 
 const STATS_ACTIVITY_TYPE_KEY = 'stats-activity-type';
 
@@ -126,8 +126,12 @@ export const StatsPage = () => {
         </div>
 
         {allStats && (
-          <ActivityTypeFilter
-            byActivityType={allStats.byActivityType}
+          <ActivityTypePicker
+            types={Object.entries(allStats.byActivityType).map(([type, data]) => ({
+              type,
+              count: data.count,
+            }))}
+            totalCount={allStats.totalActivities}
             selected={selectedType}
             onChange={setSelectedType}
           />
@@ -136,10 +140,10 @@ export const StatsPage = () => {
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onChange={setActiveTab}>
           <TabList className="mb-6">
-            <Tab value="overview" label={t('stats.overview')} />
-            <Tab value="calendar" label={t('stats.calendar')} />
-            <Tab value="charts" label={t('stats.charts')} />
-            <Tab value="comparison" label={t('stats.comparison')} />
+            <Tab value="overview" label={t('stats.overview')} compact />
+            <Tab value="calendar" label={t('stats.calendar')} compact />
+            <Tab value="charts" label={t('stats.charts')} compact />
+            <Tab value="comparison" label={t('stats.comparison')} compact />
           </TabList>
 
           {/* Overview Tab */}

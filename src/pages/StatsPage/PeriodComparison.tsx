@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { Activity, BarChart3, Minus, Ruler, Timer, TrendingDown, TrendingUp } from 'lucide-react';
-import { GlassCard, Skeleton } from '@components/ui';
+import { GlassCard, Skeleton, Tabs, TabList, Tab } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 
@@ -182,29 +182,15 @@ export const PeriodComparison = ({ activityType = null }: PeriodComparisonProps)
       </div>
 
       {/* Period Selector */}
-      <div className="mb-6 flex">
-        <div className="inline-flex rounded-full bg-white/70 p-1 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm dark:bg-gray-900/70 dark:ring-gray-100/10">
-          {(['week', 'month', 'year', 'custom'] as Period[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className={clsx(
-                'rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-150',
-                period === p
-                  ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md shadow-orange-500/25'
-                  : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-              )}
-            >
-              {p === 'week'
-                ? t('periodComparison.week')
-                : p === 'month'
-                  ? t('periodComparison.month')
-                  : p === 'year'
-                    ? t('periodComparison.year')
-                    : t('periodComparison.custom')}
-            </button>
-          ))}
-        </div>
+      <div className="mb-6">
+        <Tabs value={period} onChange={(v) => setPeriod(v as Period)}>
+          <TabList>
+            <Tab value="week" label={t('periodComparison.week')} compact />
+            <Tab value="month" label={t('periodComparison.month')} compact />
+            <Tab value="year" label={t('periodComparison.year')} compact />
+            <Tab value="custom" label={t('periodComparison.custom')} compact />
+          </TabList>
+        </Tabs>
       </div>
 
       {/* Custom Date Range Inputs */}

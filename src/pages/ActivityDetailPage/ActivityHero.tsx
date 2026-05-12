@@ -1,4 +1,17 @@
 import { useTranslation } from 'react-i18next';
+import {
+  Activity as ActivityIcon,
+  Bike,
+  Dumbbell,
+  Footprints,
+  Heart,
+  Mountain,
+  Sailboat,
+  Snowflake,
+  Trophy,
+  Waves,
+  type LucideIcon,
+} from 'lucide-react';
 import { AnimatedNumber } from '@components/ui';
 import { HeroStat } from '@components/activity';
 import {
@@ -33,8 +46,8 @@ export const ActivityHero = ({ activity, isFoot, formatSpeedValue }: ActivityHer
       />
       <div className="relative">
         <div className="flex items-start gap-3">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-3xl shadow-inner backdrop-blur">
-            {activityTypeEmoji(activity.type)}
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white shadow-inner backdrop-blur">
+            <TypeIcon activity={activity} />
           </span>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-xl font-bold leading-tight text-white sm:text-2xl">
@@ -45,8 +58,9 @@ export const ActivityHero = ({ activity, isFoot, formatSpeedValue }: ActivityHer
             </p>
           </div>
           {activity.pr_count > 0 && (
-            <span className="shrink-0 rounded-full bg-white/20 px-2.5 py-1 text-xs font-bold text-white backdrop-blur">
-              🏆 {t('activityDetail.newPrBadge', { count: activity.pr_count })}
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-xs font-bold text-white backdrop-blur">
+              <Trophy size={12} strokeWidth={2.5} aria-hidden="true" />
+              {t('activityDetail.newPrBadge', { count: activity.pr_count })}
             </span>
           )}
         </div>
@@ -89,33 +103,36 @@ export const ActivityHero = ({ activity, isFoot, formatSpeedValue }: ActivityHer
   );
 };
 
-const ACTIVITY_TYPE_EMOJI: Record<string, string> = {
-  Run: '🏃',
-  TrailRun: '🏃',
-  Ride: '🚴',
-  MountainBikeRide: '🚵',
-  GravelRide: '🚴',
-  VirtualRide: '🚴',
-  VirtualRun: '🏃',
-  Swim: '🏊',
-  Walk: '🚶',
-  Hike: '🥾',
-  AlpineSki: '⛷️',
-  BackcountrySki: '🎿',
-  NordicSki: '⛷️',
-  Snowboard: '🏂',
-  IceSkate: '⛸️',
-  InlineSkate: '🛼',
-  Rowing: '🚣',
-  Kayaking: '🛶',
-  Canoeing: '🛶',
-  Surfing: '🏄',
-  Yoga: '🧘',
-  Workout: '💪',
-  WeightTraining: '🏋️',
-  Elliptical: '🏃',
-  StairStepper: '🪜',
-  RockClimbing: '🧗',
+const ACTIVITY_TYPE_ICON: Record<string, LucideIcon> = {
+  Run: Footprints,
+  TrailRun: Footprints,
+  Walk: Footprints,
+  VirtualRun: Footprints,
+  Elliptical: Footprints,
+  StairStepper: Footprints,
+  Ride: Bike,
+  MountainBikeRide: Bike,
+  GravelRide: Bike,
+  VirtualRide: Bike,
+  Swim: Waves,
+  Surfing: Waves,
+  Hike: Mountain,
+  RockClimbing: Mountain,
+  AlpineSki: Snowflake,
+  BackcountrySki: Snowflake,
+  NordicSki: Snowflake,
+  Snowboard: Snowflake,
+  IceSkate: Snowflake,
+  InlineSkate: Snowflake,
+  Rowing: Sailboat,
+  Kayaking: Sailboat,
+  Canoeing: Sailboat,
+  Workout: Dumbbell,
+  WeightTraining: Dumbbell,
+  Yoga: Heart,
 };
 
-const activityTypeEmoji = (type: string): string => ACTIVITY_TYPE_EMOJI[type] ?? '🏃';
+const TypeIcon = ({ activity }: { activity: Activity }) => {
+  const Icon = ACTIVITY_TYPE_ICON[activity.type] ?? ActivityIcon;
+  return <Icon size={28} strokeWidth={2} aria-hidden="true" />;
+};

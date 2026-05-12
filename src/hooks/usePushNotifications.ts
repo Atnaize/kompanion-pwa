@@ -2,10 +2,16 @@ import { useState, useEffect } from 'react';
 import { apiClient } from '@api/client';
 import { useAuthStore } from '@store/authStore';
 
-interface NotificationPreferences {
+export interface NotificationPreferences {
+  // Challenges
   challengeInvites: boolean;
   challengeProgress: boolean;
   challengeReminders: boolean;
+  // Friends (M3)
+  friendRequests: boolean;
+  friendAccepted: boolean;
+  // Achievements (M3)
+  achievementUnlocked: boolean;
 }
 
 export const usePushNotifications = () => {

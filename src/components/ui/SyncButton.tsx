@@ -35,8 +35,8 @@ export const SyncButton = ({
         type="button"
         onClick={onClick}
         className={clsx(
-          'rounded-2xl bg-strava-orange font-medium text-white shadow-md transition-all',
-          'hover:bg-strava-orange-dark hover:shadow-lg active:scale-95',
+          'rounded-2xl bg-gradient-to-r from-orange-400 to-orange-600 font-medium text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-500/30 transition-all',
+          'hover:from-orange-500 hover:to-orange-700 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95',
           sizeClasses,
           className
         )}
@@ -63,7 +63,7 @@ export const SyncButton = ({
     >
       <div
         className={clsx(
-          'absolute inset-y-0 left-0 bg-gradient-to-r from-strava-orange to-strava-orange-dark transition-[width] duration-300 ease-out',
+          'absolute inset-y-0 left-0 bg-gradient-to-r from-orange-400 to-orange-600 transition-[width] duration-300 ease-out',
           pct === null && 'animate-pulse'
         )}
         style={{ width: `${pct ?? 100}%` }}

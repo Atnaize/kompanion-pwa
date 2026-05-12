@@ -3,7 +3,6 @@ import { WelcomeCard } from '@features/onboarding';
 import { useAuthStore } from '@store/authStore';
 import { QuickStatsSection } from './QuickStatsSection';
 import { PersonalRecordsPreview } from './PersonalRecordsPreview';
-import { RecentActivitiesSection } from './RecentActivitiesSection';
 import { useDashboardSync } from './useDashboardSync';
 
 export const DashboardPage = () => {
@@ -22,11 +21,6 @@ export const DashboardPage = () => {
           <>
             <QuickStatsSection />
             <PersonalRecordsPreview />
-            <RecentActivitiesSection
-              isSyncing={isSyncing}
-              syncProgress={syncProgress}
-              onSync={handleSync}
-            />
           </>
         )}
       </div>

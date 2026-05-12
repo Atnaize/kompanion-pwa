@@ -25,6 +25,10 @@
     "noChange": "Aucun changement",
     "less": "Moins",
     "more": "Plus",
+    "filter": {
+      "more": "+{{count}} autres",
+      "less": "Réduire"
+    },
     "total": "Total",
     "average": "Moyenne",
     "peak": "Maximum",
@@ -50,7 +54,19 @@
     "challenges": "D\u00e9fis",
     "badges": "Badges",
     "personalRecords": "Records",
-    "stats": "Stats"
+    "stats": "Stats",
+    "more": "Plus"
+  },
+  "more": {
+    "title": "Plus",
+    "myProgress": "Ma progression",
+    "social": "Social",
+    "socialComingSoon": "Bient\u00f4t disponible",
+    "account": "Compte",
+    "friends": "Amis",
+    "feed": "Fil",
+    "notifications": "Bo\u00eete",
+    "beta": "B\u00eata"
   },
   "header": {
     "title": "Kompanion",
@@ -88,6 +104,17 @@
     },
     "preferences": {
       "title": "Pr\u00e9f\u00e9rences de notification",
+      "activeHint": "Ces options contr\u00f4lent quels \u00e9v\u00e9nements d\u00e9clenchent une notification push.",
+      "inactiveHint": "Configurez les \u00e9v\u00e9nements qui doivent \u00eatre envoy\u00e9s sur votre appareil. Activez les notifications push ci-dessus pour qu'elles soient effectives.",
+      "friendsGroup": "Amis",
+      "friendRequests": "Demandes d'ami",
+      "friendRequestsDesc": "\u00catre notifi\u00e9 lorsque quelqu'un vous envoie une demande d'ami",
+      "friendAccepted": "Ami accept\u00e9",
+      "friendAcceptedDesc": "\u00catre notifi\u00e9 lorsque quelqu'un accepte votre demande d'ami",
+      "achievementsGroup": "R\u00e9ussites",
+      "achievementUnlocked": "R\u00e9ussite d\u00e9bloqu\u00e9e",
+      "achievementUnlockedDesc": "\u00catre notifi\u00e9 lorsque vous d\u00e9bloquez une nouvelle r\u00e9ussite",
+      "challengesGroup": "D\u00e9fis",
       "challengeInvites": "Invitations aux d\u00e9fis",
       "challengeInvitesDesc": "\u00catre notifi\u00e9 lorsque vous \u00eates invit\u00e9 \u00e0 un d\u00e9fi",
       "challengeProgress": "Progression des d\u00e9fis",
@@ -105,6 +132,142 @@
       "hapticEnabled": "Retour haptique activ\u00e9",
       "hapticDisabled": "Retour haptique d\u00e9sactiv\u00e9"
     }
+  },
+  "friends": {
+    "title": "Amis",
+    "subtitle": "G\u00e9rez vos amis et demandes en attente",
+    "findPeople": "Trouver des personnes",
+    "searchPlaceholder": "Rechercher par nom\u2026",
+    "searchHint": "Tapez au moins 2 caract\u00e8res",
+    "searchEmpty": "Aucun utilisateur trouv\u00e9",
+    "tabs": {
+      "friends": "Amis",
+      "incoming": "Demandes",
+      "outgoing": "Envoy\u00e9es"
+    },
+    "action": {
+      "addFriend": "Ajouter",
+      "cancelRequest": "Annuler",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "friends": "Amis",
+      "unfriend": "Retirer"
+    },
+    "unfriendConfirm": {
+      "title": "Retirer cet ami ?",
+      "message": "Cette personne n'apparaîtra plus dans votre liste d'amis. Vous pourrez lui envoyer une nouvelle demande plus tard.",
+      "confirm": "Retirer"
+    },
+    "empty": {
+      "friendsTitle": "Pas encore d'amis",
+      "friendsDescription": "Recherchez des utilisateurs Kompanion ci-dessus et envoyez-leur une demande.",
+      "incomingTitle": "Aucune demande en attente",
+      "incomingDescription": "Les demandes d'amiti\u00e9 re\u00e7ues appara\u00eetront ici.",
+      "outgoingTitle": "Aucune demande envoy\u00e9e",
+      "outgoingDescription": "Les demandes que vous envoyez appara\u00eetront ici jusqu'\u00e0 acceptation."
+    }
+  },
+  "feed": {
+    "title": "Fil",
+    "subtitle": "Les dernières activités de vos amis",
+    "endOfFeed": "Vous êtes à jour",
+    "viewActivity": "Voir l'activité",
+    "empty": {
+      "title": "Votre fil est vide",
+      "description": "Ajoutez des amis pour voir leurs activités ici.",
+      "action": "Trouver des amis"
+    },
+    "events": {
+      "photoAdded_one": "{{count}} photo ajoutée",
+      "photoAdded_other": "{{count}} nouvelles photos",
+      "prSet": "Nouveau record personnel : {{band}}",
+      "achievementUnlocked": "A débloqué une nouvelle réussite",
+      "challengeJoined": "A rejoint un défi"
+    },
+    "stats": {
+      "avgPace": "Allure moy.",
+      "prBadge_one": "{{count}} RP",
+      "prBadge_other": "{{count}} RP"
+    },
+    "vibes": {
+      "sub4_flying": "Allure sub-4 — ça envoie",
+      "sub4_afterburners": "Allure sub-4 — postcombustion",
+      "sub4_warpSpeed": "Allure sub-4 — vitesse lumière",
+      "sub5_a": "Allure sub-5",
+      "sub5_b": "Cruising sub-5",
+      "sub5_c": "Sub-5 territoire",
+      "speedDemon_a": "Démon de vitesse",
+      "speedDemon_b": "Jambes vives aujourd'hui",
+      "marathonMode_a": "Mode marathon",
+      "marathonMode_b": "Territoire 42 km",
+      "marathonMode_c": "Héros de la distance",
+      "epic_a": "Sortie épique — plus de 4 h",
+      "epic_b": "Aventure d'une journée",
+      "epic_c": "Temps bien investi",
+      "mountainGoat_a": "Mode chamois",
+      "mountainGoat_b": "Accro au dénivelé",
+      "mountainGoat_c": "Chasseur de sommets",
+      "bigDayBike_a": "Grosse sortie vélo",
+      "bigDayBike_b": "Le centenaire",
+      "bigDayBike_c": "Les roues ont parlé",
+      "verticalChase_a": "Chasse au dénivelé",
+      "verticalChase_b": "Que de la montée",
+      "verticalChase_c": "Festival de grimpe",
+      "cruising_a": "Vitesse de croisière — 35+ km/h",
+      "cruising_b": "Roues en feu",
+      "cruising_c": "Allure de contre-la-montre",
+      "sufferfest_a": "Sufferfest — cœur à fond",
+      "sufferfest_b": "Ça pique mais c'est bon",
+      "sufferfest_c": "Spécial zone rouge",
+      "sundayLong_a": "Sortie longue du dimanche",
+      "sundayLong_b": "Kilomètres dominicaux",
+      "longHaul_a": "Longue distance",
+      "longHaul_b": "Installé pour la durée",
+      "longHaul_c": "Journée distance",
+      "zone2_a": "Zone 2 zen",
+      "zone2_b": "Effort facile, effort intelligent",
+      "zone2_c": "Allure conversation",
+      "dawnPatrol_a": "Patrouille de l'aube",
+      "dawnPatrol_b": "Avant les oiseaux",
+      "dawnPatrol_c": "Kilomètres au lever du jour",
+      "afterDark_a": "Après la nuit tombée",
+      "afterDark_b": "Mode oiseau de nuit",
+      "afterDark_c": "Territoire frontale",
+      "unsungHero_a": "Effort discret",
+      "unsungHero_b": "Mode furtif",
+      "unsungHero_c": "Sous les radars"
+    },
+    "compare": {
+      "matched": "Presque égalé — à {{delta}} près",
+      "friendFaster": "Plus rapide que votre meilleur de {{delta}}",
+      "youFaster": "Votre meilleur est {{delta}} plus rapide",
+      "yourBest": "Votre meilleur similaire : {{name}} · {{distance}} · {{duration}}"
+    }
+  },
+  "inbox": {
+    "title": "Notifications",
+    "subtitle": "Activité récente qui requiert votre attention",
+    "markAllRead": "Tout marquer comme lu",
+    "unread": "Non lu",
+    "empty": {
+      "title": "Vous êtes à jour",
+      "description": "Lorsqu'il se passe quelque chose, vous le verrez ici."
+    },
+    "types": {
+      "friendRequest": "{{name}} vous a envoyé une demande d'ami",
+      "friendAccepted": "{{name}} a accepté votre demande d'ami",
+      "achievementUnlocked": "Vous avez débloqué une nouvelle réussite",
+      "challengeInvite": "{{name}} vous a invité à un défi",
+      "challengeJoined": "{{name}} a rejoint votre défi",
+      "generic": "Vous avez une nouvelle notification"
+    }
+  },
+  "userProfile": {
+    "notFound": "Utilisateur introuvable",
+    "friendsCount_one": "{{count}} ami",
+    "friendsCount_other": "{{count}} amis",
+    "stats": "Statistiques",
+    "lockedHint": "Devenez amis pour voir les statistiques et activit\u00e9s de cet utilisateur."
   },
   "profile": {
     "title": "Profil",
@@ -137,7 +300,6 @@
     "quickStats": "Statistiques rapides",
     "personalRecords": "Records personnels",
     "viewAllPrs": "Voir tous les records \u2192",
-    "recentActivities": "Activit\u00e9s r\u00e9centes",
     "syncSuccess_one": "{{count}} activit\u00e9 synchronis\u00e9e !",
     "syncSuccess_other": "{{count}} activit\u00e9s synchronis\u00e9es !",
     "allUpToDate": "Toutes les activit\u00e9s sont \u00e0 jour",
@@ -458,12 +620,7 @@
     "currentStreak": "S\u00e9rie actuelle",
     "bestStreak": "Meilleure s\u00e9rie",
     "byActivityType": "Par type d'activit\u00e9",
-    "activitiesCount": "{{count}} activit\u00e9s",
-    "filter": {
-      "all": "Toutes",
-      "more": "+{{count}} autres",
-      "less": "R\u00e9duire"
-    }
+    "activitiesCount": "{{count}} activit\u00e9s"
   },
   "progressCharts": {
     "title": "Progression dans le temps",

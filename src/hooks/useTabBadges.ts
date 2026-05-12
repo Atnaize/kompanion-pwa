@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { achievementsService } from '@api/services';
+import { achievementsService, friendsService, inboxService } from '@api/services';
 import type { Achievement } from '@types';
 
 interface TabBadge {
@@ -11,8 +11,13 @@ interface TabBadges {
   [path: string]: TabBadge;
 }
 
+/**
+ * Single source of truth for the count bubbles shown on bottom-nav tabs and
+ * `MoreSheet` tiles. Adding a new badge source = one `useQuery` block + one
+ * entry in the returned map. Same path key as the route the bubble points to.
+ */
 export const useTabBadges = (): TabBadges => {
-  // Use the same query that AchievementsPage uses - React Query will deduplicate
+  // Achievements ready to redeem.
   const { data: achievements } = useQuery({
     queryKey: ['achievements'],
     queryFn: async () => {
@@ -21,14 +26,35 @@ export const useTabBadges = (): TabBadges => {
     },
   });
 
-  // Calculate badges from cached data
+  // Pending friend requests sent TO me — drives the `/friends` tile bubble
+  // specifically (matches what the Friends page shows in the Requests tab).
+  const { data: incomingRequests } = useQuery({
+    queryKey: ['friend-requests-incoming'],
+    queryFn: async () => {
+      const response = await friendsService.listIncoming();
+      return response.data || [];
+    },
+  });
+
+  // Unread inbox notifications — drives the `/notifications` tile bubble.
+  // This is broader than the friends-only count (includes achievements,
+  // challenge invites, etc.).
+  const { data: inboxCount } = useQuery({
+    queryKey: ['inbox-unread-count'],
+    queryFn: async () => {
+      const response = await inboxService.unreadCount();
+      return response.data?.count ?? 0;
+    },
+    // Background-refresh the badge so it stays warm without spamming the server.
+    refetchInterval: 60_000,
+  });
+
   const badges: TabBadges = {};
 
   if (achievements) {
     const redeemableCount = achievements.filter(
       (a: Achievement) => a.isRedeemable && !a.unlockedAt
     ).length;
-
     if (redeemableCount > 0) {
       badges['/achievements'] = {
         count: redeemableCount,
@@ -37,14 +63,19 @@ export const useTabBadges = (): TabBadges => {
     }
   }
 
-  // Add more badge calculations here as needed
-  // Example:
-  // if (quests) {
-  //   const activeQuests = quests.filter(q => q.status === 'active').length;
-  //   if (activeQuests > 0) {
-  //     badges['/quests'] = { count: activeQuests };
-  //   }
-  // }
+  if (incomingRequests && incomingRequests.length > 0) {
+    badges['/friends'] = {
+      count: incomingRequests.length,
+      color: 'bg-strava-orange',
+    };
+  }
+
+  if (inboxCount && inboxCount > 0) {
+    badges['/notifications'] = {
+      count: inboxCount,
+      color: 'bg-strava-orange',
+    };
+  }
 
   return badges;
 };

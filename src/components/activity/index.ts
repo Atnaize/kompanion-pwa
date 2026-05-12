@@ -1,4 +1,5 @@
 export * from './ActivityCard';
+export * from './ActivityTypePicker';
 export * from './ActivityMap';
 export * from './ActivityChart';
 export * from './ActivityLaps';

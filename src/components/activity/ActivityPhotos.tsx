@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { PhotoLightbox, type LightboxPhoto } from '@components/ui';
 import type { ActivityPhoto } from '@types';
 
 interface ActivityPhotosProps {
@@ -19,26 +20,14 @@ const pickUrl = (photo: ActivityPhoto, preferred: 'thumb' | 'full'): string | un
 export const ActivityPhotos = ({ photos }: ActivityPhotosProps) => {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (activeIdx === null) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActiveIdx(null);
-      if (e.key === 'ArrowRight')
-        setActiveIdx((i) => (i === null ? i : Math.min(photos.length - 1, i + 1)));
-      if (e.key === 'ArrowLeft') setActiveIdx((i) => (i === null ? i : Math.max(0, i - 1)));
-    };
-    window.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [activeIdx, photos.length]);
+  // Normalise to the shape the shared lightbox expects. Memo so reference
+  // stability holds across renders (avoids spurious AnimatePresence churn).
+  const lightboxPhotos = useMemo<LightboxPhoto[]>(
+    () => photos.map((p) => ({ fullUrl: pickUrl(p, 'full') ?? '', caption: p.caption })),
+    [photos]
+  );
 
   if (!photos.length) return null;
-
-  const active = activeIdx !== null ? photos[activeIdx] : null;
 
   return (
     <>
@@ -69,63 +58,12 @@ export const ActivityPhotos = ({ photos }: ActivityPhotosProps) => {
         })}
       </div>
 
-      {active && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-          onClick={() => setActiveIdx(null)}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setActiveIdx(null);
-            }}
-            className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            aria-label="Close"
-          >
-            ✕
-          </button>
-          {activeIdx !== null && activeIdx > 0 && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveIdx((i) => (i === null ? i : Math.max(0, i - 1)));
-              }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
-              aria-label="Previous"
-            >
-              ‹
-            </button>
-          )}
-          {activeIdx !== null && activeIdx < photos.length - 1 && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setActiveIdx((i) => (i === null ? i : Math.min(photos.length - 1, i + 1)));
-              }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20"
-              aria-label="Next"
-            >
-              ›
-            </button>
-          )}
-          <img
-            src={pickUrl(active, 'full')}
-            alt={active.caption || ''}
-            className="max-h-[85vh] max-w-full rounded-lg object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
-          {active.caption && (
-            <div className="absolute inset-x-0 bottom-4 text-center text-sm text-white/90">
-              {active.caption}
-            </div>
-          )}
-        </div>
-      )}
+      <PhotoLightbox
+        photos={lightboxPhotos}
+        activeIndex={activeIdx}
+        onClose={() => setActiveIdx(null)}
+        onIndexChange={setActiveIdx}
+      />
     </>
   );
 };

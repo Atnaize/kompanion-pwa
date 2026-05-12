@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Award, Medal, Ruler, Timer, TrendingUp, Trophy, type LucideIcon } from 'lucide-react';
 import { GlassCard } from '@components/ui';
 import { formatDistance, formatDuration } from '@utils/format';
 import type { SegmentEffort } from '@types';
@@ -34,7 +35,23 @@ const RANK_LABELS: Record<number, string> = {
   3: 'activityDetail.prRank3',
 };
 
-const RANK_MEDALS: Record<number, string> = { 1: '🥇', 2: '🥈', 3: '🥉' };
+const RANK_ICONS: Record<number, LucideIcon> = {
+  1: Trophy,
+  2: Medal,
+  3: Medal,
+};
+
+const RankMedal = ({ rank, isNewPr }: { rank: number; isNewPr: boolean }) => {
+  const Icon = RANK_ICONS[rank] ?? Award;
+  return (
+    <Icon
+      size={18}
+      strokeWidth={2.25}
+      aria-hidden="true"
+      className={isNewPr ? 'text-white' : 'text-gray-500 dark:text-gray-400'}
+    />
+  );
+};
 
 const SegmentRow = ({ effort }: { effort: SegmentEffort }) => {
   const { t } = useTranslation();
@@ -61,11 +78,18 @@ const SegmentRow = ({ effort }: { effort: SegmentEffort }) => {
           )}
         </div>
         <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-gray-600 dark:text-gray-400">
-          <span>📏 {formatDistance(effort.segment.distance)}</span>
-          <span>⏱️ {formatDuration(effort.elapsed_time)}</span>
+          <span className="inline-flex items-center gap-1">
+            <Ruler size={12} strokeWidth={2.25} aria-hidden="true" />
+            {formatDistance(effort.segment.distance)}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Timer size={12} strokeWidth={2.25} aria-hidden="true" />
+            {formatDuration(effort.elapsed_time)}
+          </span>
           {effort.segment.average_grade !== 0 && (
-            <span>
-              📈 {effort.segment.average_grade > 0 ? '+' : ''}
+            <span className="inline-flex items-center gap-1">
+              <TrendingUp size={12} strokeWidth={2.25} aria-hidden="true" />
+              {effort.segment.average_grade > 0 ? '+' : ''}
               {effort.segment.average_grade.toFixed(1)}%
             </span>
           )}
@@ -73,13 +97,13 @@ const SegmentRow = ({ effort }: { effort: SegmentEffort }) => {
       </div>
       <div className="shrink-0 text-center">
         <div
-          className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-lg ${
+          className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full ${
             isNewPr
               ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 shadow'
               : 'bg-gray-100 dark:bg-gray-800'
           }`}
         >
-          {RANK_MEDALS[effort.pr_rank ?? 0] ?? '🎖️'}
+          <RankMedal rank={effort.pr_rank ?? 0} isNewPr={isNewPr} />
         </div>
         {rankKey && (
           <p className="mt-1 text-[10px] font-medium text-gray-500 dark:text-gray-400">

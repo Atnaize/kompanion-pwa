@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { GlassCard, Skeleton } from '@components/ui';
+import { GlassCard, Skeleton, Tabs, TabList, Tab } from '@components/ui';
 import { statsService } from '@api/services';
 import { formatDistance } from '@utils/format';
 
@@ -171,20 +171,13 @@ export const HeatmapCalendar = ({ activityType = null }: HeatmapCalendarProps) =
       </div>
 
       {/* Metric Selector */}
-      <div className="mb-6 flex gap-2">
-        {(['count', 'distance'] as Metric[]).map((m) => (
-          <button
-            key={m}
-            onClick={() => setMetric(m)}
-            className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
-              metric === m
-                ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-lg'
-                : 'bg-white/50 text-gray-700 backdrop-blur-sm hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:hover:bg-gray-900/80'
-            }`}
-          >
-            {m === 'count' ? t('heatmap.activityCount') : t('common.distance')}
-          </button>
-        ))}
+      <div className="mb-6">
+        <Tabs value={metric} onChange={(v) => setMetric(v as Metric)}>
+          <TabList>
+            <Tab value="count" label={t('heatmap.activityCount')} compact />
+            <Tab value="distance" label={t('common.distance')} compact />
+          </TabList>
+        </Tabs>
       </div>
 
       {/* Summary Stats */}

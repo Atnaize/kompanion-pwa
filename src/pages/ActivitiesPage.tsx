@@ -2,15 +2,13 @@ import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
-import { Activity as ActivityIcon, type LucideIcon } from 'lucide-react';
+import { Activity as ActivityIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Layout } from '@components/layout';
 import { AnimatedNumber, GlassCard, Button, Skeleton, EmptyState } from '@components/ui';
-import { ActivityCard } from '@components/activity';
+import { ActivityCard, ActivityTypePicker } from '@components/activity';
 import { activitiesService } from '@api/services';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
-import { getSportPresentation } from '@utils/sport';
 import { useAuthStore } from '@store/authStore';
 import { useToastStore } from '@store/toastStore';
 import { hapticService } from '@utils/haptic';
@@ -25,7 +23,7 @@ export const ActivitiesPage = () => {
   const { user, setUser } = useAuthStore();
   const { success, error } = useToastStore();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
+  const [selectedType, setSelectedType] = useState<string | null>(null);
   const [displayedCount, setDisplayedCount] = useState(ITEMS_PER_PAGE);
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -90,7 +88,7 @@ export const ActivitiesPage = () => {
     let result = activities;
 
     // Filter by type
-    if (selectedType !== 'all') {
+    if (selectedType !== null) {
       result = result.filter((activity) => activity.type === selectedType);
     }
 
@@ -109,9 +107,7 @@ export const ActivitiesPage = () => {
     for (const activity of activities) {
       counts.set(activity.type, (counts.get(activity.type) ?? 0) + 1);
     }
-    return Array.from(counts.entries())
-      .map(([type, count]) => ({ type, count }))
-      .sort((a, b) => a.type.localeCompare(b.type));
+    return Array.from(counts.entries()).map(([type, count]) => ({ type, count }));
   }, [activities]);
 
   // Paginate displayed activities for infinite scroll
@@ -179,27 +175,12 @@ export const ActivitiesPage = () => {
         </GlassCard>
 
         {/* Filter Chips */}
-        <div className="flex flex-wrap gap-2">
-          <FilterChip
-            label={t('common.all')}
-            count={activities.length}
-            isSelected={selectedType === 'all'}
-            onClick={() => setSelectedType('all')}
-          />
-          {activityTypes.map(({ type, count }) => {
-            const { icon: Icon } = getSportPresentation(type);
-            return (
-              <FilterChip
-                key={type}
-                icon={Icon}
-                label={type}
-                count={count}
-                isSelected={selectedType === type}
-                onClick={() => setSelectedType(type)}
-              />
-            );
-          })}
-        </div>
+        <ActivityTypePicker
+          types={activityTypes}
+          totalCount={activities.length}
+          selected={selectedType}
+          onChange={setSelectedType}
+        />
 
         {/* Activities List */}
         {displayedActivities.length === 0 ? (
@@ -212,17 +193,17 @@ export const ActivitiesPage = () => {
             }
             title={t('activities.noActivitiesFound')}
             description={
-              searchQuery || selectedType !== 'all'
+              searchQuery || selectedType !== null
                 ? t('activities.adjustFilters')
                 : t('activities.startSyncing')
             }
             action={
-              searchQuery || selectedType !== 'all'
+              searchQuery || selectedType !== null
                 ? {
                     label: t('activities.clearFilters'),
                     onClick: () => {
                       setSearchQuery('');
-                      setSelectedType('all');
+                      setSelectedType(null);
                     },
                   }
                 : undefined
@@ -267,38 +248,3 @@ export const ActivitiesPage = () => {
     </Layout>
   );
 };
-
-interface FilterChipProps {
-  icon?: LucideIcon;
-  label: string;
-  count: number;
-  isSelected: boolean;
-  onClick: () => void;
-}
-
-const FilterChip = ({ icon: Icon, label, count, isSelected, onClick }: FilterChipProps) => (
-  <button
-    type="button"
-    onClick={onClick}
-    aria-pressed={isSelected}
-    className={clsx(
-      'inline-flex items-center gap-1.5 rounded-full py-1.5 pl-3 pr-1.5 text-sm font-medium transition-all duration-150 active:scale-95',
-      isSelected
-        ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-500/30'
-        : 'bg-white/70 text-gray-700 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm hover:bg-white hover:shadow-md dark:bg-gray-900/70 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-800'
-    )}
-  >
-    {Icon && <Icon size={14} strokeWidth={2} aria-hidden="true" />}
-    <span>{label}</span>
-    <span
-      className={clsx(
-        'ml-0.5 inline-flex min-w-[22px] items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums',
-        isSelected
-          ? 'bg-white/25 text-white'
-          : 'bg-gray-900/5 text-gray-600 dark:bg-gray-100/10 dark:text-gray-400'
-      )}
-    >
-      {count}
-    </span>
-  </button>
-);

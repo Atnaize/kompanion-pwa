@@ -1,6 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { ChevronRight, Clock, Route, TrendingUp, Trophy, type LucideIcon } from 'lucide-react';
+import {
+  ChevronRight,
+  Clock,
+  Gauge,
+  Route,
+  TrendingUp,
+  Trophy,
+  type LucideIcon,
+} from 'lucide-react';
 import { GlassCard } from '@components/ui';
 import { formatDistance, formatDuration, formatElevation, formatRelativeTime } from '@utils/format';
 import { getSportPresentation } from '@utils/sport';
@@ -34,22 +42,22 @@ export const ActivityCard = ({ activity, variant = 'compact', onClick }: Activit
       />
 
       <div className="flex items-start gap-3">
-        <div
-          className={clsx(
-            'flex shrink-0 items-center justify-center rounded-xl',
-            sport.tint,
-            variant === 'compact' ? 'h-12 w-12' : 'h-14 w-14'
-          )}
-        >
-          <SportIcon size={variant === 'compact' ? 22 : 24} strokeWidth={1.75} aria-hidden="true" />
-        </div>
-
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
-              <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">
-                {activity.name}
-              </h3>
+              <div className="flex items-center gap-2">
+                <div
+                  className={clsx(
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-lg',
+                    sport.tint
+                  )}
+                >
+                  <SportIcon size={16} strokeWidth={1.75} aria-hidden="true" />
+                </div>
+                <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">
+                  {activity.name}
+                </h3>
+              </div>
               <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                 {formatRelativeTime(activity.start_date_local)}
               </p>
@@ -87,6 +95,7 @@ export const ActivityCard = ({ activity, variant = 'compact', onClick }: Activit
                 value={formatElevation(activity.total_elevation_gain)}
               />
               <DetailedMetric
+                icon={Gauge}
                 label={t('common.avgSpeed')}
                 value={`${(activity.average_speed * 3.6).toFixed(1)} km/h`}
               />
@@ -127,8 +136,15 @@ interface DetailedMetricProps {
 
 const DetailedMetric = ({ icon: Icon, label, value }: DetailedMetricProps) => (
   <div className="min-w-0">
-    <p className="flex items-center gap-1 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
-      {Icon && <Icon size={11} strokeWidth={2} className="text-gray-400 dark:text-gray-500" />}
+    <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+      {Icon && (
+        <Icon
+          size={12}
+          strokeWidth={1.75}
+          className="shrink-0 text-gray-400 dark:text-gray-500"
+          aria-hidden="true"
+        />
+      )}
       <span className="truncate">{label}</span>
     </p>
     <p className="mt-0.5 truncate font-semibold tabular-nums text-gray-900 dark:text-gray-50">

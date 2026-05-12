@@ -24,6 +24,10 @@ import {
   CreateChallengePage,
   ComponentsPage,
   ProfilePage,
+  FriendsPage,
+  UserProfilePage,
+  FeedPage,
+  NotificationsPage,
   SettingsPage,
   AboutPage,
   AdminPage,
@@ -190,6 +194,38 @@ export const App = () => {
             element={
               <ProtectedRoute>
                 <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute>
+                <FriendsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/users/:id"
+            element={
+              <ProtectedRoute>
+                <UserProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute>
+                <FeedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <NotificationsPage />
               </ProtectedRoute>
             }
           />

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { Activity, BarChart3, Home, Target, Timer, Trophy, type LucideIcon } from 'lucide-react';
+import { Activity, BarChart3, Home, MoreHorizontal, Target, type LucideIcon } from 'lucide-react';
 import { useAuthStore } from '@store/authStore';
 
 interface NavItem {
@@ -25,17 +25,16 @@ const navItems: NavItem[] = [
   { path: '/dashboard', label: 'nav.home', icon: Home },
   { path: '/activities', label: 'nav.activities', icon: Activity, requiresData: true },
   { path: '/challenges', label: 'nav.challenges', icon: Target, requiresData: true },
-  { path: '/achievements', label: 'nav.badges', icon: Trophy, requiresData: true },
-  { path: '/personal-records', label: 'nav.personalRecords', icon: Timer, requiresData: true },
   { path: '/stats', label: 'nav.stats', icon: BarChart3, requiresData: true },
 ];
 
 interface BottomNavProps {
   hideDataTabs?: boolean;
   badges?: TabBadges;
+  onOpenMore?: () => void;
 }
 
-export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps) => {
+export const BottomNav = ({ hideDataTabs = false, badges = {}, onOpenMore }: BottomNavProps) => {
   const location = useLocation();
   const { user } = useAuthStore();
   const { t } = useTranslation();
@@ -49,6 +48,14 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
     }
     return true;
   });
+
+  const showMoreButton = !hideDataTabs;
+
+  const visiblePaths = new Set(visibleItems.map((item) => item.path));
+  const moreBadgeCount = Object.entries(badges).reduce((sum, [path, badge]) => {
+    return visiblePaths.has(path) ? sum : sum + badge.count;
+  }, 0);
+  const showMoreBadge = showMoreButton && moreBadgeCount > 0;
 
   return (
     <nav
@@ -110,6 +117,32 @@ export const BottomNav = ({ hideDataTabs = false, badges = {} }: BottomNavProps)
                 </Link>
               );
             })}
+
+            {showMoreButton && (
+              <button
+                type="button"
+                onClick={onOpenMore}
+                aria-label={t('nav.more')}
+                aria-haspopup="dialog"
+                className={clsx(
+                  'relative flex flex-1 flex-col items-center justify-center gap-1 px-1 py-2.5',
+                  'min-w-[56px] rounded-t-xl transition-colors duration-200',
+                  'text-gray-500 hover:text-gray-900 active:bg-gray-100/60 dark:text-gray-400 dark:hover:text-gray-100 dark:active:bg-gray-800/60'
+                )}
+              >
+                <span className="relative flex h-6 w-6 items-center justify-center">
+                  <MoreHorizontal size={22} strokeWidth={1.75} aria-hidden="true" />
+                  {showMoreBadge && (
+                    <span className="absolute -right-2 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-strava-orange px-1 text-[10px] font-bold leading-none text-white shadow-sm ring-2 ring-white dark:ring-gray-900">
+                      {moreBadgeCount > 99 ? '99+' : moreBadgeCount}
+                    </span>
+                  )}
+                </span>
+                <span className="text-[10px] font-medium leading-none tracking-tight">
+                  {t('nav.more')}
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </div>

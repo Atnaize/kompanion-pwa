@@ -25,6 +25,10 @@
     "noChange": "No change",
     "less": "Less",
     "more": "More",
+    "filter": {
+      "more": "+{{count}} more",
+      "less": "Show less"
+    },
     "total": "Total",
     "average": "Average",
     "peak": "Peak",
@@ -50,7 +54,19 @@
     "challenges": "Challenges",
     "badges": "Badges",
     "personalRecords": "Records",
-    "stats": "Stats"
+    "stats": "Stats",
+    "more": "More"
+  },
+  "more": {
+    "title": "More",
+    "myProgress": "My progress",
+    "social": "Social",
+    "socialComingSoon": "Coming soon",
+    "account": "Account",
+    "friends": "Friends",
+    "feed": "Feed",
+    "notifications": "Inbox",
+    "beta": "Beta"
   },
   "header": {
     "title": "Kompanion",
@@ -88,6 +104,17 @@
     },
     "preferences": {
       "title": "Notification Preferences",
+      "activeHint": "These control which events trigger a push notification.",
+      "inactiveHint": "Configure which events should push to your device. Push notifications need to be enabled above for these to take effect.",
+      "friendsGroup": "Friends",
+      "friendRequests": "Friend Requests",
+      "friendRequestsDesc": "Get notified when someone sends you a friend request",
+      "friendAccepted": "Friend Accepted",
+      "friendAcceptedDesc": "Get notified when someone accepts your friend request",
+      "achievementsGroup": "Achievements",
+      "achievementUnlocked": "Achievement Unlocked",
+      "achievementUnlockedDesc": "Get notified when you unlock a new achievement",
+      "challengesGroup": "Challenges",
       "challengeInvites": "Challenge Invitations",
       "challengeInvitesDesc": "Get notified when you're invited to a challenge",
       "challengeProgress": "Challenge Progress",
@@ -105,6 +132,142 @@
       "hapticEnabled": "Haptic feedback enabled",
       "hapticDisabled": "Haptic feedback disabled"
     }
+  },
+  "friends": {
+    "title": "Friends",
+    "subtitle": "Manage your friends and pending requests",
+    "findPeople": "Find people",
+    "searchPlaceholder": "Search by name…",
+    "searchHint": "Type at least 2 characters",
+    "searchEmpty": "No users found",
+    "tabs": {
+      "friends": "Friends",
+      "incoming": "Requests",
+      "outgoing": "Sent"
+    },
+    "action": {
+      "addFriend": "Add",
+      "cancelRequest": "Cancel",
+      "accept": "Accept",
+      "decline": "Decline",
+      "friends": "Friends",
+      "unfriend": "Unfriend"
+    },
+    "unfriendConfirm": {
+      "title": "Remove friend?",
+      "message": "They'll no longer appear in your friends list. You can send a new friend request later.",
+      "confirm": "Remove"
+    },
+    "empty": {
+      "friendsTitle": "No friends yet",
+      "friendsDescription": "Search for Kompanion users above and send them a friend request.",
+      "incomingTitle": "No pending requests",
+      "incomingDescription": "Friend requests sent to you will appear here.",
+      "outgoingTitle": "No requests sent",
+      "outgoingDescription": "Requests you send will appear here until they're accepted."
+    }
+  },
+  "feed": {
+    "title": "Feed",
+    "subtitle": "Latest from your friends",
+    "endOfFeed": "You're all caught up",
+    "viewActivity": "View activity",
+    "empty": {
+      "title": "Your feed is empty",
+      "description": "Follow other athletes to see their activities here.",
+      "action": "Find friends"
+    },
+    "events": {
+      "photoAdded_one": "Added {{count}} photo",
+      "photoAdded_other": "Added {{count}} new photos",
+      "prSet": "New personal record: {{band}}",
+      "achievementUnlocked": "Unlocked a new achievement",
+      "challengeJoined": "Joined a challenge"
+    },
+    "stats": {
+      "avgPace": "Avg pace",
+      "prBadge_one": "{{count}} PR",
+      "prBadge_other": "{{count}} PRs"
+    },
+    "vibes": {
+      "sub4_flying": "Sub-4 pace — flying",
+      "sub4_afterburners": "Sub-4 pace — afterburners on",
+      "sub4_warpSpeed": "Sub-4 pace — warp speed",
+      "sub5_a": "Sub-5 pace",
+      "sub5_b": "Cruising sub-5",
+      "sub5_c": "Sub-5 territory",
+      "speedDemon_a": "Speed demon",
+      "speedDemon_b": "Quick legs today",
+      "marathonMode_a": "Marathon mode",
+      "marathonMode_b": "26.2 territory",
+      "marathonMode_c": "Long-distance hero",
+      "epic_a": "Epic outing — over 4 hours",
+      "epic_b": "All-day adventure",
+      "epic_c": "Time well spent",
+      "mountainGoat_a": "Mountain goat mode",
+      "mountainGoat_b": "Vertical addict",
+      "mountainGoat_c": "Summit hunter",
+      "bigDayBike_a": "Big day in the saddle",
+      "bigDayBike_b": "Century vibes",
+      "bigDayBike_c": "Wheels did the talking",
+      "verticalChase_a": "Vertical chase",
+      "verticalChase_b": "Up only",
+      "verticalChase_c": "Climbing fest",
+      "cruising_a": "Cruising — 35+ km/h",
+      "cruising_b": "Wheels on fire",
+      "cruising_c": "Time-trial pace",
+      "sufferfest_a": "Sufferfest — heart rate sky-high",
+      "sufferfest_b": "Hurts so good",
+      "sufferfest_c": "Red zone special",
+      "sundayLong_a": "Sunday long run",
+      "sundayLong_b": "Sunday miles",
+      "longHaul_a": "Long haul",
+      "longHaul_b": "Settled in for the long one",
+      "longHaul_c": "Distance day",
+      "zone2_a": "Zone 2 zen",
+      "zone2_b": "Easy effort, smart effort",
+      "zone2_c": "Conversational pace",
+      "dawnPatrol_a": "Dawn patrol",
+      "dawnPatrol_b": "Up before the birds",
+      "dawnPatrol_c": "Sunrise miles",
+      "afterDark_a": "After dark",
+      "afterDark_b": "Night owl mode",
+      "afterDark_c": "Headlamp territory",
+      "unsungHero_a": "Quiet effort",
+      "unsungHero_b": "Stealth mode",
+      "unsungHero_c": "Going under the radar"
+    },
+    "compare": {
+      "matched": "Almost matched — within {{delta}}",
+      "friendFaster": "Faster than your best by {{delta}}",
+      "youFaster": "Your best is {{delta}} faster",
+      "yourBest": "Your best similar: {{name}} · {{distance}} · {{duration}}"
+    }
+  },
+  "inbox": {
+    "title": "Notifications",
+    "subtitle": "Recent activity that needs your attention",
+    "markAllRead": "Mark all read",
+    "unread": "Unread",
+    "empty": {
+      "title": "All caught up",
+      "description": "When something happens, you'll see it here."
+    },
+    "types": {
+      "friendRequest": "{{name}} sent you a friend request",
+      "friendAccepted": "{{name}} accepted your friend request",
+      "achievementUnlocked": "You unlocked a new achievement",
+      "challengeInvite": "{{name}} invited you to a challenge",
+      "challengeJoined": "{{name}} joined your challenge",
+      "generic": "You have a new notification"
+    }
+  },
+  "userProfile": {
+    "notFound": "User not found",
+    "friendsCount_one": "{{count}} friend",
+    "friendsCount_other": "{{count}} friends",
+    "stats": "Stats",
+    "lockedHint": "Become friends to see this user's stats and activities."
   },
   "profile": {
     "title": "Profile",
@@ -137,7 +300,6 @@
     "quickStats": "Quick Stats",
     "personalRecords": "Personal Records",
     "viewAllPrs": "View All Records →",
-    "recentActivities": "Recent Activities",
     "syncSuccess_one": "{{count}} activity synced!",
     "syncSuccess_other": "{{count}} activities synced!",
     "allUpToDate": "All activities up to date",
@@ -458,12 +620,7 @@
     "currentStreak": "Current Streak",
     "bestStreak": "Best Streak",
     "byActivityType": "By Activity Type",
-    "activitiesCount": "{{count}} activities",
-    "filter": {
-      "all": "All",
-      "more": "+{{count}} more",
-      "less": "Show less"
-    }
+    "activitiesCount": "{{count}} activities"
   },
   "progressCharts": {
     "title": "Progress Over Time",

@@ -14,6 +14,11 @@ import type {
   ChallengeProgress,
   ChallengeEvent,
   Friend,
+  FriendSearchResult,
+  FriendRequest,
+  UserProfile,
+  FeedPage,
+  InboxPage,
   ChallengeTargets,
   ChallengeType,
   CompetitiveGoal,
@@ -362,5 +367,40 @@ export const adminQuotaService = {
 
 export const friendsService = {
   search: (query: string) =>
-    apiClient.get<Friend[]>(`/friends/search?q=${encodeURIComponent(query)}`),
+    apiClient.get<FriendSearchResult[]>(`/friends/search?q=${encodeURIComponent(query)}`),
+  list: () => apiClient.get<Friend[]>('/friends'),
+  listIncoming: () => apiClient.get<FriendRequest[]>('/friends/requests/incoming'),
+  listOutgoing: () => apiClient.get<FriendRequest[]>('/friends/requests/outgoing'),
+  sendRequest: (userId: number) => apiClient.post<FriendRequest>(`/friends/requests/${userId}`),
+  acceptRequest: (userId: number) =>
+    apiClient.post<FriendRequest>(`/friends/requests/${userId}/accept`),
+  cancelOrDeclineRequest: (userId: number) => apiClient.delete(`/friends/requests/${userId}`),
+  unfriend: (userId: number) => apiClient.delete(`/friends/${userId}`),
+};
+
+export const usersService = {
+  getProfile: (userId: number) => apiClient.get<UserProfile>(`/users/${userId}/profile`),
+};
+
+export const feedService = {
+  list: (cursor?: string, limit?: number) => {
+    const params = new URLSearchParams();
+    if (cursor) params.set('cursor', cursor);
+    if (limit) params.set('limit', String(limit));
+    const qs = params.toString();
+    return apiClient.get<FeedPage>(`/feed${qs ? `?${qs}` : ''}`);
+  },
+};
+
+export const inboxService = {
+  list: (cursor?: string, limit?: number) => {
+    const params = new URLSearchParams();
+    if (cursor) params.set('cursor', cursor);
+    if (limit) params.set('limit', String(limit));
+    const qs = params.toString();
+    return apiClient.get<InboxPage>(`/inbox${qs ? `?${qs}` : ''}`);
+  },
+  unreadCount: () => apiClient.get<{ count: number }>('/inbox/count'),
+  markRead: (id: string) => apiClient.post(`/inbox/${id}/read`),
+  markAllRead: () => apiClient.post<{ count: number }>('/inbox/read-all'),
 };

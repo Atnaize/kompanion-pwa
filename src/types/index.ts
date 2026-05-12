@@ -319,3 +319,148 @@ export interface Friend {
   profile: string;
   profileMedium: string;
 }
+
+/**
+ * Single source of truth for how the viewer is related to another user.
+ * Drives which action button the UI renders and which data the server returns.
+ */
+export type FriendshipState = 'self' | 'friends' | 'pending_outgoing' | 'pending_incoming' | 'none';
+
+export interface FriendSearchResult extends Friend {
+  friendshipState: FriendshipState;
+}
+
+export interface FriendRequest {
+  id: number;
+  requesterId: number;
+  addresseeId: number;
+  status: 'PENDING' | 'ACCEPTED';
+  createdAt: string;
+  acceptedAt: string | null;
+  requester: Friend;
+  addressee: Friend;
+}
+
+/**
+ * Polymorphic feed-event registry. Adding a new event type:
+ *   1. add a string here
+ *   2. extend FeedEventMetadata
+ *   3. register a renderer in feed/renderers.ts
+ */
+export type FeedEventType =
+  | 'activity_posted'
+  | 'photo_added'
+  | 'pr_set'
+  | 'achievement_unlocked'
+  | 'challenge_joined';
+
+export interface ActivityPostedMetadata {
+  name: string;
+  type: string;
+  distance: number;
+  movingTime: number;
+  totalElevationGain: number;
+  averageSpeed: number;
+}
+
+export interface PhotoAddedMetadata {
+  count: number;
+}
+
+export interface PrSetMetadata {
+  band: string;
+  timeSeconds: number;
+}
+
+export interface AchievementUnlockedMetadata {
+  name: string;
+  rarity: string;
+}
+
+export interface ChallengeJoinedMetadata {
+  name: string;
+}
+
+export interface FeedEventCompare {
+  yourBest: {
+    activityId: string;
+    name: string;
+    distance: number;
+    movingTime: number;
+    averageSpeed: number;
+    startDate: string;
+  };
+  /** Friend pace minus yours, sec/km. Positive ⇒ friend slower; negative ⇒ friend faster. */
+  paceDeltaSecondsPerKm: number;
+}
+
+export interface FeedActivityPhoto {
+  url: string;
+  caption: string | null;
+}
+
+/** Fresh activity snapshot attached to `activity_posted` events at hydration time. */
+export interface FeedActivitySnapshot {
+  id: string;
+  kudosCount: number;
+  commentCount: number;
+  photoCount: number;
+  prCount: number;
+  averageHeartrate: number | null;
+  summaryPolyline: string | null;
+  photos: FeedActivityPhoto[];
+}
+
+export interface FeedEvent {
+  id: string;
+  type: string; // FeedEventType plus unknown strings (forward-compat)
+  actorId: number;
+  actor: Friend;
+  entityType: string | null;
+  entityId: string | null;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
+  /** Server-computed comparison against the viewer's similar recent activity. */
+  compare?: FeedEventCompare;
+  /** Fresh data for `activity_posted` cards (kudos count, polyline, etc). */
+  activity?: FeedActivitySnapshot;
+}
+
+export interface FeedPage {
+  events: FeedEvent[];
+  nextCursor: string | null;
+}
+
+/**
+ * Inbox notification — distinct from FeedEvent (private to the recipient,
+ * tracks read state). Same polymorphic shape: type + entity + metadata.
+ */
+export interface InboxNotification {
+  id: string;
+  type: string;
+  actorId: number | null;
+  actor: Friend | null;
+  entityType: string | null;
+  entityId: string | null;
+  metadata: Record<string, unknown> | null;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export interface InboxPage {
+  notifications: InboxNotification[];
+  nextCursor: string | null;
+}
+
+export interface UserProfile {
+  user: Friend;
+  friendshipState: FriendshipState;
+  counters: {
+    friends: number;
+  };
+  stats?: {
+    totalActivities: number;
+    totalDistance: number;
+    totalElevation: number;
+  };
+}
