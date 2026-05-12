@@ -348,6 +348,48 @@ export interface AdminQuotaGrant {
   createdAt: string;
 }
 
+export interface ActivitySyncProgressEvent {
+  type: 'fetching' | 'saving' | 'processing' | 'complete' | 'error';
+  current?: number;
+  total?: number;
+  message?: string;
+  challengesSynced?: number;
+  challengeActivitiesAdded?: number;
+}
+
+const streamSse = <T extends { type: string; message?: string }>(
+  url: string,
+  onEvent: (event: T) => void,
+  terminalTypes: readonly string[],
+  errorType = 'error'
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      reject(new Error('Not authenticated'));
+      return;
+    }
+    const fullUrl = `${apiClient.getBaseURL()}${url}${url.includes('?') ? '&' : '?'}token=${token}`;
+    const eventSource = new EventSource(fullUrl);
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data) as T;
+      onEvent(data);
+      if (terminalTypes.includes(data.type)) {
+        eventSource.close();
+        if (data.type === errorType) {
+          reject(new Error(data.message || 'Stream failed'));
+        } else {
+          resolve();
+        }
+      }
+    };
+    eventSource.onerror = () => {
+      eventSource.close();
+      reject(new Error('Connection failed'));
+    };
+  });
+};
+
 export const adminQuotaService = {
   overview: () => apiClient.get<AdminQuotaOverview>('/admin/quota/overview'),
   users: (params: { date?: string; activeOnly?: boolean } = {}) => {
@@ -363,6 +405,24 @@ export const adminQuotaService = {
   createGrant: (body: { userId: number; amount: number; validUntil?: string; note?: string }) =>
     apiClient.post<AdminQuotaGrant>('/admin/quota/grants', body),
   revokeGrant: (id: number) => apiClient.delete(`/admin/quota/grants/${id}`),
+  syncUserActivities: (
+    userId: number,
+    onEvent: (event: ActivitySyncProgressEvent) => void
+  ): Promise<void> =>
+    streamSse<ActivitySyncProgressEvent>(
+      `/admin/quota/users/${userId}/sync-activities/stream`,
+      onEvent,
+      ['complete', 'error']
+    ),
+  processUserBacklog: (
+    userId: number,
+    onEvent: (event: PersonalRecordsBacklogEvent) => void
+  ): Promise<void> =>
+    streamSse<PersonalRecordsBacklogEvent>(
+      `/admin/quota/users/${userId}/process-backlog/stream`,
+      onEvent,
+      ['complete', 'paused', 'error']
+    ),
 };
 
 export const friendsService = {

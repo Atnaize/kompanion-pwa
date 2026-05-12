@@ -1,12 +1,78 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { GlassCard, Skeleton, Button } from '@components/ui';
-import { adminQuotaService, type AdminQuotaUserRow } from '@api/services';
+import {
+  adminQuotaService,
+  type AdminQuotaUserRow,
+  type ActivitySyncProgressEvent,
+  type PersonalRecordsBacklogEvent,
+} from '@api/services';
+import { useToastStore } from '@store/toastStore';
 import { GrantQuotaModal } from './GrantQuotaModal';
+
+type AdminActionKind = 'sync' | 'backlog';
+
+interface RunningAction {
+  userId: number;
+  kind: AdminActionKind;
+  label: string;
+}
 
 export const QuotaTab = () => {
   const [grantTarget, setGrantTarget] = useState<AdminQuotaUserRow | null>(null);
   const [activeOnly, setActiveOnly] = useState(true);
+  const [running, setRunning] = useState<RunningAction | null>(null);
+  const queryClient = useQueryClient();
+  const { success, error: toastError } = useToastStore();
+
+  const refetchAll = useCallback(() => {
+    void queryClient.invalidateQueries({ queryKey: ['admin', 'quota'] });
+  }, [queryClient]);
+
+  const syncUser = useCallback(
+    async (userId: number, name: string) => {
+      if (running) return;
+      setRunning({ userId, kind: 'sync', label: 'starting…' });
+      try {
+        await adminQuotaService.syncUserActivities(userId, (event: ActivitySyncProgressEvent) => {
+          setRunning({ userId, kind: 'sync', label: formatSyncEvent(event) });
+        });
+        success(`Synced activities for ${name}`);
+      } catch (err) {
+        toastError(err instanceof Error ? err.message : 'Activity sync failed');
+      } finally {
+        setRunning(null);
+        refetchAll();
+      }
+    },
+    [running, success, toastError, refetchAll]
+  );
+
+  const processBacklogFor = useCallback(
+    async (userId: number, name: string) => {
+      if (running) return;
+      setRunning({ userId, kind: 'backlog', label: 'starting…' });
+      try {
+        let finalEvent: PersonalRecordsBacklogEvent | null = null;
+        await adminQuotaService.processUserBacklog(userId, (event: PersonalRecordsBacklogEvent) => {
+          finalEvent = event;
+          setRunning({ userId, kind: 'backlog', label: formatBacklogEvent(event) });
+        });
+        if (finalEvent && (finalEvent as PersonalRecordsBacklogEvent).type === 'paused') {
+          const reason = (finalEvent as PersonalRecordsBacklogEvent).reason ?? 'paused';
+          toastError(`Paused for ${name} (${reason})`);
+        } else {
+          success(`Processed backlog for ${name}`);
+        }
+      } catch (err) {
+        toastError(err instanceof Error ? err.message : 'Backlog processing failed');
+      } finally {
+        setRunning(null);
+        refetchAll();
+      }
+    },
+    [running, success, toastError, refetchAll]
+  );
 
   const overviewQuery = useQuery({
     queryKey: ['admin', 'quota', 'overview'],
@@ -48,7 +114,15 @@ export const QuotaTab = () => {
         {usersQuery.isLoading ? (
           <Skeleton className="h-32 w-full" />
         ) : usersQuery.data && usersQuery.data.length > 0 ? (
-          <UserTable users={usersQuery.data} onGrant={setGrantTarget} />
+          <UserTable
+            users={usersQuery.data}
+            onGrant={setGrantTarget}
+            onSync={(u) => void syncUser(u.userId, `${u.firstname} ${u.lastname}`)}
+            onProcessBacklog={(u) =>
+              void processBacklogFor(u.userId, `${u.firstname} ${u.lastname}`)
+            }
+            running={running}
+          />
         ) : (
           <p className="text-sm text-gray-500 dark:text-gray-400">No usage today.</p>
         )}
@@ -62,24 +136,42 @@ export const QuotaTab = () => {
           <Skeleton className="h-24 w-full" />
         ) : backlogQuery.data && backlogQuery.data.length > 0 ? (
           <ul className="divide-y divide-gray-200 text-sm dark:divide-gray-700">
-            {backlogQuery.data.map((row) => (
-              <li
-                key={row.userId}
-                className="flex items-center justify-between py-2 text-gray-800 dark:text-gray-200"
-              >
-                <span>
-                  {row.firstname} {row.lastname}
-                  {row.username ? (
-                    <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                      @{row.username}
+            {backlogQuery.data.map((row) => {
+              const isRunning = running?.userId === row.userId;
+              const isBusy = running !== null && !isRunning;
+              return (
+                <li
+                  key={row.userId}
+                  className="flex flex-wrap items-center justify-between gap-2 py-2 text-gray-800 dark:text-gray-200"
+                >
+                  <span>
+                    {row.firstname} {row.lastname}
+                    {row.username ? (
+                      <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                        @{row.username}
+                      </span>
+                    ) : null}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-gray-600 dark:text-gray-400">
+                      {row.unprocessedRuns} runs to analyse
                     </span>
-                  ) : null}
-                </span>
-                <span className="font-mono text-gray-600 dark:text-gray-400">
-                  {row.unprocessedRuns} runs to analyse
-                </span>
-              </li>
-            ))}
+                    {isRunning ? (
+                      <span className="font-mono text-xs text-strava-orange">{running.label}</span>
+                    ) : null}
+                    <Button
+                      variant="secondary"
+                      disabled={isBusy}
+                      onClick={() =>
+                        void processBacklogFor(row.userId, `${row.firstname} ${row.lastname}`)
+                      }
+                    >
+                      {isRunning && running.kind === 'backlog' ? 'Processing…' : 'Process backlog'}
+                    </Button>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p className="text-sm text-gray-500 dark:text-gray-400">No backlog — all caught up.</p>
@@ -164,9 +256,12 @@ const KindBox = ({ label, value }: { label: string; value: number }) => (
 interface UserTableProps {
   users: AdminQuotaUserRow[];
   onGrant: (user: AdminQuotaUserRow) => void;
+  onSync: (user: AdminQuotaUserRow) => void;
+  onProcessBacklog: (user: AdminQuotaUserRow) => void;
+  running: RunningAction | null;
 }
 
-const UserTable = ({ users, onGrant }: UserTableProps) => (
+const UserTable = ({ users, onGrant, onSync, onProcessBacklog, running }: UserTableProps) => (
   <div className="overflow-x-auto">
     <table className="w-full text-sm">
       <thead>
@@ -181,29 +276,84 @@ const UserTable = ({ users, onGrant }: UserTableProps) => (
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-        {users.map((u) => (
-          <tr key={u.userId} className="text-gray-800 dark:text-gray-200">
-            <td className="py-2 pr-3">
-              {u.firstname} {u.lastname}
-              {u.username ? (
-                <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">@{u.username}</span>
-              ) : null}
-            </td>
-            <td className="py-2 pr-3 text-right font-mono">{u.prFetch}</td>
-            <td className="py-2 pr-3 text-right font-mono">{u.webhookFetch}</td>
-            <td className="py-2 pr-3 text-right font-mono">{u.activitySync}</td>
-            <td className="py-2 pr-3 text-right font-mono">
-              {u.userDailyCap} ({u.userDailyRemaining} left)
-            </td>
-            <td className="py-2 pr-3 text-right font-mono">{u.unprocessedRuns}</td>
-            <td className="py-2 text-right">
-              <Button variant="secondary" onClick={() => onGrant(u)}>
-                Grant +N
-              </Button>
-            </td>
-          </tr>
-        ))}
+        {users.map((u) => {
+          const isRunning = running?.userId === u.userId;
+          const isBusy = running !== null && !isRunning;
+          return (
+            <tr key={u.userId} className="text-gray-800 dark:text-gray-200">
+              <td className="py-2 pr-3">
+                {u.firstname} {u.lastname}
+                {u.username ? (
+                  <span className="ml-1 text-xs text-gray-500 dark:text-gray-400">
+                    @{u.username}
+                  </span>
+                ) : null}
+                {isRunning ? (
+                  <div className="font-mono text-xs text-strava-orange">{running.label}</div>
+                ) : null}
+              </td>
+              <td className="py-2 pr-3 text-right font-mono">{u.prFetch}</td>
+              <td className="py-2 pr-3 text-right font-mono">{u.webhookFetch}</td>
+              <td className="py-2 pr-3 text-right font-mono">{u.activitySync}</td>
+              <td className="py-2 pr-3 text-right font-mono">
+                {u.userDailyCap} ({u.userDailyRemaining} left)
+              </td>
+              <td className="py-2 pr-3 text-right font-mono">{u.unprocessedRuns}</td>
+              <td className="py-2 text-right">
+                <div className="flex justify-end gap-2">
+                  <Button variant="secondary" disabled={isBusy} onClick={() => onSync(u)}>
+                    {isRunning && running.kind === 'sync' ? 'Syncing…' : 'Sync'}
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    disabled={isBusy || u.unprocessedRuns === 0}
+                    onClick={() => onProcessBacklog(u)}
+                  >
+                    {isRunning && running.kind === 'backlog' ? 'Processing…' : 'Process'}
+                  </Button>
+                  <Button variant="secondary" disabled={isBusy} onClick={() => onGrant(u)}>
+                    Grant +N
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   </div>
 );
+
+const formatSyncEvent = (event: ActivitySyncProgressEvent): string => {
+  switch (event.type) {
+    case 'fetching':
+      return event.current && event.total
+        ? `fetching ${event.current}/${event.total}`
+        : 'fetching…';
+    case 'saving':
+      return event.current && event.total ? `saving ${event.current}/${event.total}` : 'saving…';
+    case 'processing':
+      return event.current && event.total
+        ? `processing ${event.current}/${event.total}`
+        : 'processing…';
+    case 'complete':
+      return `done (${event.total ?? 0})`;
+    case 'error':
+      return event.message ?? 'error';
+  }
+};
+
+const formatBacklogEvent = (event: PersonalRecordsBacklogEvent): string => {
+  switch (event.type) {
+    case 'processing':
+      return event.current && event.total
+        ? `processing ${event.current}/${event.total}`
+        : 'processing…';
+    case 'paused':
+      return `paused (${event.reason ?? 'unknown'}) ${event.current ?? 0}/${event.total ?? 0}`;
+    case 'complete':
+      return `done (${event.total ?? 0})`;
+    case 'error':
+      return event.message ?? 'error';
+  }
+};
