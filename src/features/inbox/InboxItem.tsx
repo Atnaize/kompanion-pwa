@@ -1,7 +1,18 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Target, Trash2, Trophy, UserCheck, UserPlus, Users, type LucideIcon } from 'lucide-react';
+import {
+  CheckCircle2,
+  Flag,
+  Target,
+  Trash2,
+  Trophy,
+  UserCheck,
+  UserPlus,
+  Users,
+  XCircle,
+  type LucideIcon,
+} from 'lucide-react';
 import clsx from 'clsx';
 import { Avatar } from '@components/ui';
 import { formatRelativeTime } from '@utils/format';
@@ -254,6 +265,49 @@ function buildView(
         iconClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
         href: n.entityId ? `/challenges/${n.entityId}` : '/challenges',
       };
+    case 'challenge_progress':
+      return {
+        title: meta.challengeName ?? t('inbox.types.challengeProgressFallback'),
+        subtitle: meta.milestone,
+        icon: Flag,
+        iconClass: 'bg-strava-orange/10 text-strava-orange',
+        href: n.entityId ? `/challenges/${n.entityId}` : '/challenges',
+      };
+    case 'challenge_activity_added':
+      return {
+        title: meta.challengeName ?? '',
+        subtitle: t('inbox.types.challengeActivityAdded', {
+          name: meta.participantName ?? '',
+          count: Number(meta.activityCount ?? 0),
+          distance: ((Number(meta.totalDistance ?? 0)) / 1000).toFixed(1),
+        }),
+        icon: Target,
+        iconClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+        href: n.entityId ? `/challenges/${n.entityId}` : '/challenges',
+      };
+    case 'challenge_cancelled':
+      return {
+        title: t('inbox.types.challengeCancelled'),
+        subtitle: meta.challengeName,
+        icon: XCircle,
+        iconClass: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+        href: n.entityId ? `/challenges/${n.entityId}` : '/challenges',
+      };
+    case 'challenge_completed': {
+      const rawIsSuccess = (n.metadata as { isSuccess?: unknown } | null)?.isSuccess;
+      const isSuccess = rawIsSuccess === true || rawIsSuccess === 'true';
+      return {
+        title: isSuccess
+          ? t('inbox.types.challengeCompletedSuccess')
+          : t('inbox.types.challengeCompletedEnded'),
+        subtitle: meta.challengeName,
+        icon: isSuccess ? CheckCircle2 : Flag,
+        iconClass: isSuccess
+          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+          : 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
+        href: n.entityId ? `/challenges/${n.entityId}` : '/challenges',
+      };
+    }
     default:
       // Unknown type — show a generic row so the inbox never blows up if the
       // backend ships a new notification type before the frontend knows it.

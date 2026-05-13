@@ -5,8 +5,7 @@ import { useAuthStore } from '@store/authStore';
 export interface NotificationPreferences {
   // Challenges
   challengeInvites: boolean;
-  challengeProgress: boolean;
-  challengeReminders: boolean;
+  challengeUpdates: boolean;
   // Friends (M3)
   friendRequests: boolean;
   friendAccepted: boolean;

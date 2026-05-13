@@ -49,8 +49,7 @@ export const SettingsPage = () => {
   const handlePreferenceToggle = async (
     key:
       | 'challengeInvites'
-      | 'challengeProgress'
-      | 'challengeReminders'
+      | 'challengeUpdates'
       | 'friendRequests'
       | 'friendAccepted'
       | 'achievementUnlocked',
@@ -194,16 +193,10 @@ export const SettingsPage = () => {
                     description={t('settings.preferences.challengeInvitesDesc')}
                   />
                   <Toggle
-                    enabled={preferences.challengeProgress}
-                    onChange={(value) => handlePreferenceToggle('challengeProgress', value)}
-                    label={t('settings.preferences.challengeProgress')}
-                    description={t('settings.preferences.challengeProgressDesc')}
-                  />
-                  <Toggle
-                    enabled={preferences.challengeReminders}
-                    onChange={(value) => handlePreferenceToggle('challengeReminders', value)}
-                    label={t('settings.preferences.challengeReminders')}
-                    description={t('settings.preferences.challengeRemindersDesc')}
+                    enabled={preferences.challengeUpdates}
+                    onChange={(value) => handlePreferenceToggle('challengeUpdates', value)}
+                    label={t('settings.preferences.challengeUpdates')}
+                    description={t('settings.preferences.challengeUpdatesDesc')}
                   />
                 </div>
               </GlassCard>

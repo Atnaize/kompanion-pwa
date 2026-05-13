@@ -117,10 +117,8 @@
       "challengesGroup": "D\u00e9fis",
       "challengeInvites": "Invitations aux d\u00e9fis",
       "challengeInvitesDesc": "\u00catre notifi\u00e9 lorsque vous \u00eates invit\u00e9 \u00e0 un d\u00e9fi",
-      "challengeProgress": "Progression des d\u00e9fis",
-      "challengeProgressDesc": "\u00catre notifi\u00e9 des \u00e9tapes et mises \u00e0 jour des d\u00e9fis",
-      "challengeReminders": "Rappels de d\u00e9fis",
-      "challengeRemindersDesc": "\u00catre notifi\u00e9 lorsque des d\u00e9fis commencent ou se terminent bient\u00f4t",
+      "challengeUpdates": "Mises \u00e0 jour des d\u00e9fis",
+      "challengeUpdatesDesc": "\u00catre notifi\u00e9 pour les d\u00e9fis auxquels vous participez : nouvelle inscription, \u00e9tape atteinte, activit\u00e9s ajout\u00e9es, fin ou annulation du d\u00e9fi",
       "updated": "Pr\u00e9f\u00e9rence mise \u00e0 jour",
       "updateFailed": "\u00c9chec de la mise \u00e0 jour de la pr\u00e9f\u00e9rence"
     },
@@ -267,6 +265,12 @@
       "achievementUnlocked": "Vous avez débloqué une nouvelle réussite",
       "challengeInvite": "{{name}} vous a invité à un défi",
       "challengeJoined": "{{name}} a rejoint votre défi",
+      "challengeProgressFallback": "Étape de défi",
+      "challengeActivityAdded_one": "{{name}} a ajouté {{count}} activité ({{distance}} km)",
+      "challengeActivityAdded_other": "{{name}} a ajouté {{count}} activités ({{distance}} km)",
+      "challengeCancelled": "Défi annulé",
+      "challengeCompletedSuccess": "Défi réussi !",
+      "challengeCompletedEnded": "Défi terminé",
       "generic": "Vous avez une nouvelle notification"
     }
   },

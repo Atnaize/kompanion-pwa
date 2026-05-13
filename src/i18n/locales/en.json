@@ -117,10 +117,8 @@
       "challengesGroup": "Challenges",
       "challengeInvites": "Challenge Invitations",
       "challengeInvitesDesc": "Get notified when you're invited to a challenge",
-      "challengeProgress": "Challenge Progress",
-      "challengeProgressDesc": "Get notified about challenge milestones and updates",
-      "challengeReminders": "Challenge Reminders",
-      "challengeRemindersDesc": "Get notified when challenges are starting or ending soon",
+      "challengeUpdates": "Challenge Updates",
+      "challengeUpdatesDesc": "Get notified about challenges you're in: when someone joins, hits a milestone, logs activities, or when the challenge ends or is cancelled",
       "updated": "Preference updated",
       "updateFailed": "Failed to update preference"
     },
@@ -267,6 +265,12 @@
       "achievementUnlocked": "You unlocked a new achievement",
       "challengeInvite": "{{name}} invited you to a challenge",
       "challengeJoined": "{{name}} joined your challenge",
+      "challengeProgressFallback": "Challenge milestone",
+      "challengeActivityAdded_one": "{{name}} added {{count}} activity ({{distance}} km)",
+      "challengeActivityAdded_other": "{{name}} added {{count}} activities ({{distance}} km)",
+      "challengeCancelled": "Challenge cancelled",
+      "challengeCompletedSuccess": "Challenge completed!",
+      "challengeCompletedEnded": "Challenge ended",
       "generic": "You have a new notification"
     }
   },
