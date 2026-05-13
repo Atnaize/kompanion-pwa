@@ -248,10 +248,18 @@
     "title": "Notifications",
     "subtitle": "Activité récente qui requiert votre attention",
     "markAllRead": "Tout marquer comme lu",
+    "deleteAll": "Tout supprimer",
+    "deleteAllConfirm": "Supprimer toutes les notifications ? Cette action est irréversible.",
+    "filterAll": "Toutes",
+    "filterUnread": "Non lues",
     "unread": "Non lu",
     "empty": {
       "title": "Vous êtes à jour",
       "description": "Lorsqu'il se passe quelque chose, vous le verrez ici."
+    },
+    "emptyUnread": {
+      "title": "Aucune notification non lue",
+      "description": "Vous êtes à jour."
     },
     "types": {
       "friendRequest": "{{name}} vous a envoyé une demande d'ami",

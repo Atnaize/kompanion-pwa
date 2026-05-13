@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { GlassCard, Button } from '@components/ui';
 import { apiClient } from '@api/client';
 import { useToastStore } from '@store/toastStore';
@@ -6,11 +7,23 @@ import { usePushNotifications } from '@hooks/usePushNotifications';
 import { useNotificationDebug, type NotificationDebug } from './useNotificationDebug';
 import { StatusPill, type StatusTone } from './StatusPill';
 
+const INBOX_TEST_TYPES = [
+  { type: 'friend_request', label: 'Friend request' },
+  { type: 'friend_accepted', label: 'Friend accepted' },
+  { type: 'achievement_unlocked', label: 'Achievement unlocked' },
+  { type: 'challenge_invite', label: 'Challenge invite' },
+  { type: 'challenge_joined', label: 'Challenge joined' },
+] as const;
+
+type InboxTestType = (typeof INBOX_TEST_TYPES)[number]['type'];
+
 export const NotificationsTab = () => {
   const { success, error: showError } = useToastStore();
+  const queryClient = useQueryClient();
   const { isSupported, isSubscribed, subscribe } = usePushNotifications();
   const { debug, refresh } = useNotificationDebug();
   const [sending, setSending] = useState(false);
+  const [pendingInboxType, setPendingInboxType] = useState<InboxTestType | null>(null);
 
   const handleSubscribe = async () => {
     try {
@@ -35,6 +48,26 @@ export const NotificationsTab = () => {
       showError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setSending(false);
+    }
+  };
+
+  const sendInboxTest = async (type: InboxTestType, label: string) => {
+    setPendingInboxType(type);
+    try {
+      const response = await apiClient.post<{ message: string }>('/notifications/test-inbox', {
+        type,
+      });
+      if (response.success) {
+        success(`Emitted "${label}" — check the bell + your device`);
+        void queryClient.invalidateQueries({ queryKey: ['inbox'] });
+        void queryClient.invalidateQueries({ queryKey: ['inbox-unread-count'] });
+      } else {
+        showError(response.error || 'Failed to emit notification');
+      }
+    } catch (err) {
+      showError(err instanceof Error ? err.message : 'Unknown error');
+    } finally {
+      setPendingInboxType(null);
     }
   };
 
@@ -63,11 +96,11 @@ export const NotificationsTab = () => {
 
       <GlassCard className="p-4">
         <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-50">
-          Send Test Notification
+          Send Raw Push (no inbox row)
         </h2>
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          Send a test push notification to your device. All debug checks above should show green for
-          this to work.
+          Sends a bare push notification to your subscribed device(s). Does NOT create an inbox row
+          — use the per-type tests below to exercise the full pipeline.
         </p>
         <Button
           onClick={sendTest}
@@ -75,7 +108,7 @@ export const NotificationsTab = () => {
           className="w-full"
           disabled={sending || !isSubscribed}
         >
-          {sending ? 'Sending...' : 'Send Test Notification'}
+          {sending ? 'Sending...' : 'Send Test Push'}
         </Button>
         {!isSubscribed && (
           <div className="mt-3 rounded-lg bg-yellow-50 p-3">
@@ -85,6 +118,33 @@ export const NotificationsTab = () => {
             </p>
           </div>
         )}
+      </GlassCard>
+
+      <GlassCard className="p-4">
+        <h2 className="mb-1 text-lg font-semibold text-gray-900 dark:text-gray-50">
+          Test Inbox + Push (full pipeline)
+        </h2>
+        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+          Emits one notification of the selected type to your own account via{' '}
+          <code className="rounded bg-gray-100 px-1 dark:bg-gray-800">notificationEmitter</code>.
+          Creates the in-app row AND dispatches a web-push (gated by your notification preferences).
+          Push subscription only matters for the push half — the inbox row appears regardless.
+        </p>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {INBOX_TEST_TYPES.map(({ type, label }) => {
+            const isPending = pendingInboxType === type;
+            return (
+              <Button
+                key={type}
+                variant="secondary"
+                onClick={() => sendInboxTest(type, label)}
+                disabled={pendingInboxType !== null}
+              >
+                {isPending ? 'Emitting...' : label}
+              </Button>
+            );
+          })}
+        </div>
       </GlassCard>
     </div>
   );

@@ -463,4 +463,6 @@ export const inboxService = {
   unreadCount: () => apiClient.get<{ count: number }>('/inbox/count'),
   markRead: (id: string) => apiClient.post(`/inbox/${id}/read`),
   markAllRead: () => apiClient.post<{ count: number }>('/inbox/read-all'),
+  delete: (id: string) => apiClient.delete(`/inbox/${id}`),
+  deleteAll: () => apiClient.delete<{ count: number }>('/inbox'),
 };

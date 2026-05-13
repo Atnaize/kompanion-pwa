@@ -22,7 +22,7 @@ self.addEventListener('push', (event) => {
     const options = {
       body,
       icon: icon || '/pwa-192x192.svg',
-      badge: badge || '/pwa-64x64.svg',
+      badge: badge || '/notification-badge.svg',
       data: notificationData,
       vibrate: [200, 100, 200],
       tag: notificationData?.type || 'default',
@@ -50,7 +50,13 @@ self.addEventListener('notificationclick', (event) => {
   let urlPath = '/';
 
   if (notificationData?.type === 'challenge_invite') {
-    urlPath = '/challenges';
+    urlPath = notificationData.challengeId
+      ? `/challenges/${notificationData.challengeId}`
+      : '/challenges';
+  } else if (notificationData?.type === 'challenge_joined') {
+    urlPath = notificationData.challengeId
+      ? `/challenges/${notificationData.challengeId}`
+      : '/challenges';
   } else if (notificationData?.type === 'challenge_progress') {
     urlPath = '/challenges';
   } else if (notificationData?.type === 'challenge_activity') {
@@ -63,8 +69,14 @@ self.addEventListener('notificationclick', (event) => {
     urlPath = '/challenges';
   } else if (notificationData?.type === 'challenge_completed') {
     urlPath = '/challenges';
+  } else if (notificationData?.type === 'achievement_unlocked') {
+    urlPath = '/achievements';
   } else if (notificationData?.type === 'achievement') {
     urlPath = '/achievements';
+  } else if (notificationData?.type === 'friend_request') {
+    urlPath = '/friends';
+  } else if (notificationData?.type === 'friend_accepted') {
+    urlPath = notificationData.userId ? `/users/${notificationData.userId}` : '/friends';
   }
 
   const urlToOpen = new URL(urlPath, self.location.origin).href;

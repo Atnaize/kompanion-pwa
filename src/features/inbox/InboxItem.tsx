@@ -1,6 +1,7 @@
-import { Link } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Target, Trophy, UserCheck, UserPlus, Users, type LucideIcon } from 'lucide-react';
+import { Target, Trash2, Trophy, UserCheck, UserPlus, Users, type LucideIcon } from 'lucide-react';
 import clsx from 'clsx';
 import { Avatar } from '@components/ui';
 import { formatRelativeTime } from '@utils/format';
@@ -9,7 +10,11 @@ import type { InboxNotification } from '@types';
 interface InboxItemProps {
   notification: InboxNotification;
   onClick?: () => void;
+  onDismiss?: () => void;
 }
+
+const SWIPE_DISMISS_THRESHOLD = 96; // px past which release dismisses
+const SWIPE_ACTIVATION = 8; // px before we treat the gesture as a horizontal swipe
 
 /**
  * Inbox row — one renderer per notification type via a single switch.
@@ -18,11 +23,77 @@ interface InboxItemProps {
  * Visual states:
  *   - unread: orange dot + slight orange tint
  *   - read: plain
+ *
+ * Touch/mouse swipe left to dismiss reveals a trash background; releasing past
+ * the threshold calls `onDismiss`.
  */
-export const InboxItem = ({ notification, onClick }: InboxItemProps) => {
+export const InboxItem = ({ notification, onClick, onDismiss }: InboxItemProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const isUnread = notification.readAt === null;
   const view = buildView(notification, t);
+
+  const [swipeX, setSwipeX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
+  const dragStartXRef = useRef<number | null>(null);
+  const dragActiveRef = useRef(false);
+  const swipedRef = useRef(false);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!onDismiss) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragStartXRef.current = e.clientX;
+    dragActiveRef.current = false;
+    swipedRef.current = false;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!onDismiss || dragStartXRef.current === null) return;
+    const dx = e.clientX - dragStartXRef.current;
+    if (!dragActiveRef.current) {
+      if (Math.abs(dx) < SWIPE_ACTIVATION) return;
+      dragActiveRef.current = true;
+      setIsDragging(true);
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
+    const clamped = Math.min(0, dx);
+    setSwipeX(clamped);
+    if (clamped < -SWIPE_ACTIVATION) {
+      swipedRef.current = true;
+    }
+  };
+
+  const handlePointerEnd = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!onDismiss) return;
+    const wasDragging = dragActiveRef.current;
+    dragStartXRef.current = null;
+    dragActiveRef.current = false;
+    setIsDragging(false);
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+    if (!wasDragging) return;
+    if (swipeX < -SWIPE_DISMISS_THRESHOLD) {
+      setIsDismissed(true);
+      setSwipeX(-window.innerWidth);
+      window.setTimeout(() => onDismiss(), 180);
+    } else {
+      setSwipeX(0);
+    }
+  };
+
+  const handleClick = () => {
+    // A completed horizontal swipe should not also navigate.
+    if (swipedRef.current) {
+      swipedRef.current = false;
+      return;
+    }
+    onClick?.();
+    if (view.href) {
+      navigate(view.href);
+    }
+  };
 
   const inner = (
     <div className="flex items-start gap-3">
@@ -74,23 +145,58 @@ export const InboxItem = ({ notification, onClick }: InboxItemProps) => {
     </div>
   );
 
-  const wrapperClass = clsx(
-    'block rounded-2xl border p-4 transition-colors',
+  const foregroundClass = clsx(
+    'block rounded-2xl border p-4',
+    isDragging ? '' : 'transition-[transform,background-color,opacity] duration-200',
     isUnread
       ? 'border-strava-orange/30 bg-strava-orange/[0.04] hover:bg-strava-orange/[0.08] dark:bg-strava-orange/[0.06] dark:hover:bg-strava-orange/[0.1]'
       : 'border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800'
   );
 
-  if (view.href) {
+  // No-swipe back-compat: render the previous link/div shape.
+  if (!onDismiss) {
     return (
-      <Link to={view.href} onClick={onClick} className={wrapperClass}>
+      <div className={foregroundClass} onClick={handleClick} role="button" tabIndex={0}>
         {inner}
-      </Link>
+      </div>
     );
   }
+
+  const swipeProgress = Math.min(1, Math.abs(swipeX) / SWIPE_DISMISS_THRESHOLD);
+
   return (
-    <div className={wrapperClass} onClick={onClick}>
-      {inner}
+    <div
+      className={clsx(
+        'relative overflow-hidden rounded-2xl',
+        isDismissed ? 'pointer-events-none' : ''
+      )}
+      style={{
+        maxHeight: isDismissed ? 0 : undefined,
+        marginBottom: isDismissed ? 0 : undefined,
+        opacity: isDismissed ? 0 : 1,
+        transition: isDismissed ? 'max-height 200ms ease, opacity 200ms ease' : undefined,
+      }}
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-center justify-end rounded-2xl bg-red-500/90 pr-6 text-white"
+        style={{ opacity: swipeProgress }}
+      >
+        <Trash2 size={20} strokeWidth={2} />
+      </div>
+      <div
+        className={foregroundClass}
+        style={{ transform: `translateX(${swipeX}px)`, touchAction: 'pan-y' }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerEnd}
+        onPointerCancel={handlePointerEnd}
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+      >
+        {inner}
+      </div>
     </div>
   );
 };

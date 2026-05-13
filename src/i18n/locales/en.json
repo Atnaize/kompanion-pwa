@@ -248,10 +248,18 @@
     "title": "Notifications",
     "subtitle": "Recent activity that needs your attention",
     "markAllRead": "Mark all read",
+    "deleteAll": "Delete all",
+    "deleteAllConfirm": "Delete all notifications? This cannot be undone.",
+    "filterAll": "All",
+    "filterUnread": "Unread",
     "unread": "Unread",
     "empty": {
       "title": "All caught up",
       "description": "When something happens, you'll see it here."
+    },
+    "emptyUnread": {
+      "title": "No unread notifications",
+      "description": "You're all caught up."
     },
     "types": {
       "friendRequest": "{{name}} sent you a friend request",
