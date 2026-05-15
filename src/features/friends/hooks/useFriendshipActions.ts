@@ -16,6 +16,9 @@ export const useFriendshipActions = () => {
     void queryClient.invalidateQueries({ queryKey: ['friend-requests-outgoing'] });
     void queryClient.invalidateQueries({ queryKey: ['friend-search'] });
     void queryClient.invalidateQueries({ queryKey: ['user-profile'] });
+    // The friend graph just changed — the feed query reads from it, so its
+    // cached pages may be missing (or contain) events that should now flip.
+    void queryClient.invalidateQueries({ queryKey: ['feed'] });
   };
 
   const sendRequest = useMutation({
