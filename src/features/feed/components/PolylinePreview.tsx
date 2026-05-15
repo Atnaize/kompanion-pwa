@@ -13,9 +13,9 @@ interface PolylinePreviewProps {
   /** ViewBox aspect — defaults to wide (100×60). Card-bg uses 100×100. */
   viewBox?: string;
   /**
-   * Animate the stroke drawing in once the SVG enters the viewport. Subtle
-   * "the route appears" effect that adds life to the feed. Defaults to true;
-   * pass false for places that need a static render (PDFs, screenshots, etc.).
+   * Animate the stroke drawing in on mount. Subtle "the route appears" effect
+   * that adds life to the feed. Defaults to true; pass false for places that
+   * need a static render (PDFs, screenshots, etc.).
    */
   animateDraw?: boolean;
 }
@@ -25,9 +25,14 @@ interface PolylinePreviewProps {
  * the viewBox, and draws a stroke. No map tiles, no extra requests — just the
  * shape, which is what makes a route recognisable in a feed.
  *
- * When `animateDraw` is true (default), the path draws itself in over ~1.3s
- * the first time it scrolls into view. Framer Motion's `pathLength` handles
- * the dash-offset math automatically.
+ * The draw-in animation uses `strokeDashoffset` with `pathLength={1}` on the
+ * path. Setting the SVG `pathLength` attribute tells the browser "treat this
+ * path's length as 1 for all dasharray/dashoffset math" — so we can animate
+ * `strokeDashoffset` from 1 (fully hidden) to 0 (fully drawn) with no need
+ * for framer-motion to measure the path. That measurement (via
+ * `getTotalLength()`) was the iOS Safari failure: when the SVG hadn't laid
+ * out yet at mount, the call returned 0, the dasharray collapsed, and the
+ * stroke stayed invisible forever even after scrolling.
  *
  * Respects `prefers-reduced-motion` — falls back to a static render.
  */
@@ -63,15 +68,10 @@ export const PolylinePreview = ({
         strokeWidth={strokeWidth}
         strokeLinejoin="round"
         strokeLinecap="round"
-        // Animate pathLength from 0 to 1 — Framer Motion sets stroke-dasharray
-        // and stroke-dashoffset under the hood so the line traces itself.
-        //
-        // `amount: 0.8` means the trigger waits until 80% of the SVG (≈ the
-        // card) is on-screen so the card feels settled before the line starts.
-        // A small `delay` gives the eye a beat to land on the card first.
-        initial={shouldAnimate ? { pathLength: 0 } : false}
-        whileInView={shouldAnimate ? { pathLength: 1 } : undefined}
-        viewport={{ once: true, amount: 0.9 }}
+        pathLength={1}
+        strokeDasharray={1}
+        initial={shouldAnimate ? { strokeDashoffset: 1 } : false}
+        animate={shouldAnimate ? { strokeDashoffset: 0 } : undefined}
         transition={{ duration: 3, ease: 'easeInOut', delay: 0.3 }}
       />
     </svg>
