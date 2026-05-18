@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Loader2 } from 'lucide-react';
 import { useAuthStore } from '@store/authStore';
 import { ErrorBoundary } from '@components/ErrorBoundary';
+import { RouteErrorBoundary } from '@components/RouteErrorBoundary';
+import { RouteFallback } from '@components/RouteFallback';
 import { ToastContainer } from '@components/ui';
 import { UpdateNotification } from '@components/pwa/UpdateNotification';
 import { InstallPrompt } from '@components/pwa/InstallPrompt';
@@ -11,28 +13,57 @@ import { usePwa } from '@hooks/usePwa';
 import { useServiceWorkerRegistration } from '@utils/registerServiceWorker';
 import { useOnlineStatus } from '@hooks/useOnlineStatus';
 import { useTheme } from '@hooks/useTheme';
-import {
-  LoginPage,
-  DashboardPage,
-  ActivitiesPage,
-  ActivityDetailPage,
-  PersonalRecordsPage,
-  AchievementsPage,
-  StatsPage,
-  ChallengesPage,
-  ChallengeDetailPage,
-  CreateChallengePage,
-  ComponentsPage,
-  ProfilePage,
-  FriendsPage,
-  UserProfilePage,
-  FeedPage,
-  NotificationsPage,
-  SettingsPage,
-  AboutPage,
-  AdminPage,
-  NotFoundPage,
-} from '@pages/index';
+// Eager pages — first paint after auth (or before it). Lazy-loading these
+// would just introduce a loading flash on the landing experience.
+import { LoginPage, DashboardPage, NotFoundPage } from '@pages/index';
+
+// Heavy or rarely-visited pages get split off. Each `lazy(...)` becomes its
+// own Vite chunk and is fetched on first navigation. We rely on the named
+// exports throughout the rest of the app, so wrap them into a default here
+// rather than touching every page file.
+const ActivitiesPage = lazy(() =>
+  import('@pages/ActivitiesPage').then((m) => ({ default: m.ActivitiesPage }))
+);
+const ActivityDetailPage = lazy(() =>
+  import('@pages/ActivityDetailPage').then((m) => ({ default: m.ActivityDetailPage }))
+);
+const PersonalRecordsPage = lazy(() =>
+  import('@pages/PersonalRecordsPage').then((m) => ({ default: m.PersonalRecordsPage }))
+);
+const AchievementsPage = lazy(() =>
+  import('@pages/AchievementsPage').then((m) => ({ default: m.AchievementsPage }))
+);
+const StatsPage = lazy(() => import('@pages/StatsPage').then((m) => ({ default: m.StatsPage })));
+const ChallengesPage = lazy(() =>
+  import('@pages/ChallengesPage').then((m) => ({ default: m.ChallengesPage }))
+);
+const ChallengeDetailPage = lazy(() =>
+  import('@pages/ChallengeDetailPage').then((m) => ({ default: m.ChallengeDetailPage }))
+);
+const CreateChallengePage = lazy(() =>
+  import('@pages/CreateChallengePage').then((m) => ({ default: m.CreateChallengePage }))
+);
+const ComponentsPage = lazy(() =>
+  import('@pages/ComponentsPage').then((m) => ({ default: m.ComponentsPage }))
+);
+const ProfilePage = lazy(() =>
+  import('@pages/ProfilePage').then((m) => ({ default: m.ProfilePage }))
+);
+const FriendsPage = lazy(() =>
+  import('@pages/FriendsPage').then((m) => ({ default: m.FriendsPage }))
+);
+const UserProfilePage = lazy(() =>
+  import('@pages/UserProfilePage').then((m) => ({ default: m.UserProfilePage }))
+);
+const FeedPage = lazy(() => import('@pages/FeedPage').then((m) => ({ default: m.FeedPage })));
+const NotificationsPage = lazy(() =>
+  import('@pages/NotificationsPage').then((m) => ({ default: m.NotificationsPage }))
+);
+const SettingsPage = lazy(() =>
+  import('@pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
+);
+const AboutPage = lazy(() => import('@pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const AdminPage = lazy(() => import('@pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslation();
@@ -87,6 +118,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Wraps a protected page in: auth gate → per-page error boundary → Suspense
+// for the lazy chunk. Keeps the route table readable below.
+const ProtectedPage = ({ children }: { children: ReactNode }) => (
+  <ProtectedRoute>
+    <RouteErrorBoundary>
+      <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+    </RouteErrorBoundary>
+  </ProtectedRoute>
+);
+
 export const App = () => {
   const { t } = useTranslation();
   const { fetchUser } = useAuthStore();
@@ -120,145 +161,145 @@ export const App = () => {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <DashboardPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/activities"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <ActivitiesPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/activities/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <ActivityDetailPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/personal-records"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <PersonalRecordsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/achievements"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <AchievementsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/stats"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <StatsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/challenges"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <ChallengesPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/challenges/create"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <CreateChallengePage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/challenges/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <ChallengeDetailPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <ProfilePage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/friends"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <FriendsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/users/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <UserProfilePage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/feed"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <FeedPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/notifications"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <NotificationsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/settings"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <SettingsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/about"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <AboutPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <AdminPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route
             path="/components"
             element={
-              <ProtectedRoute>
+              <ProtectedPage>
                 <ComponentsPage />
-              </ProtectedRoute>
+              </ProtectedPage>
             }
           />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />

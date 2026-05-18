@@ -705,7 +705,11 @@
     "somethingWentWrong": "Oups ! Quelque chose s'est mal pass\u00e9",
     "unexpectedError": "Nous avons rencontr\u00e9 une erreur inattendue. Ne vous inqui\u00e9tez pas, vos donn\u00e9es sont en s\u00e9curit\u00e9.",
     "errorDetails": "D\u00e9tails de l'erreur",
-    "reload": "Recharger"
+    "reload": "Recharger",
+    "pageFailed": "Cette page a rencontr\u00e9 un probl\u00e8me",
+    "pageFailedDesc": "R\u00e9essayez \u2014 si le probl\u00e8me persiste, le reste de l'app reste accessible via le menu ci-dessous.",
+    "tryAgain": "R\u00e9essayer",
+    "goHome": "Accueil"
   },
   "empty": {
     "noActivities": "Aucune activit\u00e9 pour le moment",

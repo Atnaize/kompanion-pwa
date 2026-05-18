@@ -705,7 +705,11 @@
     "somethingWentWrong": "Oops! Something went wrong",
     "unexpectedError": "We encountered an unexpected error. Don't worry, your data is safe.",
     "errorDetails": "Error details",
-    "reload": "Reload"
+    "reload": "Reload",
+    "pageFailed": "This page hit a snag",
+    "pageFailedDesc": "Try again — if it keeps happening, the rest of the app still works from the menu below.",
+    "tryAgain": "Try again",
+    "goHome": "Go home"
   },
   "empty": {
     "noActivities": "No Activities Yet",
