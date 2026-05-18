@@ -55,6 +55,12 @@ const FriendsPage = lazy(() =>
 const UserProfilePage = lazy(() =>
   import('@pages/UserProfilePage').then((m) => ({ default: m.UserProfilePage }))
 );
+const CompareWithFriendPage = lazy(() =>
+  import('@pages/CompareWithFriendPage').then((m) => ({ default: m.CompareWithFriendPage }))
+);
+const LeaderboardsPage = lazy(() =>
+  import('@pages/LeaderboardsPage').then((m) => ({ default: m.LeaderboardsPage }))
+);
 const FeedPage = lazy(() => import('@pages/FeedPage').then((m) => ({ default: m.FeedPage })));
 const NotificationsPage = lazy(() =>
   import('@pages/NotificationsPage').then((m) => ({ default: m.NotificationsPage }))
@@ -255,10 +261,26 @@ export const App = () => {
             }
           />
           <Route
+            path="/users/:id/compare"
+            element={
+              <ProtectedPage>
+                <CompareWithFriendPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
             path="/feed"
             element={
               <ProtectedPage>
                 <FeedPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/leaderboards"
+            element={
+              <ProtectedPage>
+                <LeaderboardsPage />
               </ProtectedPage>
             }
           />

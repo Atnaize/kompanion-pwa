@@ -24,6 +24,10 @@ import type {
   CompetitiveGoal,
   ChallengeParticipant,
   PersonalRecordBandGroup,
+  FriendsLeaderboard,
+  LeaderboardMetricKey,
+  LeaderboardPeriod,
+  CompareWithFriend,
 } from '@types';
 
 export const authService = {
@@ -181,6 +185,33 @@ export const statsService = {
     const query = new URLSearchParams({ metric });
     appendType(query, activityType);
     return apiClient.get<Array<{ date: string; value: number }>>(`/stats/heatmap?${query}`);
+  },
+};
+
+export const leaderboardsService = {
+  friends: (params: {
+    metric: LeaderboardMetricKey;
+    period: LeaderboardPeriod;
+    activityType?: string | null;
+  }) => {
+    const query = new URLSearchParams({ metric: params.metric, period: params.period });
+    appendType(query, params.activityType);
+    return apiClient.get<FriendsLeaderboard>(`/leaderboards/friends?${query.toString()}`);
+  },
+};
+
+export const statsCompareService = {
+  withFriend: (params: {
+    userId: number;
+    period: LeaderboardPeriod;
+    activityType?: string | null;
+  }) => {
+    const query = new URLSearchParams({
+      with: String(params.userId),
+      period: params.period,
+    });
+    appendType(query, params.activityType);
+    return apiClient.get<CompareWithFriend>(`/stats/compare-friend?${query.toString()}`);
   },
 };
 

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { Activity, BarChart3, Home, MoreHorizontal, Target, type LucideIcon } from 'lucide-react';
+import { Activity, Home, MoreHorizontal, Target, type LucideIcon } from 'lucide-react';
 import { useAuthStore } from '@store/authStore';
 
 interface NavItem {
@@ -25,7 +25,6 @@ const navItems: NavItem[] = [
   { path: '/dashboard', label: 'nav.home', icon: Home },
   { path: '/activities', label: 'nav.activities', icon: Activity, requiresData: true },
   { path: '/challenges', label: 'nav.challenges', icon: Target, requiresData: true },
-  { path: '/stats', label: 'nav.stats', icon: BarChart3, requiresData: true },
 ];
 
 interface BottomNavProps {

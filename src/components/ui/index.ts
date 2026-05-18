@@ -18,3 +18,4 @@ export * from './ConfirmModal';
 export * from './Tabs';
 export * from './TimePeriodSelector';
 export * from './PhotoLightbox';
+export * from './Tooltip';

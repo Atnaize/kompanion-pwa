@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Camera, ChevronRight, MessageCircle, Sparkles, Trophy } from 'lucide-react';
 import clsx from 'clsx';
-import { GlassCard } from '@components/ui';
+import { GlassCard, Tooltip } from '@components/ui';
 import { formatDistance, formatDuration, formatPaceFromSpeed, formatSpeed } from '@utils/format';
 import { getSportPresentation } from '@utils/sport';
 import type { FeedEvent, ActivityPostedMetadata, FeedEventCompare } from '@types';
@@ -208,15 +208,23 @@ const CompareBlock = ({ compare }: { compare: FeedEventCompare }) => {
 
 /**
  * Tiny "personality" tag right under the title. Fires only when an activity
- * has something genuinely notable about it (see `pickVibe`).
+ * has something genuinely notable about it (see `pickVibe`). Tooltip explains
+ * the criterion — required on mobile where the label alone is opaque.
  */
 const VibeChip = ({ vibe }: { vibe: Vibe }) => {
   const { t } = useTranslation();
+  const label = t(vibe.key);
   return (
-    <p className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-gray-500 dark:text-gray-400">
-      <vibe.icon size={12} strokeWidth={2.25} aria-hidden="true" />
-      <span>{t(vibe.key)}</span>
-    </p>
+    <Tooltip
+      className="mt-1"
+      label={label}
+      content={t(`feed.vibeDescriptions.${vibe.name}`, { defaultValue: '' })}
+    >
+      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-500 underline decoration-gray-300 decoration-dotted underline-offset-2 dark:text-gray-400 dark:decoration-gray-600">
+        <vibe.icon size={12} strokeWidth={2.25} aria-hidden="true" />
+        <span>{label}</span>
+      </span>
+    </Tooltip>
   );
 };
 

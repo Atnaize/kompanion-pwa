@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Avatar } from '@components/ui';
+import { Avatar, Tooltip } from '@components/ui';
 import type { ActivityAthlete, ActivityComment } from '@types';
 import { useSettingsStore } from '@store/settingsStore';
 
@@ -92,7 +92,7 @@ export const ActivityEngagement = ({
         ) : (
           <div className="flex flex-wrap items-center gap-1.5">
             {visibleAvatars.map((a) => (
-              <div key={a.id} title={fullName(a)}>
+              <Tooltip key={a.id} label={fullName(a)} content={fullName(a)}>
                 <Avatar
                   size="sm"
                   src={a.profile_medium || a.profile}
@@ -100,7 +100,7 @@ export const ActivityEngagement = ({
                   lastname={a.lastname}
                   className="h-9 w-9 ring-2 ring-white transition-transform hover:-translate-y-0.5 dark:ring-gray-900"
                 />
-              </div>
+              </Tooltip>
             ))}
             {hiddenAvatarCount > 0 && (
               <button

@@ -464,3 +464,49 @@ export interface UserProfile {
     totalElevation: number;
   };
 }
+
+/**
+ * Mirrors the backend A4 metric registry. Adding a metric is: server-side
+ * key here, then a renderer entry in the leaderboard/compare formatters.
+ */
+export type LeaderboardMetricKey =
+  | 'distance'
+  | 'elevation'
+  | 'count'
+  | 'movingTime'
+  | 'avgSpeed'
+  | 'elevationPerKm';
+
+export type LeaderboardPeriod = 'week' | 'month' | 'year' | 'overall';
+
+export interface LeaderboardRow {
+  rank: number;
+  user: Friend;
+  /** Already formatted (rounded) by the server-side metric descriptor. */
+  value: number;
+  latestActivityAt: string | null;
+  isViewer: boolean;
+}
+
+export interface FriendsLeaderboard {
+  metric: LeaderboardMetricKey;
+  period: LeaderboardPeriod;
+  activityType: string | null;
+  rows: LeaderboardRow[];
+}
+
+export interface CompareWithFriendMetric {
+  key: LeaderboardMetricKey;
+  labelKey: string;
+  viewer: number;
+  other: number;
+  higherIsBetter: boolean;
+}
+
+export interface CompareWithFriend {
+  viewerId: number;
+  otherId: number;
+  period: LeaderboardPeriod;
+  activityType: string | null;
+  metrics: CompareWithFriendMetric[];
+}

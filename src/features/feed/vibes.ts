@@ -14,6 +14,9 @@ import {
 import type { ActivityPostedMetadata, FeedActivitySnapshot } from '@types';
 
 export interface Vibe {
+  /** Stable family name (e.g. `sub4`, `unsungHero`) — used to look up a single
+   * description per vibe regardless of which phrasing variant was picked. */
+  name: string;
   /** i18n key for the chosen phrase (one of the vibe's variants). */
   key: string;
   icon: LucideIcon;
@@ -137,6 +140,7 @@ function hash32(seed: string): number {
 function build(name: VibeKey, seed: string): Vibe {
   const def = VIBES[name];
   return {
+    name,
     icon: def.icon,
     key: def.phrases[hash32(seed) % def.phrases.length],
   };

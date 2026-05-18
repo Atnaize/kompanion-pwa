@@ -63,10 +63,13 @@
     "social": "Social",
     "socialComingSoon": "Coming soon",
     "account": "Account",
+    "stats": "Stats",
     "friends": "Friends",
     "feed": "Feed",
+    "leaderboards": "Leaderboards",
     "notifications": "Inbox",
-    "beta": "Beta"
+    "beta": "Beta",
+    "requiresFriends": "Add friends first"
   },
   "header": {
     "title": "Kompanion",
@@ -235,6 +238,24 @@
       "unsungHero_b": "Stealth mode",
       "unsungHero_c": "Going under the radar"
     },
+    "vibeDescriptions": {
+      "sub4": "Run pace below 4:00/km.",
+      "sub5": "Run pace below 5:00/km.",
+      "speedDemon": "Run pace below 4:30/km.",
+      "marathonMode": "Run of 35 km or more.",
+      "epic": "Over 4 hours moving.",
+      "mountainGoat": "1,500 m+ of climbing.",
+      "bigDayBike": "Bike ride of 100 km or more.",
+      "verticalChase": "50 m+ of climbing per km.",
+      "cruising": "Bike avg 35 km/h or faster.",
+      "sufferfest": "Avg heart rate over 170 bpm.",
+      "sundayLong": "Sunday run of 15 km or more.",
+      "longHaul": "2 hours of moving time or more.",
+      "zone2": "Avg heart rate below 130 bpm.",
+      "dawnPatrol": "Started before 6 a.m.",
+      "afterDark": "Started at 9 p.m. or later.",
+      "unsungHero": "No kudos or comments yet."
+    },
     "compare": {
       "matched": "Almost matched — within {{delta}}",
       "friendFaster": "Faster than your best by {{delta}}",
@@ -279,7 +300,30 @@
     "friendsCount_one": "{{count}} friend",
     "friendsCount_other": "{{count}} friends",
     "stats": "Stats",
-    "lockedHint": "Become friends to see this user's stats and activities."
+    "lockedHint": "Become friends to see this user's stats and activities.",
+    "compareWith": "Compare with {{name}}"
+  },
+  "leaderboards": {
+    "title": "Leaderboards",
+    "subtitle": "See how you stack up against your friends.",
+    "you": "You",
+    "metric": {
+      "distance": "Distance",
+      "elevation": "Elevation",
+      "count": "Activities",
+      "movingTime": "Moving Time",
+      "avgSpeed": "Avg Speed",
+      "elevationPerKm": "Climb / km"
+    },
+    "empty": {
+      "title": "No-one to race yet",
+      "description": "Add some friends to see how you stack up."
+    }
+  },
+  "compare": {
+    "title": "Head-to-head",
+    "subtitle": "Side-by-side stats for the chosen period.",
+    "you": "You"
   },
   "profile": {
     "title": "Profile",

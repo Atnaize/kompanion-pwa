@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { Lock, Users } from 'lucide-react';
+import { GitCompareArrows, Lock, Users } from 'lucide-react';
 import { Layout } from '@components/layout';
 import { Avatar, Button, GlassCard, StatTile } from '@components/ui';
 import { usersService } from '@api/services';
@@ -49,6 +49,9 @@ export const UserProfilePage = () => {
 
   const { user, friendshipState, counters, stats } = data;
   const hasFullAccess = friendshipState === 'self' || friendshipState === 'friends';
+  // Compare-vs-friend is only meaningful with another person, so hide when
+  // viewing your own profile (`self`). The server enforces this too (A5).
+  const canCompare = friendshipState === 'friends';
 
   return (
     <Layout>
@@ -81,6 +84,19 @@ export const UserProfilePage = () => {
             </div>
           </div>
         </GlassCard>
+
+        {/* Compare action (friends only — server enforces A5) */}
+        {canCompare && (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => navigate(`/users/${user.id}/compare`)}
+            className="inline-flex items-center gap-1.5"
+          >
+            <GitCompareArrows size={14} strokeWidth={2} aria-hidden="true" />
+            {t('userProfile.compareWith', { name: user.firstname })}
+          </Button>
+        )}
 
         {/* Stats (visible to friends + self only) */}
         {hasFullAccess && stats && (

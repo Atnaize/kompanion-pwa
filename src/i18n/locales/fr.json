@@ -63,10 +63,13 @@
     "social": "Social",
     "socialComingSoon": "Bient\u00f4t disponible",
     "account": "Compte",
+    "stats": "Statistiques",
     "friends": "Amis",
     "feed": "Fil",
+    "leaderboards": "Classements",
     "notifications": "Bo\u00eete",
-    "beta": "B\u00eata"
+    "beta": "B\u00eata",
+    "requiresFriends": "Ajoutez des amis d'abord"
   },
   "header": {
     "title": "Kompanion",
@@ -235,6 +238,24 @@
       "unsungHero_b": "Mode furtif",
       "unsungHero_c": "Sous les radars"
     },
+    "vibeDescriptions": {
+      "sub4": "Allure inférieure à 4:00/km.",
+      "sub5": "Allure inférieure à 5:00/km.",
+      "speedDemon": "Allure inférieure à 4:30/km.",
+      "marathonMode": "Course de 35 km ou plus.",
+      "epic": "Plus de 4 heures de mouvement.",
+      "mountainGoat": "1 500 m+ de dénivelé positif.",
+      "bigDayBike": "Sortie vélo de 100 km ou plus.",
+      "verticalChase": "50 m+ de D+ par km.",
+      "cruising": "Vélo à 35 km/h de moyenne ou plus.",
+      "sufferfest": "Fréquence cardiaque moyenne > 170 bpm.",
+      "sundayLong": "Sortie dominicale de 15 km ou plus.",
+      "longHaul": "2 heures de mouvement ou plus.",
+      "zone2": "Fréquence cardiaque moyenne < 130 bpm.",
+      "dawnPatrol": "Démarrée avant 6 h.",
+      "afterDark": "Démarrée à partir de 21 h.",
+      "unsungHero": "Pas encore de kudo ni commentaire."
+    },
     "compare": {
       "matched": "Presque égalé — à {{delta}} près",
       "friendFaster": "Plus rapide que votre meilleur de {{delta}}",
@@ -279,7 +300,30 @@
     "friendsCount_one": "{{count}} ami",
     "friendsCount_other": "{{count}} amis",
     "stats": "Statistiques",
-    "lockedHint": "Devenez amis pour voir les statistiques et activit\u00e9s de cet utilisateur."
+    "lockedHint": "Devenez amis pour voir les statistiques et activit\u00e9s de cet utilisateur.",
+    "compareWith": "Comparer avec {{name}}"
+  },
+  "leaderboards": {
+    "title": "Classements",
+    "subtitle": "Voyez comment vous vous situez face à vos amis.",
+    "you": "Vous",
+    "metric": {
+      "distance": "Distance",
+      "elevation": "D\u00e9nivel\u00e9",
+      "count": "Activit\u00e9s",
+      "movingTime": "Temps en mouvement",
+      "avgSpeed": "Vitesse moyenne",
+      "elevationPerKm": "D+ / km"
+    },
+    "empty": {
+      "title": "Personne avec qui se mesurer",
+      "description": "Ajoutez des amis pour voir comment vous vous situez."
+    }
+  },
+  "compare": {
+    "title": "T\u00eate-\u00e0-t\u00eate",
+    "subtitle": "Statistiques c\u00f4te \u00e0 c\u00f4te sur la p\u00e9riode choisie.",
+    "you": "Vous"
   },
   "profile": {
     "title": "Profil",

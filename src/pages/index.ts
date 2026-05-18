@@ -12,6 +12,8 @@ export * from './ComponentsPage';
 export * from './ProfilePage';
 export * from './FriendsPage';
 export * from './UserProfilePage';
+export * from './CompareWithFriendPage';
+export * from './LeaderboardsPage';
 export * from './FeedPage';
 export * from './NotificationsPage';
 export * from './SettingsPage';
