@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { GlassCard, Button } from '@components/ui';
 import { FriendSelector } from '@features/friends';
 import { friendsService } from '@api/services';
@@ -27,46 +27,33 @@ export const InviteFriendsModal = ({
 
   useEffect(() => {
     if (!isOpen) {
-      // Reset state when modal closes
       setSelectedFriendIds([]);
       setFriends([]);
       setSearchQuery('');
-    }
-  }, [isOpen]);
-
-  const searchUsers = useCallback(async () => {
-    setIsLoadingFriends(true);
-    try {
-      const response = await friendsService.search(searchQuery);
-      if (response.success && response.data) {
-        // Filter out users who are already participants
-        const availableFriends = response.data.filter(
-          (friend) => !existingParticipantIds.includes(friend.id)
-        );
-        setFriends(availableFriends);
-      }
-    } catch (error) {
-      console.error('Error searching users:', error);
-    } finally {
-      setIsLoadingFriends(false);
-    }
-  }, [searchQuery, existingParticipantIds]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (searchQuery.length < 2) {
-      setFriends([]);
       return;
     }
 
-    // Debounce search
-    const timeoutId = setTimeout(() => {
-      void searchUsers();
-    }, 300);
+    let cancelled = false;
+    setIsLoadingFriends(true);
+    (async () => {
+      try {
+        const response = await friendsService.list();
+        if (cancelled) return;
+        if (response.success && response.data) {
+          // Only friends can be invited; also filter anyone already in the challenge.
+          setFriends(response.data.filter((f) => !existingParticipantIds.includes(f.id)));
+        }
+      } catch (error) {
+        console.error('Error loading friends:', error);
+      } finally {
+        if (!cancelled) setIsLoadingFriends(false);
+      }
+    })();
 
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, isOpen, searchUsers]);
+    return () => {
+      cancelled = true;
+    };
+  }, [isOpen, existingParticipantIds]);
 
   const handleInvite = async () => {
     if (selectedFriendIds.length === 0) {
@@ -110,13 +97,13 @@ export const InviteFriendsModal = ({
         </div>
 
         <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          Search for Kompanion users by name to invite them to this challenge.
+          Pick from your Kompanion friends to invite to this challenge.
         </p>
 
         <div className="mb-4">
           <input
             type="text"
-            placeholder="Search users by name (min 2 characters)..."
+            placeholder="Search your friends by name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-lg border border-gray-200 bg-white/50 px-4 py-2 text-sm backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-orange-500 dark:border-gray-800 dark:bg-gray-900/50 dark:text-gray-100 dark:placeholder-gray-500"
@@ -125,20 +112,14 @@ export const InviteFriendsModal = ({
         </div>
 
         <div className="mb-6">
-          {searchQuery.length < 2 ? (
-            <GlassCard className="p-6 text-center">
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Start typing to search for users...
-              </p>
-            </GlassCard>
-          ) : (
-            <FriendSelector
-              selectedFriendIds={selectedFriendIds}
-              onSelectionChange={setSelectedFriendIds}
-              friends={friends}
-              isLoading={isLoadingFriends}
-            />
-          )}
+          <FriendSelector
+            selectedFriendIds={selectedFriendIds}
+            onSelectionChange={setSelectedFriendIds}
+            friends={friends}
+            isLoading={isLoadingFriends}
+            showSearch={false}
+            searchQuery={searchQuery}
+          />
         </div>
 
         <div className="flex gap-3">

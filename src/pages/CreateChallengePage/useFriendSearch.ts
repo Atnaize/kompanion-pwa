@@ -2,58 +2,39 @@ import { useCallback, useEffect, useState } from 'react';
 import { friendsService } from '@api/services';
 import type { Friend } from '@types';
 
-const MIN_QUERY_LENGTH = 2;
-const DEBOUNCE_MS = 300;
-
 /**
- * Debounced friend search with a persistent id→Friend cache so that previously
- * selected friends stay resolvable even after the search results change.
+ * Loads the viewer's accepted-friends list once. Only friends can be invited
+ * to a challenge, so the picker's source set is bounded — we fetch the full
+ * list upfront and let FriendSelector do client-side name filtering against
+ * the searchQuery passed down from the page.
  */
 export const useFriendSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [friends, setFriends] = useState<Friend[]>([]);
-  const [cache, setCache] = useState<Map<number, Friend>>(new Map());
-  const [isLoading, setIsLoading] = useState(false);
-
-  const search = useCallback(async (query: string) => {
-    setIsLoading(true);
-    try {
-      const response = await friendsService.search(query);
-      if (response.success && response.data) {
-        const data = response.data;
-        setFriends(data);
-        setCache((prev) => {
-          const next = new Map(prev);
-          data.forEach((f: Friend) => next.set(f.id, f));
-          return next;
-        });
-      }
-    } catch (error) {
-      console.error('Failed to search users:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (searchQuery.length < MIN_QUERY_LENGTH) return;
-    const timeoutId = setTimeout(() => void search(searchQuery), DEBOUNCE_MS);
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, search]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await friendsService.list();
+        if (cancelled) return;
+        if (response.success && response.data) {
+          setFriends(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to load friends:', error);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  /** Merges current search results with already-selected friends from the cache. */
-  const combineWithSelected = useCallback(
-    (selectedIds: number[]): Friend[] => {
-      const map = new Map<number, Friend>();
-      friends.forEach((f) => map.set(f.id, f));
-      selectedIds.forEach((id) => {
-        const cached = cache.get(id);
-        if (cached) map.set(cached.id, cached);
-      });
-      return Array.from(map.values());
-    },
-    [friends, cache]
-  );
+  /** Kept for API compatibility; the friends list is stable so selected ids resolve directly. */
+  const combineWithSelected = useCallback((_selectedIds: number[]): Friend[] => friends, [friends]);
 
   return {
     searchQuery,
