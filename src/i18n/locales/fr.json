@@ -720,7 +720,55 @@
     "title": "\u00c0 propos de",
     "version": "Version {{version}}",
     "dataProvider": "Donn\u00e9es fournies par",
-    "footer": "Fait avec \u2764\ufe0f pour vous"
+    "footer": "Fait avec \u2764\ufe0f pour vous",
+    "privacyPolicy": "Politique de confidentialit\u00e9",
+    "termsOfService": "Conditions d'utilisation"
+  },
+  "legal": {
+    "back": "Retour \u00e0 \u00c0 propos",
+    "lastUpdated": "Derni\u00e8re mise \u00e0 jour : {{date}}",
+    "privacy": {
+      "title": "Politique de confidentialit\u00e9",
+      "dataCollected": {
+        "title": "Donn\u00e9es collect\u00e9es",
+        "body": "Kompanion se connecte \u00e0 votre compte Strava via OAuth et lit vos donn\u00e9es d'activit\u00e9, votre profil et vos donn\u00e9es athl\u00e8te. Nous stockons les activit\u00e9s, les records personnels et quelques statistiques d\u00e9riv\u00e9es pour afficher vos succ\u00e8s, classements et flux social."
+      },
+      "dataUse": {
+        "title": "Utilisation de vos donn\u00e9es",
+        "body": "Vos donn\u00e9es servent \u00e0 alimenter votre tableau de bord, la gamification (succ\u00e8s, qu\u00eates, classements entre amis) et les fonctionnalit\u00e9s sociales auxquelles vous adh\u00e9rez (demandes d'amis, flux). Nous ne vendons ni ne partageons vos donn\u00e9es avec des annonceurs."
+      },
+      "dataSharing": {
+        "title": "Partage avec d'autres utilisateurs",
+        "body": "Lorsque vous acceptez une demande d'ami, cette personne peut voir votre profil, vos activit\u00e9s r\u00e9centes et les comparaisons statistiques. Rien n'est partag\u00e9 avec des non-amis. Strava reste la source de v\u00e9rit\u00e9 pour les kudos et commentaires \u2014 les deux sont en lecture seule dans Kompanion."
+      },
+      "rights": {
+        "title": "Vos droits",
+        "body": "Vous pouvez supprimer votre compte \u00e0 tout moment depuis votre profil. Cela supprime toutes vos donn\u00e9es de nos serveurs. Vous pouvez aussi r\u00e9voquer l'acc\u00e8s de Kompanion depuis les param\u00e8tres de votre compte Strava."
+      }
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "acceptance": {
+        "title": "Acceptation",
+        "body": "En vous connectant avec Strava, vous acceptez ces conditions. Si vous n'\u00eates pas d'accord, merci de ne pas utiliser Kompanion."
+      },
+      "useOfService": {
+        "title": "Utilisation du service",
+        "body": "Kompanion est fourni pour un usage personnel et non commercial. Vous ne pouvez pas extraire automatiquement les donn\u00e9es du service, tenter de r\u00e9troconcevoir les points d'API prot\u00e9g\u00e9s, ni utiliser le service pour harceler d'autres utilisateurs."
+      },
+      "stravaTerms": {
+        "title": "Conditions de l'API Strava",
+        "body": "Kompanion est une application tierce construite sur l'API Strava. Votre utilisation de Kompanion est \u00e9galement soumise aux Conditions d'utilisation et \u00e0 l'Accord d'API de Strava."
+      },
+      "disclaimer": {
+        "title": "Avertissement",
+        "body": "Kompanion est fourni \u00ab\u00a0en l'\u00e9tat\u00a0\u00bb, sans garantie. Nous faisons de notre mieux pour que tout fonctionne, mais des coupures, des probl\u00e8mes de synchronisation ou des succ\u00e8s incorrects peuvent survenir. Nous ne sommes pas responsables des d\u00e9cisions que vous prenez sur la base des donn\u00e9es affich\u00e9es ici."
+      },
+      "termination": {
+        "title": "R\u00e9siliation",
+        "body": "Nous pouvons suspendre les comptes qui enfreignent ces conditions. Vous pouvez r\u00e9silier votre compte \u00e0 tout moment en le supprimant depuis votre page profil."
+      }
+    }
   },
   "notFound": {
     "title": "Page non trouv\u00e9e",

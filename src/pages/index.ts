@@ -18,5 +18,7 @@ export * from './FeedPage';
 export * from './NotificationsPage';
 export * from './SettingsPage';
 export * from './AboutPage';
+export * from './PrivacyPage';
+export * from './TermsPage';
 export * from './AdminPage';
 export * from './NotFoundPage';

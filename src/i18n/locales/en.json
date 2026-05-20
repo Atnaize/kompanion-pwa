@@ -720,7 +720,55 @@
     "title": "About",
     "version": "Version {{version}}",
     "dataProvider": "Data provided by",
-    "footer": "Made with ❤️ for you"
+    "footer": "Made with ❤️ for you",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  },
+  "legal": {
+    "back": "Back to About",
+    "lastUpdated": "Last updated: {{date}}",
+    "privacy": {
+      "title": "Privacy Policy",
+      "dataCollected": {
+        "title": "Data we collect",
+        "body": "Kompanion connects to your Strava account via OAuth and reads your activity, profile, and athlete data. We store activities, personal records, and a few derived stats so we can show you achievements, leaderboards, and your social feed."
+      },
+      "dataUse": {
+        "title": "How we use your data",
+        "body": "Your data is used to power your dashboard, gamification (achievements, quests, friend leaderboards) and any social features you opt into (friend requests, feed). We do not sell or share your data with advertisers."
+      },
+      "dataSharing": {
+        "title": "Sharing with other users",
+        "body": "When you accept a friend request, that friend can see your profile, recent activities, and stat comparisons. Nothing is shared with non-friends. Strava remains the source of truth for kudos and comments,  both surfaces are read-only inside Kompanion."
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": "You can delete your account at any time from your Profile page. This removes all your data from our servers. You can also revoke Kompanion's access to your Strava account directly from your Strava settings."
+      }
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "acceptance": {
+        "title": "Acceptance",
+        "body": "By signing in with Strava, you agree to these terms. If you don't agree, please don't use Kompanion."
+      },
+      "useOfService": {
+        "title": "Use of the service",
+        "body": "Kompanion is provided for personal, non-commercial use. You may not scrape data from the service, attempt to reverse-engineer protected endpoints, or use the service to harass other users."
+      },
+      "stravaTerms": {
+        "title": "Strava API terms",
+        "body": "Kompanion is a third-party app built on top of the Strava API. Your use of Kompanion is also subject to Strava's own Terms of Service and API Agreement."
+      },
+      "disclaimer": {
+        "title": "Disclaimer",
+        "body": "Kompanion is provided \"as is\" with no warranties. We try to keep things working but downtime, data sync issues, or incorrect achievements can happen. We are not responsible for any decision you make based on the data shown here."
+      },
+      "termination": {
+        "title": "Termination",
+        "body": "We may suspend accounts that violate these terms. You can terminate your own account at any time by deleting it from your Profile page."
+      }
+    }
   },
   "notFound": {
     "title": "Page Not Found",

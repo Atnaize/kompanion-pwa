@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Layout } from '@components/layout';
 import { GlassCard } from '@components/ui';
@@ -32,7 +33,17 @@ export const AboutPage = () => {
                 </a>
               </p>
 
-              <div className="mt-6 border-t border-gray-200 pt-6 text-sm text-gray-500 dark:border-gray-800 dark:text-gray-400"></div>
+              <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-800"></div>
+
+              <nav className="mt-4 flex justify-center gap-4 text-sm">
+                <Link to="/privacy" className="font-medium text-strava-orange hover:underline">
+                  {t('about.privacyPolicy')}
+                </Link>
+                <span className="text-gray-300 dark:text-gray-700">·</span>
+                <Link to="/terms" className="font-medium text-strava-orange hover:underline">
+                  {t('about.termsOfService')}
+                </Link>
+              </nav>
 
               <p className="mt-4 text-sm">{t('about.footer')}</p>
             </div>

@@ -69,6 +69,10 @@ const SettingsPage = lazy(() =>
   import('@pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 );
 const AboutPage = lazy(() => import('@pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const PrivacyPage = lazy(() =>
+  import('@pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage }))
+);
+const TermsPage = lazy(() => import('@pages/TermsPage').then((m) => ({ default: m.TermsPage })));
 const AdminPage = lazy(() => import('@pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -164,6 +168,10 @@ export const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          {/* Public legal pages — must be readable without auth (Strava ToS
+              requirement for production OAuth apps). */}
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route
             path="/dashboard"
             element={
