@@ -473,6 +473,15 @@ export const usersService = {
   getProfile: (userId: number) => apiClient.get<UserProfile>(`/users/${userId}/profile`),
 };
 
+export const privacyService = {
+  block: (userId: number) => apiClient.post(`/privacy/blocks/${userId}`),
+  unblock: (userId: number) => apiClient.delete(`/privacy/blocks/${userId}`),
+  mute: (userId: number) => apiClient.post(`/privacy/mutes/${userId}`),
+  unmute: (userId: number) => apiClient.delete(`/privacy/mutes/${userId}`),
+  listBlocked: () => apiClient.get<Friend[]>('/privacy/blocks'),
+  listMuted: () => apiClient.get<Friend[]>('/privacy/mutes'),
+};
+
 export const feedService = {
   list: (cursor?: string, limit?: number) => {
     const params = new URLSearchParams();

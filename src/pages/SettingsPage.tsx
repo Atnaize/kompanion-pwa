@@ -5,6 +5,7 @@ import { useToastStore } from '@store/toastStore';
 import { useSettingsStore } from '@store/settingsStore';
 import { hapticService } from '@utils/haptic';
 import { usePushNotifications } from '@hooks/usePushNotifications';
+import { PrivacyLists } from '@features/privacy';
 
 export const SettingsPage = () => {
   const { t } = useTranslation();
@@ -218,6 +219,14 @@ export const SettingsPage = () => {
               description={`${t('settings.feedback.hapticDesc')}${!hapticService.isSupported() ? t('settings.feedback.hapticUnsupported') : ''}`}
             />
           </GlassCard>
+        </section>
+
+        {/* Privacy — blocked + muted users */}
+        <section>
+          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+            {t('settings.privacy.title')}
+          </h3>
+          <PrivacyLists />
         </section>
       </div>
     </Layout>

@@ -132,6 +132,46 @@
       "hapticUnsupported": " (Not supported on this device)",
       "hapticEnabled": "Haptic feedback enabled",
       "hapticDisabled": "Haptic feedback disabled"
+    },
+    "privacy": {
+      "title": "Privacy"
+    }
+  },
+  "privacy": {
+    "menu": {
+      "open": "More actions",
+      "mute": "Mute (stay friends)",
+      "unmute": "Unmute",
+      "block": "Block & unfriend"
+    },
+    "action": {
+      "unblock": "Unblock",
+      "unmute": "Unmute"
+    },
+    "muted": {
+      "title": "Muted · {{count}}",
+      "description": "You stay friends. Their activity hides from your feed and leaderboards.",
+      "empty": "You haven't muted anyone."
+    },
+    "blocked": {
+      "title": "Blocked · {{count}}",
+      "description": "You can't see each other anywhere on Kompanion.",
+      "empty": "You haven't blocked anyone."
+    },
+    "confirmBlock": {
+      "title": "Block {{name}}?",
+      "bullet1": "You'll unfriend immediately",
+      "bullet2": "Neither of you will appear in search, feed, leaderboards, or challenges",
+      "bullet3": "Pending friend requests between you are removed",
+      "bullet4": "They won't be notified",
+      "confirm": "Block & unfriend"
+    },
+    "toast": {
+      "muted": "{{name}} muted",
+      "unmuted": "{{name}} unmuted",
+      "blocked": "{{name}} blocked",
+      "unblocked": "{{name}} unblocked",
+      "actionFailed": "Something went wrong"
     }
   },
   "friends": {

@@ -6,6 +6,7 @@ import { Layout } from '@components/layout';
 import { Avatar, Button, GlassCard, StatTile } from '@components/ui';
 import { usersService } from '@api/services';
 import { FriendActionButton } from '@features/friends';
+import { UserActionsMenu } from '@features/privacy';
 
 export const UserProfilePage = () => {
   const { t } = useTranslation();
@@ -52,6 +53,8 @@ export const UserProfilePage = () => {
   // Compare-vs-friend is only meaningful with another person, so hide when
   // viewing your own profile (`self`). The server enforces this too (A5).
   const canCompare = friendshipState === 'friends';
+  // Show the privacy menu (block / mute) on anyone but yourself.
+  const showActionsMenu = friendshipState !== 'self';
 
   return (
     <Layout>
@@ -79,8 +82,11 @@ export const UserProfilePage = () => {
                 {t('userProfile.friendsCount', { count: counters.friends })}
               </p>
             </div>
-            <div className="shrink-0">
+            <div className="flex shrink-0 items-center gap-2">
               <FriendActionButton userId={user.id} state={friendshipState} compact allowUnfriend />
+              {showActionsMenu && (
+                <UserActionsMenu userId={user.id} userName={`${user.firstname} ${user.lastname}`} />
+              )}
             </div>
           </div>
         </GlassCard>

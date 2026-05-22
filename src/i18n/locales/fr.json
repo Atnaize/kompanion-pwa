@@ -132,6 +132,46 @@
       "hapticUnsupported": " (Non pris en charge sur cet appareil)",
       "hapticEnabled": "Retour haptique activ\u00e9",
       "hapticDisabled": "Retour haptique d\u00e9sactiv\u00e9"
+    },
+    "privacy": {
+      "title": "Confidentialit\u00e9"
+    }
+  },
+  "privacy": {
+    "menu": {
+      "open": "Plus d'actions",
+      "mute": "Mettre en sourdine (rester amis)",
+      "unmute": "R\u00e9activer",
+      "block": "Bloquer et retirer"
+    },
+    "action": {
+      "unblock": "D\u00e9bloquer",
+      "unmute": "R\u00e9activer"
+    },
+    "muted": {
+      "title": "En sourdine \u00b7 {{count}}",
+      "description": "Vous restez amis. Son activit\u00e9 est masqu\u00e9e de votre fil et des classements.",
+      "empty": "Vous n'avez mis personne en sourdine."
+    },
+    "blocked": {
+      "title": "Bloqu\u00e9s \u00b7 {{count}}",
+      "description": "Vous ne pouvez plus vous voir sur Kompanion.",
+      "empty": "Vous n'avez bloqu\u00e9 personne."
+    },
+    "confirmBlock": {
+      "title": "Bloquer {{name}} ?",
+      "bullet1": "Vous serez retir\u00e9s de vos amis imm\u00e9diatement",
+      "bullet2": "Vous n'apparaitrez plus l'un \u00e0 l'autre dans la recherche, le fil, les classements ni les d\u00e9fis",
+      "bullet3": "Les demandes d'amis en attente entre vous seront supprim\u00e9es",
+      "bullet4": "L'autre utilisateur ne sera pas notifi\u00e9",
+      "confirm": "Bloquer et retirer"
+    },
+    "toast": {
+      "muted": "{{name}} mis en sourdine",
+      "unmuted": "{{name}} r\u00e9activ\u00e9",
+      "blocked": "{{name}} bloqu\u00e9",
+      "unblocked": "{{name}} d\u00e9bloqu\u00e9",
+      "actionFailed": "Une erreur est survenue"
     }
   },
   "friends": {
