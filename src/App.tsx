@@ -43,6 +43,9 @@ const ChallengeDetailPage = lazy(() =>
 const CreateChallengePage = lazy(() =>
   import('@pages/CreateChallengePage').then((m) => ({ default: m.CreateChallengePage }))
 );
+const ChallengeChatPage = lazy(() =>
+  import('@pages/ChallengeChatPage').then((m) => ({ default: m.ChallengeChatPage }))
+);
 const ComponentsPage = lazy(() =>
   import('@pages/ComponentsPage').then((m) => ({ default: m.ComponentsPage }))
 );
@@ -68,12 +71,53 @@ const NotificationsPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('@pages/SettingsPage').then((m) => ({ default: m.SettingsPage }))
 );
+const SettingsLanguagePage = lazy(() =>
+  import('@pages/settings/SettingsLanguagePage').then((m) => ({ default: m.SettingsLanguagePage }))
+);
+const SettingsAppearancePage = lazy(() =>
+  import('@pages/settings/SettingsAppearancePage').then((m) => ({
+    default: m.SettingsAppearancePage,
+  }))
+);
+const SettingsNotificationsPage = lazy(() =>
+  import('@pages/settings/SettingsNotificationsPage').then((m) => ({
+    default: m.SettingsNotificationsPage,
+  }))
+);
+const SettingsPrivacyPage = lazy(() =>
+  import('@pages/settings/SettingsPrivacyPage').then((m) => ({ default: m.SettingsPrivacyPage }))
+);
+const SettingsFeedbackPage = lazy(() =>
+  import('@pages/settings/SettingsFeedbackPage').then((m) => ({ default: m.SettingsFeedbackPage }))
+);
 const AboutPage = lazy(() => import('@pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const PrivacyPage = lazy(() =>
   import('@pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage }))
 );
 const TermsPage = lazy(() => import('@pages/TermsPage').then((m) => ({ default: m.TermsPage })));
 const AdminPage = lazy(() => import('@pages/AdminPage').then((m) => ({ default: m.AdminPage })));
+const ClubsPage = lazy(() => import('@pages/ClubsPage').then((m) => ({ default: m.ClubsPage })));
+const ClubDetailPage = lazy(() =>
+  import('@pages/ClubDetailPage').then((m) => ({ default: m.ClubDetailPage }))
+);
+const CreateClubPage = lazy(() =>
+  import('@pages/CreateClubPage').then((m) => ({ default: m.CreateClubPage }))
+);
+const InviteToClubPage = lazy(() =>
+  import('@pages/InviteToClubPage').then((m) => ({ default: m.InviteToClubPage }))
+);
+const ClubChatPage = lazy(() =>
+  import('@pages/ClubChatPage').then((m) => ({ default: m.ClubChatPage }))
+);
+const ClubSettingsPage = lazy(() =>
+  import('@pages/ClubSettingsPage').then((m) => ({ default: m.ClubSettingsPage }))
+);
+const MessagesPage = lazy(() =>
+  import('@pages/MessagesPage').then((m) => ({ default: m.MessagesPage }))
+);
+const MessageThreadPage = lazy(() =>
+  import('@pages/MessageThreadPage').then((m) => ({ default: m.MessageThreadPage }))
+);
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslation();
@@ -237,10 +281,66 @@ export const App = () => {
             }
           />
           <Route
+            path="/challenges/:id/chat"
+            element={
+              <ProtectedPage>
+                <ChallengeChatPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
             path="/challenges/:id"
             element={
               <ProtectedPage>
                 <ChallengeDetailPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/clubs"
+            element={
+              <ProtectedPage>
+                <ClubsPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/clubs/create"
+            element={
+              <ProtectedPage>
+                <CreateClubPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/clubs/:id"
+            element={
+              <ProtectedPage>
+                <ClubDetailPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/clubs/:id/invite"
+            element={
+              <ProtectedPage>
+                <InviteToClubPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/clubs/:id/chat"
+            element={
+              <ProtectedPage>
+                <ClubChatPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/clubs/:id/settings"
+            element={
+              <ProtectedPage>
+                <ClubSettingsPage />
               </ProtectedPage>
             }
           />
@@ -257,6 +357,22 @@ export const App = () => {
             element={
               <ProtectedPage>
                 <FriendsPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedPage>
+                <MessagesPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/messages/:conversationId"
+            element={
+              <ProtectedPage>
+                <MessageThreadPage />
               </ProtectedPage>
             }
           />
@@ -305,6 +421,46 @@ export const App = () => {
             element={
               <ProtectedPage>
                 <SettingsPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/settings/language"
+            element={
+              <ProtectedPage>
+                <SettingsLanguagePage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/settings/appearance"
+            element={
+              <ProtectedPage>
+                <SettingsAppearancePage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/settings/notifications"
+            element={
+              <ProtectedPage>
+                <SettingsNotificationsPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/settings/privacy"
+            element={
+              <ProtectedPage>
+                <SettingsPrivacyPage />
+              </ProtectedPage>
+            }
+          />
+          <Route
+            path="/settings/feedback"
+            element={
+              <ProtectedPage>
+                <SettingsFeedbackPage />
               </ProtectedPage>
             }
           />

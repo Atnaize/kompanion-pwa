@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+import { useConfetti } from '@hooks/useConfetti';
 import type { Achievement } from '@types';
 
 interface AchievementUnlockedModalProps {
@@ -28,60 +29,13 @@ export const AchievementUnlockedModal = ({
 }: AchievementUnlockedModalProps) => {
   const { t } = useTranslation();
   const [showContent, setShowContent] = useState(false);
+  const fireConfetti = useConfetti();
 
   useEffect(() => {
-    // Show content after a brief delay
     const contentTimer = setTimeout(() => setShowContent(true), 100);
-
-    // Create confetti effect with proper randomization
-    const colors = ['#FF4B00', '#FF6B2B', '#4B5563', '#3B82F6', '#8B5CF6', '#F59E0B'];
-    const confettiCount = 60;
-    const confettiElements: HTMLDivElement[] = [];
-
-    for (let i = 0; i < confettiCount; i++) {
-      const confetti = document.createElement('div');
-      const size = Math.random() * 8 + 4; // 4-12px
-      const startX = Math.random() * window.innerWidth;
-      const endX = startX + (Math.random() - 0.5) * 200; // Drift sideways
-      const rotation = Math.random() * 720 - 360;
-      const delay = Math.random() * 500; // Random start time
-      const duration = Math.random() * 1500 + 2000; // 2-3.5s
-
-      confetti.style.position = 'fixed';
-      confetti.style.width = `${size}px`;
-      confetti.style.height = `${size}px`;
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.left = `${startX}px`;
-      confetti.style.top = '-20px';
-      confetti.style.opacity = '1';
-      confetti.style.zIndex = '9999';
-      confetti.style.pointerEvents = 'none';
-      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-
-      document.body.appendChild(confetti);
-      confettiElements.push(confetti);
-
-      // Animate confetti with delay
-      setTimeout(() => {
-        confetti.style.transition = `all ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-        confetti.style.top = `${window.innerHeight + 20}px`;
-        confetti.style.left = `${endX}px`;
-        confetti.style.opacity = '0';
-        confetti.style.transform = `rotate(${rotation}deg)`;
-      }, delay);
-    }
-
-    // Cleanup
-    const cleanup = setTimeout(() => {
-      confettiElements.forEach((el) => el.remove());
-    }, 4000);
-
-    return () => {
-      clearTimeout(contentTimer);
-      clearTimeout(cleanup);
-      confettiElements.forEach((el) => el.remove());
-    };
-  }, []);
+    fireConfetti();
+    return () => clearTimeout(contentTimer);
+  }, [fireConfetti]);
 
   return (
     <div

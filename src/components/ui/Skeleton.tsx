@@ -72,4 +72,26 @@ export const AchievementCardSkeleton = () => {
   );
 };
 
+/**
+ * Generic list placeholder: N avatar-row cards. Replaces the bare "Loading…"
+ * text that several list pages (clubs, notifications, feed) used to show, so
+ * loading reserves the list's shape and avoids layout shift.
+ */
+export const ListSkeleton = ({ count = 4 }: { count?: number }) => (
+  <div className="space-y-3">
+    {Array.from({ length: count }).map((_, i) => (
+      <div
+        key={i}
+        className="flex items-center gap-3 rounded-2xl border border-white/20 bg-white/80 p-4 shadow-lg backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70"
+      >
+        <Skeleton variant="circular" width="40px" height="40px" />
+        <div className="flex-1 space-y-2">
+          <Skeleton width="55%" height="14px" />
+          <Skeleton width="35%" height="12px" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 // Skeleton for quest card

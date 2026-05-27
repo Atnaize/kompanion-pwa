@@ -3,7 +3,7 @@
     "loading": "Chargement...",
     "authenticating": "Authentification",
     "cancel": "Annuler",
-    "back": "\u2190 Retour",
+    "back": "Retour",
     "delete": "Supprimer",
     "confirm": "Confirmer",
     "processing": "Traitement...",
@@ -12,6 +12,9 @@
     "syncing": "Synchronisation...",
     "enable": "Activer",
     "disable": "D\u00e9sactiver",
+    "enabled": "Activ\u00e9",
+    "disabled": "D\u00e9sactiv\u00e9",
+    "endOfList": "Vous avez tout vu",
     "offline": "Vous \u00eates hors ligne - certaines fonctionnalit\u00e9s peuvent \u00eatre limit\u00e9es",
     "activities": "Activit\u00e9s",
     "distance": "Distance",
@@ -64,7 +67,9 @@
     "socialComingSoon": "Bient\u00f4t disponible",
     "account": "Compte",
     "stats": "Statistiques",
+    "messages": "Messages",
     "friends": "Amis",
+    "clubs": "Clubs",
     "feed": "Fil",
     "leaderboards": "Classements",
     "notifications": "Bo\u00eete",
@@ -91,6 +96,19 @@
   "settings": {
     "title": "Param\u00e8tres",
     "subtitle": "Personnalisez votre exp\u00e9rience Kompanion",
+    "groups": {
+      "app": "Application",
+      "notifications": "Notifications",
+      "privacy": "Confidentialit\u00e9 et s\u00e9curit\u00e9",
+      "feedback": "Retour"
+    },
+    "appearance": {
+      "title": "Apparence",
+      "description": "Th\u00e8me et retour haptique."
+    },
+    "notifSummary_one": "Activ\u00e9 \u00b7 {{count}} cat\u00e9gorie active",
+    "notifSummary_other": "Activ\u00e9 \u00b7 {{count}} cat\u00e9gories actives",
+    "privacySummary": "{{muted}} en sourdine \u00b7 {{blocked}} bloqu\u00e9s",
     "language": {
       "title": "Langue",
       "description": "Choisissez votre langue pr\u00e9f\u00e9r\u00e9e",
@@ -122,27 +140,43 @@
       "challengeInvitesDesc": "\u00catre notifi\u00e9 lorsque vous \u00eates invit\u00e9 \u00e0 un d\u00e9fi",
       "challengeUpdates": "Mises \u00e0 jour des d\u00e9fis",
       "challengeUpdatesDesc": "\u00catre notifi\u00e9 pour les d\u00e9fis auxquels vous participez : nouvelle inscription, \u00e9tape atteinte, activit\u00e9s ajout\u00e9es, fin ou annulation du d\u00e9fi",
+      "chatGroup": "Chat",
+      "chatMessages": "Nouveaux messages",
+      "chatMessagesDesc": "\u00catre notifi\u00e9 des nouveaux messages dans un club ou un d\u00e9fi. La sourdine par conversation reste accessible dans le chat.",
+      "chatMentions": "Mentions @",
+      "chatMentionsDesc": "Toujours \u00eatre notifi\u00e9 quand quelqu'un vous mentionne \u2014 m\u00eame en sourdine.",
+      "chatReactions": "R\u00e9actions",
+      "chatReactionsDesc": "Quand quelqu'un r\u00e9agit \u00e0 votre message ou \u00e0 une activit\u00e9 que vous avez enregistr\u00e9e.",
+      "chatReplies": "R\u00e9ponses",
+      "chatRepliesDesc": "Quand quelqu'un r\u00e9pond \u00e0 votre message ou \u00e0 une activit\u00e9 que vous avez enregistr\u00e9e.",
       "updated": "Pr\u00e9f\u00e9rence mise \u00e0 jour",
       "updateFailed": "\u00c9chec de la mise \u00e0 jour de la pr\u00e9f\u00e9rence"
     },
     "feedback": {
       "title": "Retour haptique",
+      "description": "Vibrations lors d'un nouveau succ\u00e8s ou d'une notification.",
       "haptic": "Retour haptique",
+      "hapticShort": "Vibrations pour les \u00e9v\u00e9nements",
       "hapticDesc": "Activer les vibrations pour les r\u00e9alisations et \u00e9v\u00e9nements",
       "hapticUnsupported": " (Non pris en charge sur cet appareil)",
       "hapticEnabled": "Retour haptique activ\u00e9",
       "hapticDisabled": "Retour haptique d\u00e9sactiv\u00e9"
     },
     "privacy": {
-      "title": "Confidentialit\u00e9"
+      "title": "Confidentialit\u00e9",
+      "description": "Mettez en sourdine ou bloquez des utilisateurs pour garder votre fil et vos classements clean."
     }
   },
   "privacy": {
     "menu": {
       "open": "Plus d'actions",
-      "mute": "Mettre en sourdine (rester amis)",
+      "viewProfile": "Voir le profil",
+      "inviteToChallenge": "Inviter \u00e0 un d\u00e9fi",
+      "mute": "Mettre en sourdine",
+      "muteHint": "Rester amis \u00b7 masquer du fil",
       "unmute": "R\u00e9activer",
-      "block": "Bloquer et retirer"
+      "block": "Bloquer et retirer",
+      "blockHint": "Invisible l'un pour l'autre"
     },
     "action": {
       "unblock": "D\u00e9bloquer",
@@ -172,6 +206,211 @@
       "blocked": "{{name}} bloqu\u00e9",
       "unblocked": "{{name}} d\u00e9bloqu\u00e9",
       "actionFailed": "Une erreur est survenue"
+    }
+  },
+  "chat": {
+    "title": "Discussion",
+    "mutedBadge": "Silencieux",
+    "notifications": "Notifications",
+    "loadEarlier": "Plus anciens",
+    "empty": "Aucun message. Lancez la discussion.",
+    "emptyPreview": "Lancez la discussion.",
+    "openChat": "Ouvrir la discussion",
+    "participantCount_one": "{{count}} participant",
+    "participantCount_other": "{{count}} participants",
+    "placeholder": "Message…",
+    "send": "Envoyer",
+    "toast": {
+      "sendFailed": "Envoi impossible. Réessayer ?",
+      "muteFailed": "Impossible de mettre à jour la sourdine"
+    },
+    "muteSheet": {
+      "title": "Mettre la discussion en sourdine",
+      "subtitle": "Vous verrez toujours les messages dans l'app. Plus de bannières.",
+      "off": "Notifications activées",
+      "offDesc": "Une notification par message",
+      "oneHour": "Pendant 1 heure",
+      "eightHours": "Pendant 8 heures",
+      "forever": "Jusqu'à réactivation",
+      "foreverDesc": "Silencieux jusqu'à ce que vous le réactiviez"
+    }
+  },
+  "messages": {
+    "title": "Messages",
+    "you": "Vous",
+    "noMessagesYet": "Aucun message",
+    "action": {
+      "message": "Message"
+    },
+    "new": {
+      "title": "Nouveau message",
+      "cta": "Nouveau",
+      "startChat": "Démarrer la discussion",
+      "createGroup": "Créer un groupe",
+      "groupNamePlaceholder": "Nom du groupe (facultatif)"
+    },
+    "empty": {
+      "title": "Aucune conversation",
+      "description": "Démarrez une discussion avec un ami, ou rejoignez un club ou un défi."
+    },
+    "toast": {
+      "startFailed": "Impossible d'ouvrir la discussion"
+    },
+    "system": {
+      "club_created": "{{name}} a créé le club",
+      "member_joined": "{{name}} a rejoint",
+      "member_left": "{{name}} est parti"
+    }
+  },
+  "clubs": {
+    "title": "Clubs",
+    "subtitle": "Vos équipes et la scène autour.",
+    "createCta": "Créer",
+    "notFound": "Club introuvable",
+    "memberCount_one": "{{count}} membre",
+    "memberCount_other": "{{count}} membres",
+    "tabs": {
+      "mine": "Mes clubs",
+      "invites": "Invitations",
+      "overview": "Aperçu",
+      "feed": "Fil",
+      "chat": "Chat",
+      "board": "Classement",
+      "leaderboard": "Classement"
+    },
+    "feed": {
+      "empty": {
+        "title": "Aucune activité dans le fil du club",
+        "description": "Quand les membres enregistrent des activités, elles apparaîtront ici."
+      }
+    },
+    "leaderboard": {
+      "scope": "Distance ce mois — membres du club uniquement",
+      "empty": {
+        "title": "Pas de classement",
+        "description": "Les membres doivent avoir des activités sur la période pour apparaître ici."
+      }
+    },
+    "role": {
+      "owner": "Propriétaire",
+      "admin": "Admin",
+      "member": "Membre"
+    },
+    "visibility": {
+      "private": "Privé",
+      "public": "Public"
+    },
+    "empty": {
+      "mineTitle": "Aucun club pour l'instant",
+      "mineDescription": "Créez un club pour votre équipe, ou acceptez une invitation.",
+      "invitesTitle": "Aucune invitation",
+      "invitesDescription": "Les invitations à des clubs apparaîtront ici."
+    },
+    "action": {
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "leave": "Quitter le club",
+      "delete": "Supprimer le club",
+      "invite": "Inviter des amis",
+      "launchChallenge": "Lancer un défi avec ce groupe"
+    },
+    "create": {
+      "title": "Créer un club",
+      "subtitle": "Donnez-lui un nom, choisissez sa visibilité, invitez vos amis.",
+      "nameLabel": "Nom",
+      "namePlaceholder": "Cyclistes du dimanche",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Sorties après le travail + gravel le weekend.",
+      "visibilityLabel": "Visibilité",
+      "privateHint": "Sur invitation. Invisible dans Découvrir. Les membres peuvent inviter leurs amis.",
+      "publicHint": "Demande d'adhésion publique. Apparaît dans Découvrir. Les admins approuvent.",
+      "privateHintShort": "Sur invitation",
+      "publicHintShort": "Visible par tous",
+      "previewHint": "L'aperçu se met à jour à la saisie",
+      "inviteLabel": "Inviter des amis",
+      "inviteHint": "Sélectionnez les amis à inviter. Vous pourrez en inviter d'autres plus tard.",
+      "submit": "Créer le club"
+    },
+    "detail": {
+      "members": "Membres",
+      "pendingInvites_one": "Invitation en attente · {{count}}",
+      "pendingInvites_other": "Invitations en attente · {{count}}",
+      "invitePending": "En attente",
+      "activeChallenges": "Défis actifs",
+      "noActiveChallenges": "Aucun défi actif. Lancez-en un pour mettre l'équipe en mouvement.",
+      "challengeTypeCompetitive": "Compétitif",
+      "challengeTypeCollab": "Collaboratif",
+      "moreActions": "Plus d'actions",
+      "seeAll": "Tout voir",
+      "showLess": "Réduire",
+      "stats": {
+        "members": "Membres",
+        "challenges": "Défis",
+        "thisWeek": "Cette semaine"
+      }
+    },
+    "chat": {
+      "notMemberTitle": "Réservé aux membres",
+      "notMember": "Rejoignez ce club pour participer au chat."
+    },
+    "invite": {
+      "title": "Inviter au club",
+      "allInvited": "Tous vos amis sont déjà dans ce club.",
+      "submit_one": "Inviter {{count}} ami",
+      "submit_other": "Inviter {{count}} amis",
+      "toast_one": "{{count}} invitation envoyée",
+      "toast_other": "{{count}} invitations envoyées"
+    },
+    "confirmLeave": {
+      "title": "Quitter {{name}} ?",
+      "message": "Vous perdrez accès au classement et aux défis du club. Vous pourrez être ré-invité plus tard."
+    },
+    "confirmDelete": {
+      "title": "Supprimer {{name}} ?",
+      "message": "Le club est supprimé pour tous les membres. Cette action est irréversible."
+    },
+    "toast": {
+      "created": "Club {{name}} créé",
+      "accepted": "Vous avez rejoint {{name}}",
+      "declined": "Invitation à {{name}} refusée",
+      "left": "Vous avez quitté {{name}}",
+      "deleted": "Club {{name}} supprimé",
+      "actionFailed": "Une erreur est survenue"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "identity": "Identité",
+      "members": "Membres",
+      "danger": "Zone dangereuse",
+      "dangerHint": "Supprimer le club le retire pour tous les membres. Cette action est irréversible.",
+      "namePreview": "Nom du club",
+      "accentLabel": "Couleur d'accent",
+      "accent": {
+        "default": "Auto",
+        "orange": "Orange",
+        "sky": "Ciel",
+        "purple": "Violet",
+        "emerald": "Émeraude",
+        "amber": "Ambre",
+        "pink": "Rose"
+      },
+      "promote": "Promouvoir admin",
+      "demote": "Rétrograder en membre",
+      "kick": "Retirer du club",
+      "transfer": "Transférer la propriété",
+      "you": "Vous",
+      "legendOwner": "En tant que propriétaire, vous pouvez promouvoir/rétrograder les admins, retirer n'importe qui, transférer la propriété et supprimer le club.",
+      "legendAdmin": "En tant qu'admin, vous pouvez inviter des amis et retirer les membres standards.",
+      "confirmTransfer": {
+        "title": "Nommer {{name}} propriétaire ?",
+        "message": "Vous deviendrez admin. Seul le nouveau propriétaire pourra supprimer ou transférer le club à nouveau."
+      },
+      "toast": {
+        "saved": "Club mis à jour",
+        "roleUpdated": "Rôle mis à jour",
+        "kicked": "Membre retiré",
+        "transferred": "Propriété transférée"
+      }
     }
   },
   "friends": {
@@ -528,6 +767,22 @@
     "competitive": "D\u00e9fi comp\u00e9titif",
     "teamChallenge": "D\u00e9fi d'\u00e9quipe",
     "competition": "Comp\u00e9tition",
+    "summary": {
+      "completedTitle": "D\u00e9fi r\u00e9ussi !",
+      "endedTitle": "D\u00e9fi termin\u00e9",
+      "ofTarget": "sur {{target}}",
+      "activityCount_one": "{{count}} activit\u00e9",
+      "activityCount_other": "{{count}} activit\u00e9s",
+      "teamContributions": "Contributions de l'\u00e9quipe",
+      "finalRankings": "Classement final",
+      "you": "vous",
+      "finishedPlace": "Vous avez termin\u00e9 #{{rank}} sur {{count}}",
+      "share": "Partager le r\u00e9sultat",
+      "shareText": "Je viens de terminer \u00ab {{name}} \u00bb sur Kompanion ! \ud83c\udf89",
+      "shareCopied": "Copi\u00e9 dans le presse-papiers",
+      "viewChallenge": "Voir le d\u00e9fi",
+      "dismiss": "Fermer"
+    },
     "participant_one": "{{count}} participant",
     "participant_other": "{{count}} participants",
     "statusCompleted": "\u2713 Termin\u00e9",
@@ -602,11 +857,30 @@
     "activityWalk": "Marche",
     "inviteFriends": "Inviter des amis",
     "inviteDescription": "Recherchez des utilisateurs Kompanion \u00e0 inviter (minimum 2 caract\u00e8res)",
+    "inviteClubMembers": "Membres du club",
+    "clubMembersDescription": "Pr\u00e9-remplis depuis le club. D\u00e9s\u00e9lectionnez ceux que vous ne voulez pas inclure.",
     "searchUsers": "Rechercher des utilisateurs par nom...",
     "cancel": "Annuler",
     "creating": "Cr\u00e9ation...",
     "submit": "Cr\u00e9er le d\u00e9fi",
-    "back": "\u2190 Retour"
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Pr\u00e9c\u00e9dent",
+    "stepIndicator": "\u00c9tape {{current}} sur {{total}}",
+    "steps": {
+      "basics": "Bases",
+      "duration": "Dur\u00e9e",
+      "goals": "Objectifs",
+      "invites": "Invitations"
+    },
+    "launchingFrom": "Lancement depuis",
+    "detachClub": "Retirer",
+    "nudge": {
+      "title": "Sauvegarder ce groupe en tant que club ?",
+      "description": "Classement persistant, fil partag\u00e9, possibilit\u00e9 de lancer plus de d\u00e9fis ensemble. Vous pouvez ignorer.",
+      "confirm": "Oui, nommer",
+      "dismiss": "Plus tard"
+    }
   },
   "friendSelector": {
     "emptyHint": "Aucun utilisateur Kompanion trouv\u00e9. Recherchez des utilisateurs par nom pour les inviter !"
@@ -754,6 +1028,17 @@
         "title": "Limite d'API Strava atteinte",
         "body": "Nous reprendrons automatiquement dans quelques minutes."
       }
+    }
+  },
+  "streak": {
+    "milestone": {
+      "label": "Cap de série",
+      "dayStreak": "jours de suite",
+      "body": "Vous vous êtes entraîné {{days}} jours d'affilée — gardez la flamme ! 🔥",
+      "share": "Partager la série",
+      "shareText": "Je suis sur une série de {{days}} jours d'activité sur Kompanion ! 🔥",
+      "shareCopied": "Copié dans le presse-papiers",
+      "dismiss": "Continuer"
     }
   },
   "about": {

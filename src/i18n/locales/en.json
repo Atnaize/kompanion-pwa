@@ -3,7 +3,7 @@
     "loading": "Loading...",
     "authenticating": "Authenticating",
     "cancel": "Cancel",
-    "back": "← Back",
+    "back": "Back",
     "delete": "Delete",
     "confirm": "Confirm",
     "processing": "Processing...",
@@ -12,6 +12,9 @@
     "syncing": "Syncing...",
     "enable": "Enable",
     "disable": "Disable",
+    "enabled": "On",
+    "disabled": "Off",
+    "endOfList": "You're all caught up",
     "offline": "You're offline - some features may be limited",
     "activities": "Activities",
     "distance": "Distance",
@@ -64,7 +67,9 @@
     "socialComingSoon": "Coming soon",
     "account": "Account",
     "stats": "Stats",
+    "messages": "Messages",
     "friends": "Friends",
+    "clubs": "Clubs",
     "feed": "Feed",
     "leaderboards": "Leaderboards",
     "notifications": "Inbox",
@@ -91,6 +96,19 @@
   "settings": {
     "title": "Settings",
     "subtitle": "Customize your Kompanion experience",
+    "groups": {
+      "app": "App",
+      "notifications": "Notifications",
+      "privacy": "Privacy & safety",
+      "feedback": "Feedback"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "description": "Theme and haptic feedback."
+    },
+    "notifSummary_one": "Enabled · {{count}} category on",
+    "notifSummary_other": "Enabled · {{count}} categories on",
+    "privacySummary": "{{muted}} muted · {{blocked}} blocked",
     "language": {
       "title": "Language",
       "description": "Choose your preferred language",
@@ -122,27 +140,43 @@
       "challengeInvitesDesc": "Get notified when you're invited to a challenge",
       "challengeUpdates": "Challenge Updates",
       "challengeUpdatesDesc": "Get notified about challenges you're in: when someone joins, hits a milestone, logs activities, or when the challenge ends or is cancelled",
+      "chatGroup": "Chat",
+      "chatMessages": "New messages",
+      "chatMessagesDesc": "Get notified when someone sends a message in a club or challenge you're in. Per-conversation mute lives on the chat itself.",
+      "chatMentions": "@Mentions",
+      "chatMentionsDesc": "Always notify me when someone @'s me — even when the chat is muted.",
+      "chatReactions": "Reactions",
+      "chatReactionsDesc": "When someone reacts to your message or to an activity you logged.",
+      "chatReplies": "Replies",
+      "chatRepliesDesc": "When someone replies to your message or to an activity you logged.",
       "updated": "Preference updated",
       "updateFailed": "Failed to update preference"
     },
     "feedback": {
-      "title": "Feedback",
-      "haptic": "Haptic Feedback",
+      "title": "Haptic feedback",
+      "description": "Vibration feedback when achievements unlock or notifications arrive.",
+      "haptic": "Haptic feedback",
+      "hapticShort": "Vibrations for events",
       "hapticDesc": "Enable vibration for achievements and events",
       "hapticUnsupported": " (Not supported on this device)",
       "hapticEnabled": "Haptic feedback enabled",
       "hapticDisabled": "Haptic feedback disabled"
     },
     "privacy": {
-      "title": "Privacy"
+      "title": "Privacy",
+      "description": "Mute or block users to keep your feed and leaderboards clean."
     }
   },
   "privacy": {
     "menu": {
       "open": "More actions",
-      "mute": "Mute (stay friends)",
+      "viewProfile": "View profile",
+      "inviteToChallenge": "Invite to challenge",
+      "mute": "Mute",
+      "muteHint": "Stay friends · hide from feed",
       "unmute": "Unmute",
-      "block": "Block & unfriend"
+      "block": "Block & unfriend",
+      "blockHint": "Invisible to each other"
     },
     "action": {
       "unblock": "Unblock",
@@ -172,6 +206,225 @@
       "blocked": "{{name}} blocked",
       "unblocked": "{{name}} unblocked",
       "actionFailed": "Something went wrong"
+    }
+  },
+  "chat": {
+    "title": "Chat",
+    "mutedBadge": "Muted",
+    "notifications": "Notifications",
+    "loadEarlier": "Load earlier",
+    "empty": "No messages yet. Be the first to say hi.",
+    "emptyPreview": "Be the first to say hi.",
+    "openChat": "Open chat",
+    "unavailable": "Chat unavailable",
+    "participantCount_one": "{{count}} participant",
+    "participantCount_other": "{{count}} participants",
+    "placeholder": "Message…",
+    "send": "Send",
+    "reply": "Reply",
+    "replyingTo": "Replying to {{name}}",
+    "digest": {
+      "previewTitle": "Activity recap",
+      "contributor": "Member",
+      "headline_one": "{{names}}{{extra}} logged {{count}} activity",
+      "headline_other": "{{names}}{{extra}} logged {{count}} activities"
+    },
+    "thread": {
+      "show_one": "Show {{count}} reply",
+      "show_other": "Show {{count}} replies",
+      "hide": "Hide replies"
+    },
+    "toast": {
+      "sendFailed": "Couldn't send. Try again?",
+      "muteFailed": "Couldn't update mute setting"
+    },
+    "muteSheet": {
+      "title": "Pause chat notifications",
+      "subtitle": "You'll still see messages in-app. Just no banners.",
+      "off": "Notifications on",
+      "offDesc": "Push for every new message",
+      "oneHour": "For 1 hour",
+      "eightHours": "For 8 hours",
+      "forever": "Until I turn back on",
+      "foreverDesc": "Quiet until you re-enable here"
+    }
+  },
+  "messages": {
+    "title": "Messages",
+    "you": "You",
+    "noMessagesYet": "No messages yet",
+    "action": {
+      "message": "Message"
+    },
+    "new": {
+      "title": "New message",
+      "cta": "New",
+      "startChat": "Start chat",
+      "createGroup": "Create group",
+      "groupNamePlaceholder": "Group name (optional)"
+    },
+    "empty": {
+      "title": "No conversations yet",
+      "description": "Start a chat with a friend, or jump into a club or challenge."
+    },
+    "toast": {
+      "startFailed": "Couldn't open chat"
+    },
+    "system": {
+      "club_created": "{{name}} created the club",
+      "member_joined": "{{name}} joined",
+      "member_left": "{{name}} left"
+    }
+  },
+  "clubs": {
+    "title": "Clubs",
+    "subtitle": "Your crews and the wider scene.",
+    "createCta": "Create",
+    "notFound": "Club not found",
+    "memberCount_one": "{{count}} member",
+    "memberCount_other": "{{count}} members",
+    "tabs": {
+      "mine": "My clubs",
+      "invites": "Invites",
+      "overview": "Overview",
+      "feed": "Feed",
+      "chat": "Chat",
+      "board": "Board",
+      "leaderboard": "Leaderboard"
+    },
+    "feed": {
+      "empty": {
+        "title": "Nothing in the club feed yet",
+        "description": "When members log activities, they'll show up here."
+      }
+    },
+    "leaderboard": {
+      "scope": "Distance this month — club members only",
+      "empty": {
+        "title": "No leaderboard yet",
+        "description": "Members need activities in the period to appear here."
+      }
+    },
+    "role": {
+      "owner": "Owner",
+      "admin": "Admin",
+      "member": "Member"
+    },
+    "visibility": {
+      "private": "Private",
+      "public": "Public"
+    },
+    "empty": {
+      "mineTitle": "No clubs yet",
+      "mineDescription": "Create a club for your regular crew, or accept an invite.",
+      "invitesTitle": "No pending invites",
+      "invitesDescription": "Club invitations show up here."
+    },
+    "action": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "leave": "Leave club",
+      "delete": "Delete club",
+      "invite": "Invite friends",
+      "launchChallenge": "Launch a challenge with this crew"
+    },
+    "create": {
+      "title": "Create a club",
+      "subtitle": "Name it, decide who can find it, invite friends.",
+      "nameLabel": "Name",
+      "namePlaceholder": "Sunday Riders",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "After-work rides + weekend gravel.",
+      "visibilityLabel": "Visibility",
+      "privateHint": "Invite-only. Hidden from Discover. Members can invite friends.",
+      "publicHint": "Anyone can request to join. Appears in Discover. Admins approve.",
+      "privateHintShort": "Invite only",
+      "publicHintShort": "Anyone can find",
+      "previewHint": "Preview updates as you type",
+      "inviteLabel": "Invite friends",
+      "inviteHint": "Pick the friends to invite. You can invite more later.",
+      "submit": "Create club"
+    },
+    "detail": {
+      "members": "Members",
+      "pendingInvites_one": "Pending invite · {{count}}",
+      "pendingInvites_other": "Pending invites · {{count}}",
+      "invitePending": "Pending",
+      "activeChallenges": "Active challenges",
+      "noActiveChallenges": "No active challenges yet. Launch one to get the crew moving.",
+      "challengeTypeCompetitive": "Competitive",
+      "challengeTypeCollab": "Collaborative",
+      "moreActions": "More actions",
+      "seeAll": "See all",
+      "showLess": "Show less",
+      "stats": {
+        "members": "Members",
+        "challenges": "Challenges",
+        "thisWeek": "This week"
+      }
+    },
+    "chat": {
+      "notMemberTitle": "Members only",
+      "notMember": "Join this club to participate in the chat."
+    },
+    "invite": {
+      "title": "Invite to club",
+      "allInvited": "All your friends are already in this club.",
+      "submit_one": "Invite {{count}} friend",
+      "submit_other": "Invite {{count}} friends",
+      "toast_one": "Sent {{count}} invite",
+      "toast_other": "Sent {{count}} invites"
+    },
+    "confirmLeave": {
+      "title": "Leave {{name}}?",
+      "message": "You'll lose access to the club's leaderboard and challenges. You can be re-invited later."
+    },
+    "confirmDelete": {
+      "title": "Delete {{name}}?",
+      "message": "This deletes the club for all members. There's no undo."
+    },
+    "toast": {
+      "created": "Created {{name}}",
+      "accepted": "Joined {{name}}",
+      "declined": "Declined {{name}}",
+      "left": "Left {{name}}",
+      "deleted": "Deleted {{name}}",
+      "actionFailed": "Something went wrong"
+    },
+    "settings": {
+      "title": "Settings",
+      "identity": "Identity",
+      "members": "Members",
+      "danger": "Danger zone",
+      "dangerHint": "Deleting the club removes it for every member. There is no undo.",
+      "namePreview": "Club name",
+      "accentLabel": "Accent color",
+      "accent": {
+        "default": "Auto",
+        "orange": "Orange",
+        "sky": "Sky",
+        "purple": "Purple",
+        "emerald": "Emerald",
+        "amber": "Amber",
+        "pink": "Pink"
+      },
+      "promote": "Promote to admin",
+      "demote": "Demote to member",
+      "kick": "Remove from club",
+      "transfer": "Transfer ownership",
+      "you": "You",
+      "legendOwner": "As owner you can promote / demote admins, kick anyone, transfer ownership, and delete the club.",
+      "legendAdmin": "As admin you can invite friends and remove regular members.",
+      "confirmTransfer": {
+        "title": "Make {{name}} the owner?",
+        "message": "You'll become an admin. The new owner is the only one who can delete the club or transfer it again."
+      },
+      "toast": {
+        "saved": "Club updated",
+        "roleUpdated": "Role updated",
+        "kicked": "Member removed",
+        "transferred": "Ownership transferred"
+      }
     }
   },
   "friends": {
@@ -528,6 +781,22 @@
     "competitive": "Competitive Challenge",
     "teamChallenge": "Team Challenge",
     "competition": "Competition",
+    "summary": {
+      "completedTitle": "Challenge complete!",
+      "endedTitle": "Challenge ended",
+      "ofTarget": "of {{target}}",
+      "activityCount_one": "{{count}} activity",
+      "activityCount_other": "{{count}} activities",
+      "teamContributions": "Team contributions",
+      "finalRankings": "Final rankings",
+      "you": "you",
+      "finishedPlace": "You finished #{{rank}} of {{count}}",
+      "share": "Share result",
+      "shareText": "I just completed \"{{name}}\" on Kompanion! 🎉",
+      "shareCopied": "Copied to clipboard",
+      "viewChallenge": "View challenge",
+      "dismiss": "Dismiss"
+    },
     "participant_one": "{{count}} participant",
     "participant_other": "{{count}} participants",
     "statusCompleted": "✓ Completed",
@@ -602,11 +871,30 @@
     "activityWalk": "Walk",
     "inviteFriends": "Invite Friends",
     "inviteDescription": "Search for Kompanion users to invite (minimum 2 characters)",
+    "inviteClubMembers": "Club members",
+    "clubMembersDescription": "Pre-filled from the club. Deselect anyone you don't want in.",
     "searchUsers": "Search users by name...",
     "cancel": "Cancel",
     "creating": "Creating...",
     "submit": "Create Challenge",
-    "back": "← Back"
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "stepIndicator": "Step {{current}} of {{total}}",
+    "steps": {
+      "basics": "Basics",
+      "duration": "Duration",
+      "goals": "Goals",
+      "invites": "Invites"
+    },
+    "launchingFrom": "Launching from",
+    "detachClub": "Remove",
+    "nudge": {
+      "title": "Save this crew as a club?",
+      "description": "Persistent leaderboard, shared feed, easy to run more challenges together. Free to skip.",
+      "confirm": "Yes, name it",
+      "dismiss": "Not now"
+    }
   },
   "friendSelector": {
     "emptyHint": "No Kompanion users found. Try searching for users by name to invite them!"
@@ -754,6 +1042,17 @@
         "title": "Strava rate limit reached",
         "body": "We'll automatically resume in a few minutes."
       }
+    }
+  },
+  "streak": {
+    "milestone": {
+      "label": "Streak milestone",
+      "dayStreak": "day streak",
+      "body": "You've trained {{days}} days in a row — keep the fire alive! 🔥",
+      "share": "Share streak",
+      "shareText": "I'm on a {{days}}-day activity streak on Kompanion! 🔥",
+      "shareCopied": "Copied to clipboard",
+      "dismiss": "Keep it going"
     }
   },
   "about": {

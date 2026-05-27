@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Search } from 'lucide-react';
+import { ListSkeleton } from '@components/ui';
 import { friendsService } from '@api/services';
 import { UserRow } from './UserRow';
 import { FriendActionButton } from './FriendActionButton';
@@ -62,9 +63,7 @@ export const FriendSearch = () => {
 
       {debouncedQuery && (
         <div className="space-y-2">
-          {isFetching && results.length === 0 && (
-            <p className="px-1 text-sm text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
-          )}
+          {isFetching && results.length === 0 && <ListSkeleton count={3} />}
           {!isFetching && results.length === 0 && (
             <p className="px-1 text-sm text-gray-500 dark:text-gray-400">
               {t('friends.searchEmpty')}

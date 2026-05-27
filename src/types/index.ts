@@ -246,6 +246,10 @@ export interface ChallengeParticipant {
 export interface Challenge {
   id: string;
   creatorId: number;
+  /** When set, this challenge is "owned by" a club — shown on the club page. */
+  clubId?: string | null;
+  /** Hydrated club hint (id + name) when `clubId` is set. */
+  club?: { id: string; name: string } | null;
   name: string;
   description?: string;
   type: ChallengeType;
@@ -339,6 +343,157 @@ export interface FriendRequest {
   acceptedAt: string | null;
   requester: Friend;
   addressee: Friend;
+}
+
+/** Chat scope discriminator — mirrors the server's ChatScopeKind. */
+export type ChatScopeKind = 'club' | 'challenge' | 'dm';
+
+/**
+ * Conversation summary returned by the resolver endpoints
+ * (`GET /api/challenges/:id/conversation`, `/api/clubs/:id/conversation`).
+ * Drives the chat header (scope name) and is the source of the `conversationId`
+ * used for every subsequent chat API call.
+ */
+export interface ConversationSummary {
+  id: string;
+  kind: ChatScopeKind;
+  scopeName: string;
+  scopeId: string | null;
+  /** Other person's avatar for a 1:1 DM; null for groups, clubs, challenges. */
+  image: string | null;
+}
+
+/** Last-message preview shown in a Messages inbox row. */
+export interface ConversationLastMessage {
+  preview: string;
+  createdAt: string;
+  authorId: number | null;
+  authorName: string | null;
+}
+
+/** One row in the unified Messages inbox (`GET /api/conversations`). */
+export interface ConversationListItem {
+  id: string;
+  kind: ChatScopeKind;
+  scopeId: string | null;
+  title: string;
+  image: string | null;
+  /** Other participants for DMs/groups (excludes the viewer); empty for clubs/challenges. */
+  members: ChatUserSummary[];
+  lastMessage: ConversationLastMessage | null;
+  unreadCount: number;
+  muted: boolean;
+  updatedAt: string;
+}
+
+export interface ChatUserSummary {
+  id: number;
+  firstname: string;
+  lastname: string;
+  profile: string;
+  profileMedium: string;
+}
+
+export interface ReactionSummary {
+  emoji: string;
+  userIds: number[];
+  viewerReacted: boolean;
+}
+
+/** One activity inside an `activity_digest` message. */
+export interface DigestActivity {
+  userId: number;
+  activityId: string;
+  type: string;
+  name: string;
+  distance: number;
+  movingTime: number;
+  elevation: number;
+  recordedAt: string;
+}
+
+export interface DigestPayload {
+  date: string;
+  activities: DigestActivity[];
+}
+
+export type ChatMessageKind = 'text' | 'activity_digest' | 'system';
+
+/** Membership/lifecycle events rendered as a centered notice in a thread. */
+export type ChatSystemEvent = 'club_created' | 'member_joined' | 'member_left';
+
+export interface ChatSystemPayload {
+  event: ChatSystemEvent;
+  userId?: number;
+  actorName?: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  conversationId: string;
+  kind: ChatMessageKind;
+  author: ChatUserSummary | null;
+  body: string | null;
+  digest: DigestPayload | null;
+  /** Set when kind='system'. */
+  system: ChatSystemPayload | null;
+  parentId: string | null;
+  mentions: number[];
+  reactions: ReactionSummary[];
+  replyCount: number;
+  createdAt: string;
+  editedAt: string | null;
+}
+
+export interface ChatPage {
+  messages: ChatMessage[];
+  nextCursor: string | null;
+}
+
+export interface ChatMuteState {
+  mutedUntil: string | null;
+}
+
+export type ClubRole = 'owner' | 'admin' | 'member';
+export type ClubMemberStatus = 'active' | 'pending_invite' | 'pending_request';
+export type ClubVisibility = 'private' | 'public';
+
+/** Accent colors an owner can pick for the club's banner + avatar gradient. */
+export type ClubAccentColor =
+  | 'default'
+  | 'orange'
+  | 'sky'
+  | 'purple'
+  | 'emerald'
+  | 'amber'
+  | 'pink';
+
+export interface ClubSummary {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  visibility: ClubVisibility;
+  accentColor: ClubAccentColor | null;
+  createdById: number;
+  createdAt: string;
+  memberCount: number;
+  myRole: ClubRole | null;
+  myStatus: ClubMemberStatus | null;
+}
+
+export interface ClubMember {
+  id: number;
+  userId: number;
+  role: ClubRole;
+  status: ClubMemberStatus;
+  joinedAt: string | null;
+  user: Friend;
+}
+
+export interface ClubDetail extends ClubSummary {
+  members: ClubMember[];
+  pendingInvites: ClubMember[];
 }
 
 /**

@@ -18,7 +18,12 @@ export const useFriendshipActions = () => {
     void queryClient.invalidateQueries({ queryKey: ['user-profile'] });
     // The friend graph just changed — the feed query reads from it, so its
     // cached pages may be missing (or contain) events that should now flip.
-    void queryClient.invalidateQueries({ queryKey: ['feed'] });
+    // refetchType 'all' is required because the Feed page is usually NOT
+    // mounted when accepting (the user is on the Friends page). A plain
+    // invalidate only refetches *active* queries, so the inactive feed would
+    // stay stale and — with refetchOnMount: false — serve empty cached pages
+    // until a full page reload.
+    void queryClient.invalidateQueries({ queryKey: ['feed'], refetchType: 'all' });
   };
 
   const sendRequest = useMutation({

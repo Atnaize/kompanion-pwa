@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Users } from 'lucide-react';
 import { Layout } from '@components/layout';
-import { EmptyState } from '@components/ui';
+import { EmptyState, ListSkeleton } from '@components/ui';
 import { Tabs, TabList, Tab, TabPanel } from '@components/ui';
 import { friendsService } from '@api/services';
 import { FriendActionButton, FriendSearch, UserRow } from '@features/friends';
+import { MessageButton } from '@features/chat';
 
 type FriendsTab = 'friends' | 'incoming' | 'outgoing';
 
@@ -56,9 +57,7 @@ export const FriendsPage = () => {
 
             <TabPanel value="friends">
               {friendsLoading ? (
-                <p className="px-1 text-sm text-gray-500 dark:text-gray-400">
-                  {t('common.loading')}
-                </p>
+                <ListSkeleton count={5} />
               ) : friends.length === 0 ? (
                 <EmptyState
                   icon={<Users size={32} strokeWidth={1.5} aria-hidden="true" />}
@@ -72,12 +71,15 @@ export const FriendsPage = () => {
                       key={friend.id}
                       user={friend}
                       action={
-                        <FriendActionButton
-                          userId={friend.id}
-                          state="friends"
-                          compact
-                          allowUnfriend
-                        />
+                        <div className="flex items-center gap-1.5">
+                          <MessageButton userId={friend.id} compact />
+                          <FriendActionButton
+                            userId={friend.id}
+                            state="friends"
+                            compact
+                            allowUnfriend
+                          />
+                        </div>
                       }
                     />
                   ))}
@@ -87,9 +89,7 @@ export const FriendsPage = () => {
 
             <TabPanel value="incoming">
               {incomingLoading ? (
-                <p className="px-1 text-sm text-gray-500 dark:text-gray-400">
-                  {t('common.loading')}
-                </p>
+                <ListSkeleton count={3} />
               ) : incoming.length === 0 ? (
                 <EmptyState
                   icon={<Users size={32} strokeWidth={1.5} aria-hidden="true" />}
@@ -117,9 +117,7 @@ export const FriendsPage = () => {
 
             <TabPanel value="outgoing">
               {outgoingLoading ? (
-                <p className="px-1 text-sm text-gray-500 dark:text-gray-400">
-                  {t('common.loading')}
-                </p>
+                <ListSkeleton count={3} />
               ) : outgoing.length === 0 ? (
                 <EmptyState
                   icon={<Users size={32} strokeWidth={1.5} aria-hidden="true" />}

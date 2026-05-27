@@ -48,17 +48,6 @@ export const PersonalRecordsBoard = ({ groups, onActivityClick }: PersonalRecord
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="inline-flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
-          <Sparkles size={20} className="text-strava-orange" strokeWidth={2} />
-          {t('personalRecords.title')}
-        </h1>
-        <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-          {t('personalRecords.summary', { bands: bandsWithRecords, total: totalRecords })}
-        </p>
-      </div>
-
       {/* Hero: totals + pace curve */}
       <GlassCard className="relative overflow-hidden p-5">
         <span

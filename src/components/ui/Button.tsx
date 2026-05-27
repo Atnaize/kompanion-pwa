@@ -19,7 +19,7 @@ export const Button = ({
   return (
     <button
       className={clsx(
-        'rounded-2xl font-medium transition-all duration-200',
+        'inline-flex items-center justify-center rounded-2xl font-medium transition-all duration-200',
         'active:scale-95 disabled:cursor-not-allowed disabled:opacity-50',
         {
           'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-md shadow-orange-500/25 ring-1 ring-orange-500/30 hover:from-orange-500 hover:to-orange-700 hover:shadow-lg hover:shadow-orange-500/30':

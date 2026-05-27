@@ -4,3 +4,4 @@ export * from './ChallengeSummaryCard';
 export * from './ChallengeSummaryModal';
 export * from './InvitationCard';
 export * from './InviteFriendsModal';
+export * from './ChallengeChatSection';

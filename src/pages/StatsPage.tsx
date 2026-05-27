@@ -10,6 +10,7 @@ import {
   DistanceProgressViz,
   ElevationMountainViz,
   GlassCard,
+  PageHeader,
   StatTile,
   StatTileSkeleton,
   StreakDotsViz,
@@ -22,6 +23,8 @@ import {
 import { statsService } from '@api/services';
 import { formatDistance, formatElevation, formatDuration } from '@utils/format';
 import { ActivityTypePicker } from '@components/activity';
+import { useScrollPastSentinel } from '@hooks/useScrollPastSentinel';
+import clsx from 'clsx';
 import { ProgressCharts } from './StatsPage/ProgressCharts';
 import { PeriodComparison } from './StatsPage/PeriodComparison';
 import { HeatmapCalendar } from './StatsPage/HeatmapCalendar';
@@ -32,6 +35,8 @@ export const StatsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+  // Sticky tabs once the user scrolls past the ActivityTypePicker row.
+  const { ref: controlsEndRef, hasPassed: isCompact } = useScrollPastSentinel();
   const [selectedType, setSelectedType] = useState<string | null>(() => {
     // Mirrors the DashboardPage period selector's persistence approach
     // (raw localStorage, kebab-cased key). Lazy init so the first render
@@ -76,12 +81,7 @@ export const StatsPage = () => {
     return (
       <Layout>
         <div className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
-              {t('stats.title')}
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400">{t('stats.loading')}</p>
-          </div>
+          <PageHeader title={t('stats.title')} subtitle={t('stats.loading')} />
           <div className="grid grid-cols-2 gap-3">
             <StatTileSkeleton />
             <StatTileSkeleton />
@@ -118,12 +118,7 @@ export const StatsPage = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <div>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-            {t('stats.title')}
-          </p>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('stats.subtitle')}</p>
-        </div>
+        <PageHeader title={t('stats.title')} subtitle={t('stats.subtitle')} />
 
         {allStats && (
           <ActivityTypePicker
@@ -137,14 +132,26 @@ export const StatsPage = () => {
           />
         )}
 
+        {/* Sentinel: TabList sticks to the top once this scrolls past. */}
+        <div ref={controlsEndRef} aria-hidden className="h-0" />
+
         {/* Tabs Navigation */}
         <Tabs value={activeTab} onChange={setActiveTab}>
-          <TabList className="mb-6">
-            <Tab value="overview" label={t('stats.overview')} compact />
-            <Tab value="calendar" label={t('stats.calendar')} compact />
-            <Tab value="charts" label={t('stats.charts')} compact />
-            <Tab value="comparison" label={t('stats.comparison')} compact />
-          </TabList>
+          <div
+            className={clsx(
+              'sticky top-0 z-30 -mx-4 mb-6 px-4 transition-shadow',
+              isCompact
+                ? 'bg-gray-50/95 py-2 shadow-sm backdrop-blur-md dark:bg-gray-950/95'
+                : 'bg-transparent'
+            )}
+          >
+            <TabList fade>
+              <Tab value="overview" label={t('stats.overview')} compact />
+              <Tab value="calendar" label={t('stats.calendar')} compact />
+              <Tab value="charts" label={t('stats.charts')} compact />
+              <Tab value="comparison" label={t('stats.comparison')} compact />
+            </TabList>
+          </div>
 
           {/* Overview Tab */}
           <TabPanel value="overview">

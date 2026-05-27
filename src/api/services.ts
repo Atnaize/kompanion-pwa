@@ -28,6 +28,17 @@ import type {
   LeaderboardMetricKey,
   LeaderboardPeriod,
   CompareWithFriend,
+  ClubSummary,
+  ClubDetail,
+  ClubVisibility,
+  ClubAccentColor,
+  ClubRole,
+  ChatMessage,
+  ChatMuteState,
+  ChatPage,
+  ConversationListItem,
+  ConversationSummary,
+  ReactionSummary,
 } from '@types';
 
 export const authService = {
@@ -193,9 +204,13 @@ export const leaderboardsService = {
     metric: LeaderboardMetricKey;
     period: LeaderboardPeriod;
     activityType?: string | null;
+    clubId?: string;
   }) => {
     const query = new URLSearchParams({ metric: params.metric, period: params.period });
     appendType(query, params.activityType);
+    if (params.clubId) {
+      query.set('clubId', params.clubId);
+    }
     return apiClient.get<FriendsLeaderboard>(`/leaderboards/friends?${query.toString()}`);
   },
 };
@@ -223,10 +238,11 @@ export const achievementsService = {
 
 export const challengesService = {
   // Challenge CRUD
-  list: (filters?: { status?: string; type?: ChallengeType }) => {
+  list: (filters?: { status?: string; type?: ChallengeType; clubId?: string }) => {
     const params = new URLSearchParams();
     if (filters?.status) params.append('status', filters.status);
     if (filters?.type) params.append('type', filters.type);
+    if (filters?.clubId) params.append('clubId', filters.clubId);
     const query = params.toString();
     return apiClient.get<Challenge[]>(`/challenges${query ? `?${query}` : ''}`);
   },
@@ -240,6 +256,7 @@ export const challengesService = {
     targets: ChallengeTargets;
     competitiveGoal?: CompetitiveGoal;
     invitedUserIds?: number[];
+    clubId?: string;
   }) => apiClient.post<Challenge>('/challenges', data),
   update: (
     id: string,
@@ -482,11 +499,151 @@ export const privacyService = {
   listMuted: () => apiClient.get<Friend[]>('/privacy/mutes'),
 };
 
-export const feedService = {
-  list: (cursor?: string, limit?: number) => {
+export const clubsService = {
+  list: () => apiClient.get<ClubSummary[]>('/clubs'),
+  listInvites: () => apiClient.get<ClubSummary[]>('/clubs/invites'),
+  get: (id: string) => apiClient.get<ClubDetail>(`/clubs/${id}`),
+  create: (body: {
+    name: string;
+    description?: string;
+    visibility?: ClubVisibility;
+    invitedUserIds?: number[];
+  }) => apiClient.post<ClubDetail>('/clubs', body),
+  update: (
+    id: string,
+    body: {
+      name?: string;
+      description?: string | null;
+      visibility?: ClubVisibility;
+      accentColor?: ClubAccentColor | null;
+    }
+  ) => apiClient.patch<ClubDetail>(`/clubs/${id}`, body),
+  delete: (id: string) => apiClient.delete(`/clubs/${id}`),
+  invite: (id: string, userIds: number[]) => apiClient.post(`/clubs/${id}/invite`, { userIds }),
+  accept: (id: string) => apiClient.post(`/clubs/${id}/accept`),
+  decline: (id: string) => apiClient.post(`/clubs/${id}/decline`),
+  leave: (id: string) => apiClient.post(`/clubs/${id}/leave`),
+  setMemberRole: (clubId: string, userId: number, role: Exclude<ClubRole, 'owner'>) =>
+    apiClient.patch(`/clubs/${clubId}/members/${userId}`, { role }),
+  kickMember: (clubId: string, userId: number) =>
+    apiClient.delete(`/clubs/${clubId}/members/${userId}`),
+  transferOwnership: (clubId: string, userId: number) =>
+    apiClient.post(`/clubs/${clubId}/transfer/${userId}`),
+};
+
+/**
+ * Generic chat API. Conversations are resolved from a scope (challenge/club)
+ * via `getChallengeConversation` / `getClubConversation`; everything else
+ * keys off the returned `conversationId`.
+ *
+ * Server endpoints:
+ *   GET  /api/conversations                      → ConversationListItem[]  (inbox)
+ *   GET  /api/conversations/unread-total         → { count }
+ *   GET  /api/conversations/:id                  → ConversationSummary
+ *   POST /api/conversations/dm                   → ConversationSummary  { userId }
+ *   POST /api/conversations/group                → ConversationSummary  { userIds, title? }
+ *   POST /api/conversations/:id/participants      { userIds }
+ *   DEL  /api/conversations/:id/participants/:userId
+ *   POST /api/conversations/:id/leave
+ *   GET  /api/challenges/:id/conversation        → ConversationSummary
+ *   GET  /api/clubs/:id/conversation             → ConversationSummary
+ *   GET  /api/conversations/:id/messages?cursor= → ChatPage
+ *   POST /api/conversations/:id/messages         → ChatMessage   { body, parentId? }
+ *   POST /api/conversations/:id/messages/read
+ *   GET  /api/conversations/:id/messages/unread-count
+ *   GET  /api/conversations/:id/messages/:messageId/replies
+ *   POST /api/conversations/:id/messages/:messageId/reactions   { emoji }
+ *   DEL  /api/conversations/:id/messages/:messageId/reactions/:emoji
+ *   GET  /api/conversations/:id/mute
+ *   PATCH /api/conversations/:id/mute            { mutedUntil: ISO | null }
+ */
+export const conversationsService = {
+  // Inbox + DM/group lifecycle.
+  listConversations: () => apiClient.get<ConversationListItem[]>('/conversations'),
+  unreadTotal: () => apiClient.get<{ count: number }>('/conversations/unread-total'),
+  getConversation: (conversationId: string) =>
+    apiClient.get<ConversationSummary>(`/conversations/${conversationId}`),
+  startDm: (userId: number) => apiClient.post<ConversationSummary>('/conversations/dm', { userId }),
+  createGroup: (userIds: number[], title?: string) =>
+    apiClient.post<ConversationSummary>('/conversations/group', {
+      userIds,
+      ...(title ? { title } : {}),
+    }),
+  addParticipants: (conversationId: string, userIds: number[]) =>
+    apiClient.post(`/conversations/${conversationId}/participants`, { userIds }),
+  removeParticipant: (conversationId: string, userId: number) =>
+    apiClient.delete(`/conversations/${conversationId}/participants/${userId}`),
+  leave: (conversationId: string) => apiClient.post(`/conversations/${conversationId}/leave`),
+
+  // Realtime: mint a capability-scoped Ably token. `enabled:false` means the
+  // server has no Ably key configured → client stays on polling.
+  realtimeToken: () =>
+    apiClient.post<{ enabled: boolean; tokenRequest?: unknown }>('/realtime/token'),
+
+  getChallengeConversation: (challengeId: string) =>
+    apiClient.get<ConversationSummary>(`/challenges/${challengeId}/conversation`),
+  getClubConversation: (clubId: string) =>
+    apiClient.get<ConversationSummary>(`/clubs/${clubId}/conversation`),
+
+  listMessages: (conversationId: string, options?: { cursor?: string; limit?: number }) => {
     const params = new URLSearchParams();
-    if (cursor) params.set('cursor', cursor);
-    if (limit) params.set('limit', String(limit));
+    if (options?.cursor) params.set('cursor', options.cursor);
+    if (options?.limit) params.set('limit', String(options.limit));
+    const qs = params.toString();
+    return apiClient.get<ChatPage>(
+      `/conversations/${conversationId}/messages${qs ? `?${qs}` : ''}`
+    );
+  },
+  sendMessage: (conversationId: string, body: string, parentId?: string) =>
+    apiClient.post<ChatMessage>(`/conversations/${conversationId}/messages`, {
+      body,
+      ...(parentId ? { parentId } : {}),
+    }),
+  markRead: (conversationId: string) =>
+    apiClient.post(`/conversations/${conversationId}/messages/read`),
+  unreadCount: (conversationId: string) =>
+    apiClient.get<{ count: number }>(`/conversations/${conversationId}/messages/unread-count`),
+
+  listReplies: (
+    conversationId: string,
+    messageId: string,
+    options?: { cursor?: string; limit?: number }
+  ) => {
+    const params = new URLSearchParams();
+    if (options?.cursor) params.set('cursor', options.cursor);
+    if (options?.limit) params.set('limit', String(options.limit));
+    const qs = params.toString();
+    return apiClient.get<ChatPage>(
+      `/conversations/${conversationId}/messages/${messageId}/replies${qs ? `?${qs}` : ''}`
+    );
+  },
+
+  addReaction: (conversationId: string, messageId: string, emoji: string) =>
+    apiClient.post<{ reactions: ReactionSummary[] }>(
+      `/conversations/${conversationId}/messages/${messageId}/reactions`,
+      { emoji }
+    ),
+  removeReaction: (conversationId: string, messageId: string, emoji: string) =>
+    apiClient.delete<{ reactions: ReactionSummary[] }>(
+      // Emoji glyphs are multibyte — encode so server sees the original chars.
+      `/conversations/${conversationId}/messages/${messageId}/reactions/${encodeURIComponent(emoji)}`
+    ),
+
+  getMute: (conversationId: string) =>
+    apiClient.get<ChatMuteState>(`/conversations/${conversationId}/mute`),
+  setMute: (conversationId: string, mutedUntil: string | null) =>
+    apiClient.patch<ChatMuteState>(`/conversations/${conversationId}/mute`, { mutedUntil }),
+};
+
+/** Quick-set emojis exposed in the UI. Server enforces the same allowlist. */
+export const CHAT_REACTION_EMOJIS = ['👍', '❤️', '🔥', '👏', '🎉'] as const;
+
+export const feedService = {
+  list: (options?: { cursor?: string; limit?: number; clubId?: string }) => {
+    const params = new URLSearchParams();
+    if (options?.cursor) params.set('cursor', options.cursor);
+    if (options?.limit) params.set('limit', String(options.limit));
+    if (options?.clubId) params.set('clubId', options.clubId);
     const qs = params.toString();
     return apiClient.get<FeedPage>(`/feed${qs ? `?${qs}` : ''}`);
   },

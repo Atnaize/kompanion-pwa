@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import { BarChart3, Camera, ClipboardList, Map as MapIcon, Timer, Trophy } from 'lucide-react';
 import { Layout } from '@components/layout';
-import { Button, GlassCard, Skeleton, Tab, TabList, TabPanel, Tabs } from '@components/ui';
+import { BackButton, GlassCard, Skeleton, Tab, TabList, TabPanel, Tabs } from '@components/ui';
 import { ActivityMap, ActivityLaps, ActivityPhotos } from '@components/activity';
+import { useScrollPastSentinel } from '@hooks/useScrollPastSentinel';
 import { formatPaceFromSpeed } from '@utils/format';
 import { isFootActivity } from '@utils/sport';
 import { ActivityHero } from './ActivityHero';
@@ -20,6 +22,9 @@ export const ActivityDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [tab, setTab] = useState<TabKey>('overview');
+  // Sticky tab strip: once the hero scrolls past, pin the TabList so users
+  // can switch tabs without scrolling back up.
+  const { ref: heroEndRef, hasPassed: isCompact } = useScrollPastSentinel();
 
   const numericId = id ? parseInt(id, 10) : NaN;
   const validId = !Number.isNaN(numericId);
@@ -67,64 +72,77 @@ export const ActivityDetailPage = () => {
   return (
     <Layout>
       <div className="space-y-5">
-        <Button variant="secondary" size="sm" onClick={() => navigate(-1)}>
-          {t('common.back')}
-        </Button>
+        <BackButton />
 
         <ActivityHero activity={activity} isFoot={isFoot} formatSpeedValue={formatSpeedValue} />
 
+        {/* Sentinel: when this passes the viewport top, the TabList below
+            shows a backdrop + shadow to clarify it's pinned. */}
+        <div ref={heroEndRef} aria-hidden className="h-0" />
+
         <Tabs value={tab} onChange={(v) => setTab(v as TabKey)}>
-          <TabList wrap>
-            <Tab
-              value="overview"
-              label={t('activityDetail.tabs.overview')}
-              icon={<ClipboardList size={14} strokeWidth={2.25} aria-hidden="true" />}
-              compact
-            />
-            {hasMap && (
+          {/* The sticky wrapper extends to the page edges via the negative
+              side margins — Layout adds px-4, we need an edge-to-edge bar. */}
+          <div
+            className={clsx(
+              'sticky top-0 z-30 -mx-4 px-4 transition-shadow',
+              isCompact
+                ? 'bg-gray-50/95 shadow-sm backdrop-blur-md dark:bg-gray-950/95'
+                : 'bg-transparent'
+            )}
+          >
+            <TabList fade>
               <Tab
-                value="map"
-                label={t('activityDetail.tabs.map')}
-                icon={<MapIcon size={14} strokeWidth={2.25} aria-hidden="true" />}
+                value="overview"
+                label={t('activityDetail.tabs.overview')}
+                icon={<ClipboardList size={14} strokeWidth={2.25} aria-hidden="true" />}
                 compact
               />
-            )}
-            {hasStreams && (
-              <Tab
-                value="charts"
-                label={t('activityDetail.tabs.charts')}
-                icon={<BarChart3 size={14} strokeWidth={2.25} aria-hidden="true" />}
-                compact
-              />
-            )}
-            {hasLaps && (
-              <Tab
-                value="laps"
-                label={t('activityDetail.tabs.laps')}
-                count={laps?.length}
-                icon={<Timer size={14} strokeWidth={2.25} aria-hidden="true" />}
-                compact
-              />
-            )}
-            {hasSegments && (
-              <Tab
-                value="segments"
-                label={t('activityDetail.tabs.prs')}
-                count={prSegments.length}
-                icon={<Trophy size={14} strokeWidth={2.25} aria-hidden="true" />}
-                compact
-              />
-            )}
-            {hasPhotos && (
-              <Tab
-                value="photos"
-                label={t('activityDetail.tabs.photos')}
-                count={photos?.length}
-                icon={<Camera size={14} strokeWidth={2.25} aria-hidden="true" />}
-                compact
-              />
-            )}
-          </TabList>
+              {hasMap && (
+                <Tab
+                  value="map"
+                  label={t('activityDetail.tabs.map')}
+                  icon={<MapIcon size={14} strokeWidth={2.25} aria-hidden="true" />}
+                  compact
+                />
+              )}
+              {hasStreams && (
+                <Tab
+                  value="charts"
+                  label={t('activityDetail.tabs.charts')}
+                  icon={<BarChart3 size={14} strokeWidth={2.25} aria-hidden="true" />}
+                  compact
+                />
+              )}
+              {hasLaps && (
+                <Tab
+                  value="laps"
+                  label={t('activityDetail.tabs.laps')}
+                  count={laps?.length}
+                  icon={<Timer size={14} strokeWidth={2.25} aria-hidden="true" />}
+                  compact
+                />
+              )}
+              {hasSegments && (
+                <Tab
+                  value="segments"
+                  label={t('activityDetail.tabs.prs')}
+                  count={prSegments.length}
+                  icon={<Trophy size={14} strokeWidth={2.25} aria-hidden="true" />}
+                  compact
+                />
+              )}
+              {hasPhotos && (
+                <Tab
+                  value="photos"
+                  label={t('activityDetail.tabs.photos')}
+                  count={photos?.length}
+                  icon={<Camera size={14} strokeWidth={2.25} aria-hidden="true" />}
+                  compact
+                />
+              )}
+            </TabList>
+          </div>
 
           <TabPanel value="overview" className="mt-4">
             <OverviewTab

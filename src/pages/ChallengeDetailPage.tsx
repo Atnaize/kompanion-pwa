@@ -3,7 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Layout } from '@components/layout/Layout';
 import { GlassCard, Button, Skeleton, ConfirmModal, Avatar } from '@components/ui';
-import { ChallengeProgress, ChallengeChart, InviteFriendsModal } from '@features/challenges';
+import {
+  ChallengeChart,
+  ChallengeChatSection,
+  ChallengeProgress,
+  InviteFriendsModal,
+} from '@features/challenges';
 import { useChallengeStore } from '@store/challengeStore';
 import { useAuthStore } from '@store/authStore';
 import { useSettingsStore } from '@store/settingsStore';
@@ -364,6 +369,10 @@ export const ChallengeDetailPage = () => {
               )}
           </div>
         )}
+
+        {/* Chat — only accepted participants can read/write. Renders inline
+            rather than as its own page; the section has its own scroll. */}
+        {isAccepted && <ChallengeChatSection challengeId={currentChallenge.id} />}
 
         {/* Actions */}
         <div className="flex flex-col gap-2">

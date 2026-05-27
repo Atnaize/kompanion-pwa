@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Swords, Users } from 'lucide-react';
+import { Shield, Swords, Users } from 'lucide-react';
 import { GlassCard, ProgressRing, Avatar } from '@components/ui';
 import type { Challenge } from '@types';
 import { formatDistance, formatDate } from '@utils/format';
@@ -69,6 +69,16 @@ export const ChallengeSummaryCard = ({ challenge, onClick }: ChallengeSummaryCar
 
         {/* Content */}
         <div className="min-w-0 flex-1">
+          {/* Club badge — surfaces only when the challenge is attached to a
+              club. Keeps the differentiator visible at a glance. */}
+          {challenge.club && (
+            <div className="mb-1 inline-flex max-w-full items-center gap-1 truncate">
+              <Shield size={11} strokeWidth={2} className="shrink-0 text-strava-orange" />
+              <span className="truncate font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-strava-orange">
+                {challenge.club.name}
+              </span>
+            </div>
+          )}
           {/* Header */}
           <div className="mb-1 flex items-start justify-between gap-2">
             <h3 className="truncate font-semibold text-gray-900 dark:text-gray-50">

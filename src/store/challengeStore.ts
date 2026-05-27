@@ -10,7 +10,7 @@ interface ChallengeState {
   currentChallenge: Challenge | null;
   isLoading: boolean;
   lastEventTimestamp: string | null;
-  pollingInterval: number | null;
+  pollingInterval: ReturnType<typeof setInterval> | null;
 
   // Actions
   fetchChallenges: () => Promise<void>;

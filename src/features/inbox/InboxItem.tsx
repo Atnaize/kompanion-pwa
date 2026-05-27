@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
+  Check,
   CheckCircle2,
   Flag,
   Target,
@@ -21,38 +22,53 @@ import type { InboxNotification } from '@types';
 interface InboxItemProps {
   notification: InboxNotification;
   onClick?: () => void;
+  /** Left-swipe action: destructive, removes the row. */
   onDismiss?: () => void;
+  /** Right-swipe action: non-destructive, marks the row read. Pass only when
+   *  the row is actually unread — for read rows we suppress the affordance. */
+  onMarkRead?: () => void;
 }
 
-const SWIPE_DISMISS_THRESHOLD = 96; // px past which release dismisses
+const SWIPE_THRESHOLD = 96; // px past which release commits the action
 const SWIPE_ACTIVATION = 8; // px before we treat the gesture as a horizontal swipe
+const SNAP_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'; // ease-out-quint — smooth snap
 
 /**
  * Inbox row — one renderer per notification type via a single switch.
  * Adding a new type: add a `case` here (title + body + icon + link).
  *
- * Visual states:
- *   - unread: orange dot + slight orange tint
- *   - read: plain
- *
- * Touch/mouse swipe left to dismiss reveals a trash background; releasing past
- * the threshold calls `onDismiss`.
+ * Swipe gestures (iOS-mail pattern):
+ *   - Swipe right → mark read (green background, check icon). Only available
+ *     when the row is unread; on read rows the right swipe is suppressed.
+ *   - Swipe left  → delete (red background, trash icon). Always available
+ *     when `onDismiss` is provided.
+ *   - Below threshold: snaps back without committing.
  */
-export const InboxItem = ({ notification, onClick, onDismiss }: InboxItemProps) => {
+export const InboxItem = ({ notification, onClick, onDismiss, onMarkRead }: InboxItemProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isUnread = notification.readAt === null;
   const view = buildView(notification, t);
 
+  const canMarkRead = !!onMarkRead && isUnread;
+  const canDismiss = !!onDismiss;
+  const swipeEnabled = canMarkRead || canDismiss;
+
   const [swipeX, setSwipeX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isRemoved, setIsRemoved] = useState(false);
   const dragStartXRef = useRef<number | null>(null);
   const dragActiveRef = useRef(false);
   const swipedRef = useRef(false);
 
+  const swipingRight = swipeX > 0;
+  // Clamp the visible offset so the user can't drag right when mark-read isn't
+  // available — the row snaps back rather than misleading them.
+  const visibleSwipeX = swipingRight && !canMarkRead ? Math.min(swipeX, SWIPE_ACTIVATION) : swipeX;
+  const directionActive = swipingRight ? canMarkRead : canDismiss;
+
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!onDismiss) return;
+    if (!swipeEnabled) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     dragStartXRef.current = e.clientX;
     dragActiveRef.current = false;
@@ -60,7 +76,7 @@ export const InboxItem = ({ notification, onClick, onDismiss }: InboxItemProps) 
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!onDismiss || dragStartXRef.current === null) return;
+    if (!swipeEnabled || dragStartXRef.current === null) return;
     const dx = e.clientX - dragStartXRef.current;
     if (!dragActiveRef.current) {
       if (Math.abs(dx) < SWIPE_ACTIVATION) return;
@@ -68,16 +84,16 @@ export const InboxItem = ({ notification, onClick, onDismiss }: InboxItemProps) 
       setIsDragging(true);
       e.currentTarget.setPointerCapture(e.pointerId);
     }
-    const clamped = Math.min(0, dx);
-    setSwipeX(clamped);
-    if (clamped < -SWIPE_ACTIVATION) {
+    setSwipeX(dx);
+    if (Math.abs(dx) > SWIPE_ACTIVATION) {
       swipedRef.current = true;
     }
   };
 
   const handlePointerEnd = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!onDismiss) return;
+    if (!swipeEnabled) return;
     const wasDragging = dragActiveRef.current;
+    const finalDx = swipeX;
     dragStartXRef.current = null;
     dragActiveRef.current = false;
     setIsDragging(false);
@@ -85,13 +101,26 @@ export const InboxItem = ({ notification, onClick, onDismiss }: InboxItemProps) 
       e.currentTarget.releasePointerCapture(e.pointerId);
     }
     if (!wasDragging) return;
-    if (swipeX < -SWIPE_DISMISS_THRESHOLD) {
-      setIsDismissed(true);
+
+    const committedRight = finalDx > SWIPE_THRESHOLD && canMarkRead;
+    const committedLeft = finalDx < -SWIPE_THRESHOLD && canDismiss;
+
+    if (committedLeft) {
+      setIsRemoved(true);
       setSwipeX(-window.innerWidth);
-      window.setTimeout(() => onDismiss(), 180);
-    } else {
-      setSwipeX(0);
+      window.setTimeout(() => onDismiss?.(), 220);
+      return;
     }
+
+    if (committedRight) {
+      // Mark-read is non-destructive — the row stays. Snap back and fire the
+      // callback; the parent's optimistic update will repaint the row as read.
+      setSwipeX(0);
+      onMarkRead?.();
+      return;
+    }
+
+    setSwipeX(0);
   };
 
   const handleClick = () => {
@@ -156,48 +185,73 @@ export const InboxItem = ({ notification, onClick, onDismiss }: InboxItemProps) 
     </div>
   );
 
-  const foregroundClass = clsx(
+  const foregroundBaseClass = clsx(
     'block rounded-2xl border p-4',
-    isDragging ? '' : 'transition-[transform,background-color,opacity] duration-200',
     isUnread
       ? 'border-strava-orange/30 bg-strava-orange/[0.04] hover:bg-strava-orange/[0.08] dark:bg-strava-orange/[0.06] dark:hover:bg-strava-orange/[0.1]'
       : 'border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800'
   );
 
-  // No-swipe back-compat: render the previous link/div shape.
-  if (!onDismiss) {
+  // No-swipe fallback (back-compat: parent provided neither callback).
+  if (!swipeEnabled) {
     return (
-      <div className={foregroundClass} onClick={handleClick} role="button" tabIndex={0}>
+      <div className={foregroundBaseClass} onClick={handleClick} role="button" tabIndex={0}>
         {inner}
       </div>
     );
   }
 
-  const swipeProgress = Math.min(1, Math.abs(swipeX) / SWIPE_DISMISS_THRESHOLD);
+  const swipeProgress = Math.min(1, Math.abs(visibleSwipeX) / SWIPE_THRESHOLD);
+  const crossedThreshold = Math.abs(visibleSwipeX) > SWIPE_THRESHOLD && directionActive;
+  const iconScale = 0.7 + 0.3 * swipeProgress + (crossedThreshold ? 0.15 : 0);
+
+  // Action affordance: green/check on the leading edge (right swipe = mark
+  // read), red/trash on the trailing edge (left swipe = delete).
+  const ActionIcon = swipingRight ? Check : Trash2;
+  const actionBgIdle = swipingRight ? 'bg-emerald-500/90' : 'bg-red-500/90';
+  const actionBgActive = swipingRight ? 'bg-emerald-600' : 'bg-red-600';
 
   return (
     <div
       className={clsx(
         'relative overflow-hidden rounded-2xl',
-        isDismissed ? 'pointer-events-none' : ''
+        isRemoved ? 'pointer-events-none' : ''
       )}
       style={{
-        maxHeight: isDismissed ? 0 : undefined,
-        marginBottom: isDismissed ? 0 : undefined,
-        opacity: isDismissed ? 0 : 1,
-        transition: isDismissed ? 'max-height 200ms ease, opacity 200ms ease' : undefined,
+        maxHeight: isRemoved ? 0 : undefined,
+        marginBottom: isRemoved ? 0 : undefined,
+        opacity: isRemoved ? 0 : 1,
+        transition: isRemoved
+          ? `max-height 220ms ${SNAP_EASE} 80ms, opacity 220ms ${SNAP_EASE} 80ms`
+          : undefined,
       }}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 flex items-center justify-end rounded-2xl bg-red-500/90 pr-6 text-white"
-        style={{ opacity: swipeProgress }}
+        className={clsx(
+          'pointer-events-none absolute inset-0 flex items-center rounded-2xl text-white transition-colors duration-150',
+          swipingRight ? 'justify-start pl-6' : 'justify-end pr-6',
+          crossedThreshold ? actionBgActive : actionBgIdle
+        )}
+        style={{ opacity: directionActive ? swipeProgress : 0 }}
       >
-        <Trash2 size={20} strokeWidth={2} />
+        <ActionIcon
+          size={20}
+          strokeWidth={2.25}
+          style={{
+            transform: `scale(${iconScale})`,
+            transition: isDragging ? `transform 120ms ${SNAP_EASE}` : undefined,
+          }}
+        />
       </div>
       <div
-        className={foregroundClass}
-        style={{ transform: `translateX(${swipeX}px)`, touchAction: 'pan-y' }}
+        className={foregroundBaseClass}
+        style={{
+          transform: `translateX(${visibleSwipeX}px)`,
+          touchAction: 'pan-y',
+          transition: isDragging ? undefined : `transform 260ms ${SNAP_EASE}`,
+          willChange: 'transform',
+        }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
@@ -279,7 +333,7 @@ function buildView(
         subtitle: t('inbox.types.challengeActivityAdded', {
           name: meta.participantName ?? '',
           count: Number(meta.activityCount ?? 0),
-          distance: ((Number(meta.totalDistance ?? 0)) / 1000).toFixed(1),
+          distance: (Number(meta.totalDistance ?? 0) / 1000).toFixed(1),
         }),
         icon: Target,
         iconClass: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',

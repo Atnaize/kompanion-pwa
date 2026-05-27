@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   useInfiniteQuery,
@@ -9,8 +9,9 @@ import {
 import { Bell, CheckCheck, Trash2 } from 'lucide-react';
 import clsx from 'clsx';
 import { Layout } from '@components/layout';
-import { Button, ConfirmModal, EmptyState } from '@components/ui';
+import { Button, ConfirmModal, EmptyState, EndOfList, ListSkeleton } from '@components/ui';
 import { inboxService } from '@api/services';
+import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
 import { InboxItem } from '@features/inbox';
 import type { InboxPage as InboxPageData } from '@types';
 
@@ -22,7 +23,6 @@ type Filter = 'all' | 'unread';
 export const NotificationsPage = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [filter, setFilter] = useState<Filter>('all');
   const [confirmDeleteAllOpen, setConfirmDeleteAllOpen] = useState(false);
 
@@ -131,20 +131,10 @@ export const NotificationsPage = () => {
   });
 
   // Infinite scroll sentinel.
-  useEffect(() => {
-    const node = sentinelRef.current;
-    if (!node || !hasNextPage) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          void fetchNextPage();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
+  const loadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) void fetchNextPage();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const sentinelRef = useInfiniteScroll(loadMore, { rootMargin: '200px' });
 
   const allNotifications = useMemo(() => data?.pages.flatMap((p) => p.notifications) ?? [], [data]);
   const filtered = useMemo(
@@ -220,7 +210,7 @@ export const NotificationsPage = () => {
         )}
 
         {isLoading ? (
-          <p className="px-1 text-sm text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
+          <ListSkeleton count={5} />
         ) : filtered.length === 0 ? (
           <EmptyState
             icon={<Bell size={32} strokeWidth={1.5} aria-hidden="true" />}
@@ -245,6 +235,7 @@ export const NotificationsPage = () => {
                   }
                 }}
                 onDismiss={() => deleteMutation.mutate(n.id)}
+                onMarkRead={n.readAt === null ? () => markReadMutation.mutate(n.id) : undefined}
               />
             ))}
 
@@ -255,6 +246,8 @@ export const NotificationsPage = () => {
                 )}
               </div>
             )}
+
+            {!hasNextPage && filter === 'all' && filtered.length > 0 && <EndOfList />}
           </div>
         )}
       </div>

@@ -17,29 +17,94 @@ self.addEventListener('push', (event) => {
     const data = event.data.json();
     console.log('[SW Push] Parsed push data:', data);
 
-    const { title, body, icon, badge, data: notificationData } = data;
+    const { title, body, icon, badge, tag, data: notificationData } = data;
 
-    const options = {
-      body,
-      icon: icon || '/pwa-192x192.svg',
-      badge: badge || '/notification-badge.svg',
-      data: notificationData,
-      vibrate: [200, 100, 200],
-      tag: notificationData?.type || 'default',
-      requireInteraction: false,
-    };
-
-    console.log('[SW Push] Showing notification with options:', options);
+    // Tag precedence: explicit `tag` from the payload wins (lets the backend
+    // route per-entity, e.g. `challenge:<uuid>` so all messages in one chat
+    // collapse to a single banner instead of stacking per type).
+    const resolvedTag = tag || notificationData?.type || 'default';
 
     event.waitUntil(
-      self.registration.showNotification(title, options).then(() => {
+      (async () => {
+        // Foreground suppression: if the user is already looking at the page
+        // this push points to, skip the banner. The in-app view picks up the
+        // change via its own polling/refresh — a banner on top would be
+        // redundant and annoying (think: chat tab open while messages arrive).
+        // Mentions still pop through; getting @'d is a "look at me NOW" signal
+        // even when the page is open.
+        const isMention = notificationData?.type === 'challenge_mention';
+        if (!isMention) {
+          const shouldSuppress = await isViewingTarget(notificationData);
+          if (shouldSuppress) {
+            console.log('[SW Push] Suppressed (foreground client on target URL)');
+            return;
+          }
+        }
+
+        const options = {
+          body,
+          icon: icon || '/pwa-192x192.svg',
+          badge: badge || '/notification-badge.svg',
+          data: notificationData,
+          vibrate: [200, 100, 200],
+          tag: resolvedTag,
+          // Same-tag pushes are otherwise treated as separate banners on some
+          // platforms — `renotify: false` is the default but spelling it out
+          // makes the collapse contract explicit.
+          renotify: false,
+          requireInteraction: false,
+        };
+
+        console.log('[SW Push] Showing notification with options:', options);
+        await self.registration.showNotification(title, options);
         console.log('[SW Push] Notification shown successfully');
-      })
+      })()
     );
   } catch (error) {
     console.error('[SW Push] Error handling push notification:', error);
   }
 });
+
+/**
+ * Returns true when at least one visible window client is already on the page
+ * this notification would link to — meaning the user is staring at the very
+ * thing being pushed and doesn't need a banner. Currently covers
+ * challenge_message / challenge_invite / challenge_completed (path:
+ * /challenges/<id>); extend the switch as new notification types deserve
+ * suppression.
+ */
+async function isViewingTarget(notificationData) {
+  if (!notificationData) return false;
+  let targetPath = null;
+  if (
+    notificationData.type === 'challenge_message' &&
+    typeof notificationData.challengeId === 'string'
+  ) {
+    targetPath = `/challenges/${notificationData.challengeId}`;
+  } else if (
+    notificationData.type === 'challenge_invite' &&
+    typeof notificationData.challengeId === 'string'
+  ) {
+    targetPath = `/challenges/${notificationData.challengeId}`;
+  }
+  if (!targetPath) return false;
+
+  const windowClients = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+  for (const client of windowClients) {
+    // `visibilityState === 'visible'` is the spec-correct signal for "the
+    // user can actually see this tab". `focused` is platform-flaky on
+    // Android. We accept either as "foreground".
+    const visible = client.visibilityState === 'visible' || client.focused === true;
+    if (!visible) continue;
+    try {
+      const u = new URL(client.url);
+      if (u.pathname === targetPath) return true;
+    } catch {
+      // Bad URL — ignore.
+    }
+  }
+  return false;
+}
 
 self.addEventListener('notificationclick', (event) => {
   console.log('[SW Push] Notification clicked:', event.notification);
@@ -52,6 +117,14 @@ self.addEventListener('notificationclick', (event) => {
   if (notificationData?.type === 'challenge_invite') {
     urlPath = notificationData.challengeId
       ? `/challenges/${notificationData.challengeId}`
+      : '/challenges';
+  } else if (notificationData?.type === 'challenge_message') {
+    urlPath = notificationData.challengeId
+      ? `/challenges/${notificationData.challengeId}#chat`
+      : '/challenges';
+  } else if (notificationData?.type === 'challenge_mention') {
+    urlPath = notificationData.challengeId
+      ? `/challenges/${notificationData.challengeId}#chat`
       : '/challenges';
   } else if (notificationData?.type === 'challenge_joined') {
     urlPath = notificationData.challengeId

@@ -6,6 +6,7 @@ import {
   AnimatedNumber,
   DistanceProgressViz,
   ElevationMountainViz,
+  PageHeader,
   StatTile,
   StatTileSkeleton,
   StreakDotsViz,
@@ -29,16 +30,17 @@ export const QuickStatsSection = () => {
 
   return (
     <section>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-50">
-          {t('dashboard.quickStats')}
-        </h2>
-        <TimePeriodSelector
-          value={period}
-          onChange={setPeriod}
-          storageKey="dashboard-stats-period"
-        />
-      </div>
+      <PageHeader
+        title={t('dashboard.quickStats')}
+        className="mb-4 items-center"
+        action={
+          <TimePeriodSelector
+            value={period}
+            onChange={setPeriod}
+            storageKey="dashboard-stats-period"
+          />
+        }
+      />
       {isLoading ? (
         <div className="grid grid-cols-2 gap-3">
           <StatTileSkeleton />

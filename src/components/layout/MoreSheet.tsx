@@ -8,7 +8,8 @@ import {
   Bell,
   ChevronRight,
   Medal,
-  Rss,
+  MessageCircle,
+  Shield,
   Timer,
   Trophy,
   Users,
@@ -72,7 +73,9 @@ const items: SheetItem[] = [
   { to: '/stats', labelKey: 'more.stats', icon: BarChart3 },
   { to: '/personal-records', labelKey: 'nav.personalRecords', icon: Timer },
   { to: '/achievements', labelKey: 'nav.badges', icon: Trophy },
+  { to: '/messages', labelKey: 'more.messages', icon: MessageCircle, beta: true },
   { to: '/friends', labelKey: 'more.friends', icon: Users, beta: true },
+  { to: '/clubs', labelKey: 'more.clubs', icon: Shield, beta: true },
   {
     to: '/leaderboards',
     labelKey: 'more.leaderboards',
@@ -80,7 +83,6 @@ const items: SheetItem[] = [
     beta: true,
     requiresFriends: true,
   },
-  { to: '/feed', labelKey: 'more.feed', icon: Rss, beta: true, requiresFriends: true },
   { to: '/notifications', labelKey: 'more.notifications', icon: Bell, beta: true },
 ];
 

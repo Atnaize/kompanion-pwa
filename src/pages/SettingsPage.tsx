@@ -1,68 +1,50 @@
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import { Ban, Bell, BellOff, Globe, Moon, Sun, Zap } from 'lucide-react';
 import { Layout } from '@components/layout';
-import { GlassCard, Toggle, Button } from '@components/ui';
-import { useToastStore } from '@store/toastStore';
 import { useSettingsStore } from '@store/settingsStore';
-import { hapticService } from '@utils/haptic';
 import { usePushNotifications } from '@hooks/usePushNotifications';
-import { PrivacyLists } from '@features/privacy';
+import { privacyService } from '@api/services';
+import { SettingsRow } from './settings/SettingsRow';
 
+/**
+ * Settings hub — navigation list of category rows. Replaces the previous
+ * long-scroll layout (A/B review #4): each row drills into a focused
+ * sub-page so scrolling stays minimal as we add categories.
+ *
+ * Subtitles show current state at a glance — e.g. "English", "Enabled · 4
+ * categories on", "2 muted · 1 blocked" — so users don't need to dig into a
+ * sub-page just to remember what they configured.
+ */
 export const SettingsPage = () => {
   const { t } = useTranslation();
-  const { success, error } = useToastStore();
-  const { locale, setLocale, hapticEnabled, setHapticEnabled } = useSettingsStore();
+  const locale = useSettingsStore((s) => s.locale);
+  const theme = useSettingsStore((s) => s.theme);
+  const hapticEnabled = useSettingsStore((s) => s.hapticEnabled);
+  const { isSubscribed, preferences } = usePushNotifications();
 
-  const {
-    isSupported: isPushSupported,
-    isSubscribed,
-    isLoading: isPushLoading,
-    preferences,
-    subscribe,
-    unsubscribe,
-    updatePreferences,
-  } = usePushNotifications();
+  const { data: blocked = [] } = useQuery({
+    queryKey: ['privacy-blocked'],
+    queryFn: async () => (await privacyService.listBlocked()).data,
+  });
+  const { data: muted = [] } = useQuery({
+    queryKey: ['privacy-muted'],
+    queryFn: async () => (await privacyService.listMuted()).data,
+  });
 
-  const handleHapticToggle = (enabled: boolean) => {
-    setHapticEnabled(enabled);
-
-    if (enabled) {
-      hapticService.vibrate('light');
-      success(t('settings.feedback.hapticEnabled'));
-    } else {
-      success(t('settings.feedback.hapticDisabled'));
-    }
-  };
-
-  const handlePushToggle = async () => {
-    try {
-      if (isSubscribed) {
-        await unsubscribe();
-        success(t('settings.pushNotifications.disabled'));
-      } else {
-        await subscribe();
-        success(t('settings.pushNotifications.enabled'));
-      }
-    } catch (err) {
-      error(err instanceof Error ? err.message : t('settings.pushNotifications.disabled'));
-    }
-  };
-
-  const handlePreferenceToggle = async (
-    key:
-      | 'challengeInvites'
-      | 'challengeUpdates'
-      | 'friendRequests'
-      | 'friendAccepted'
-      | 'achievementUnlocked',
-    value: boolean
-  ) => {
-    try {
-      await updatePreferences({ [key]: value });
-      success(t('settings.preferences.updated'));
-    } catch {
-      error(t('settings.preferences.updateFailed'));
-    }
-  };
+  const localeLabel = t(`settings.language.${locale}`);
+  const themeLabel = t(`profileMenu.theme.${theme}`);
+  const notifSubtitle = !isSubscribed
+    ? t('settings.pushNotifications.disabled')
+    : preferences
+      ? t('settings.notifSummary', {
+          count: countActivePrefs(preferences),
+        })
+      : t('settings.pushNotifications.enabled');
+  const privacySubtitle = t('settings.privacySummary', {
+    muted: muted.length,
+    blocked: blocked.length,
+  });
 
   return (
     <Layout>
@@ -74,161 +56,90 @@ export const SettingsPage = () => {
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t('settings.subtitle')}</p>
         </div>
 
-        {/* Language */}
+        {/* App */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-            {t('settings.language.title')}
+          <h3 className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+            {t('settings.groups.app')}
           </h3>
-          <GlassCard className="p-5">
-            <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-              {t('settings.language.description')}
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setLocale('en')}
-                className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all ${
-                  locale === 'en'
-                    ? 'bg-strava-orange text-white shadow-md shadow-orange-500/25 ring-1 ring-strava-orange/30'
-                    : 'bg-white/50 text-gray-700 ring-1 ring-inset ring-gray-900/5 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-900/80'
-                }`}
-              >
-                {t('settings.language.en')}
-              </button>
-              <button
-                onClick={() => setLocale('fr')}
-                className={`flex-1 rounded-lg px-4 py-3 text-sm font-semibold tracking-wide transition-all ${
-                  locale === 'fr'
-                    ? 'bg-strava-orange text-white shadow-md shadow-orange-500/25 ring-1 ring-strava-orange/30'
-                    : 'bg-white/50 text-gray-700 ring-1 ring-inset ring-gray-900/5 hover:bg-white/80 dark:bg-gray-900/50 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-900/80'
-                }`}
-              >
-                {t('settings.language.fr')}
-              </button>
-            </div>
-          </GlassCard>
-        </section>
-
-        {/* Push Notifications */}
-        <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-            {t('settings.pushNotifications.title')}
-          </h3>
-          <div className="space-y-4">
-            <GlassCard className="p-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-50">
-                    {t('settings.pushNotifications.enable')}
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {isPushSupported
-                      ? t('settings.pushNotifications.descriptionSupported')
-                      : t('settings.pushNotifications.descriptionUnsupported')}
-                  </p>
-                </div>
-                <Button
-                  onClick={handlePushToggle}
-                  disabled={!isPushSupported || isPushLoading}
-                  variant={isSubscribed ? 'secondary' : 'primary'}
-                  size="sm"
-                >
-                  {isPushLoading
-                    ? t('common.loading')
-                    : isSubscribed
-                      ? t('common.disable')
-                      : t('common.enable')}
-                </Button>
-              </div>
-            </GlassCard>
-
-            {isSubscribed && preferences && (
-              <GlassCard className="p-5">
-                <h4 className="mb-1 font-semibold text-gray-900 dark:text-gray-50">
-                  {t('settings.preferences.title')}
-                </h4>
-                <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">
-                  {t('settings.preferences.activeHint')}
-                </p>
-
-                {/* Friends */}
-                <p className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-                  {t('settings.preferences.friendsGroup')}
-                </p>
-                <div className="space-y-4">
-                  <Toggle
-                    enabled={preferences.friendRequests}
-                    onChange={(value) => handlePreferenceToggle('friendRequests', value)}
-                    label={t('settings.preferences.friendRequests')}
-                    description={t('settings.preferences.friendRequestsDesc')}
-                  />
-                  <Toggle
-                    enabled={preferences.friendAccepted}
-                    onChange={(value) => handlePreferenceToggle('friendAccepted', value)}
-                    label={t('settings.preferences.friendAccepted')}
-                    description={t('settings.preferences.friendAcceptedDesc')}
-                  />
-                </div>
-
-                {/* Achievements */}
-                <p className="mb-3 mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-                  {t('settings.preferences.achievementsGroup')}
-                </p>
-                <div className="space-y-4">
-                  <Toggle
-                    enabled={preferences.achievementUnlocked}
-                    onChange={(value) => handlePreferenceToggle('achievementUnlocked', value)}
-                    label={t('settings.preferences.achievementUnlocked')}
-                    description={t('settings.preferences.achievementUnlockedDesc')}
-                  />
-                </div>
-
-                {/* Challenges */}
-                <p className="mb-3 mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-                  {t('settings.preferences.challengesGroup')}
-                </p>
-                <div className="space-y-4">
-                  <Toggle
-                    enabled={preferences.challengeInvites}
-                    onChange={(value) => handlePreferenceToggle('challengeInvites', value)}
-                    label={t('settings.preferences.challengeInvites')}
-                    description={t('settings.preferences.challengeInvitesDesc')}
-                  />
-                  <Toggle
-                    enabled={preferences.challengeUpdates}
-                    onChange={(value) => handlePreferenceToggle('challengeUpdates', value)}
-                    label={t('settings.preferences.challengeUpdates')}
-                    description={t('settings.preferences.challengeUpdatesDesc')}
-                  />
-                </div>
-              </GlassCard>
-            )}
+          <div className="divide-y divide-gray-200/60 overflow-hidden rounded-2xl border border-white/20 bg-white/80 backdrop-blur-md dark:divide-gray-800/60 dark:border-gray-700/40 dark:bg-gray-900/70">
+            <SettingsRow
+              to="/settings/language"
+              icon={<Globe size={16} strokeWidth={2} />}
+              title={t('settings.language.title')}
+              value={localeLabel}
+            />
+            <SettingsRow
+              to="/settings/appearance"
+              icon={
+                theme === 'dark' ? (
+                  <Moon size={16} strokeWidth={2} />
+                ) : (
+                  <Sun size={16} strokeWidth={2} />
+                )
+              }
+              title={t('settings.appearance.title')}
+              value={themeLabel}
+            />
           </div>
         </section>
 
-        {/* Haptic Feedback */}
+        {/* Notifications */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-            {t('settings.feedback.title')}
+          <h3 className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+            {t('settings.groups.notifications')}
           </h3>
-          <GlassCard className="p-5">
-            <Toggle
-              enabled={hapticEnabled}
-              onChange={handleHapticToggle}
-              disabled={!hapticService.isSupported()}
-              label={t('settings.feedback.haptic')}
-              description={`${t('settings.feedback.hapticDesc')}${!hapticService.isSupported() ? t('settings.feedback.hapticUnsupported') : ''}`}
+          <div className="overflow-hidden rounded-2xl border border-white/20 bg-white/80 backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70">
+            <SettingsRow
+              to="/settings/notifications"
+              icon={
+                isSubscribed ? (
+                  <Bell size={16} strokeWidth={2} />
+                ) : (
+                  <BellOff size={16} strokeWidth={2} />
+                )
+              }
+              title={t('settings.pushNotifications.title')}
+              value={notifSubtitle}
             />
-          </GlassCard>
+          </div>
         </section>
 
-        {/* Privacy — blocked + muted users */}
+        {/* Privacy */}
         <section>
-          <h3 className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
-            {t('settings.privacy.title')}
+          <h3 className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+            {t('settings.groups.privacy')}
           </h3>
-          <PrivacyLists />
+          <div className="overflow-hidden rounded-2xl border border-white/20 bg-white/80 backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70">
+            <SettingsRow
+              to="/settings/privacy"
+              icon={<Ban size={16} strokeWidth={2} />}
+              title={t('settings.privacy.title')}
+              value={privacySubtitle}
+            />
+          </div>
+        </section>
+
+        {/* Feedback */}
+        <section>
+          <h3 className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+            {t('settings.groups.feedback')}
+          </h3>
+          <div className="overflow-hidden rounded-2xl border border-white/20 bg-white/80 backdrop-blur-md dark:border-gray-700/40 dark:bg-gray-900/70">
+            <SettingsRow
+              to="/settings/feedback"
+              icon={<Zap size={16} strokeWidth={2} />}
+              title={t('settings.feedback.haptic')}
+              value={hapticEnabled ? t('common.enabled') : t('common.disabled')}
+            />
+          </div>
         </section>
       </div>
     </Layout>
   );
 };
+
+function countActivePrefs(
+  prefs: NonNullable<ReturnType<typeof usePushNotifications>['preferences']>
+): number {
+  return Object.values(prefs).filter((v) => v === true).length;
+}

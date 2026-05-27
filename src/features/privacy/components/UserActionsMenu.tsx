@@ -1,36 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Ban, BellOff, MoreHorizontal, Volume2 } from 'lucide-react';
-import clsx from 'clsx';
-import { ConfirmModal } from '@components/ui';
+import { Ban, BellOff, MoreHorizontal, Swords, UserMinus, Volume2 } from 'lucide-react';
+import { ActionSheet, type ActionSheetItem, ConfirmModal } from '@components/ui';
 import { privacyService } from '@api/services';
 import { useToastStore } from '@store/toastStore';
+import type { FriendshipState } from '@types';
+import { useFriendshipActions } from '@features/friends';
 import { usePrivacyActions } from '../hooks/usePrivacyActions';
 
 interface UserActionsMenuProps {
   userId: number;
   userName: string;
+  friendshipState: FriendshipState;
 }
 
 /**
- * "···" dropdown shown on user profiles. Currently exposes Mute and Block.
- * Block goes through a confirmation modal because it's destructive (deletes
- * friendship + pending requests + leaves shared challenges).
+ * "···" trigger on user profiles → bottom action sheet with privacy actions.
  *
- * The mute state is derived from the cached `privacy-muted` query so toggling
- * the menu doesn't fire a new request when the user is also viewing settings.
+ * Previously a dropdown anchored to the trigger. Re-platformed onto the shared
+ * ActionSheet primitive (A/B review #3) — bigger tap targets, native-feeling
+ * presentation, and consistent with the rest of the app's sheets (chat mute,
+ * more-nav, etc.). Block still goes through a ConfirmModal because deleting
+ * the friendship and pending invites is irreversible.
+ *
+ * Mute state is derived from the cached `privacy-muted` query so the row
+ * label reflects current state without a per-mount network call.
  */
-export const UserActionsMenu = ({ userId, userName }: UserActionsMenuProps) => {
+export const UserActionsMenu = ({ userId, userName, friendshipState }: UserActionsMenuProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { success, error } = useToastStore();
   const { block, mute, unmute } = usePrivacyActions();
+  const { unfriend } = useFriendshipActions();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [confirmUnfriendOpen, setConfirmUnfriendOpen] = useState(false);
 
   const { data: mutedList = [] } = useQuery({
     queryKey: ['privacy-muted'],
@@ -39,30 +46,88 @@ export const UserActionsMenu = ({ userId, userName }: UserActionsMenuProps) => {
   });
   const isMuted = mutedList.some((u) => u.id === userId);
 
-  useEffect(() => {
-    const onClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-    if (isOpen) {
-      document.addEventListener('mousedown', onClickOutside);
-    }
-    return () => document.removeEventListener('mousedown', onClickOutside);
-  }, [isOpen]);
+  // "View profile" is intentionally omitted — this menu only lives on
+  // UserProfilePage, so the action would just reload the current page.
+  const items: ActionSheetItem[] = [
+    {
+      id: 'challenge',
+      label: t('privacy.menu.inviteToChallenge'),
+      icon: <Swords size={16} strokeWidth={2} />,
+    },
+    isMuted
+      ? {
+          id: 'unmute',
+          label: t('privacy.menu.unmute'),
+          icon: <Volume2 size={16} strokeWidth={2} />,
+          variant: 'warning',
+          separator: true,
+          disabled: unmute.isPending,
+        }
+      : {
+          id: 'mute',
+          label: t('privacy.menu.mute'),
+          description: t('privacy.menu.muteHint'),
+          icon: <BellOff size={16} strokeWidth={2} />,
+          variant: 'warning',
+          separator: true,
+          disabled: mute.isPending,
+        },
+    ...(friendshipState === 'friends'
+      ? [
+          {
+            id: 'unfriend',
+            label: t('friends.action.unfriend'),
+            icon: <UserMinus size={16} strokeWidth={2} />,
+            variant: 'danger',
+            disabled: unfriend.isPending,
+          } satisfies ActionSheetItem,
+        ]
+      : []),
+    {
+      id: 'block',
+      label: t('privacy.menu.block'),
+      description: t('privacy.menu.blockHint'),
+      icon: <Ban size={16} strokeWidth={2} />,
+      variant: 'danger',
+      disabled: block.isPending,
+    },
+  ];
 
-  const handleMuteToggle = async () => {
-    setIsOpen(false);
-    try {
-      if (isMuted) {
-        await unmute.mutateAsync(userId);
-        success(t('privacy.toast.unmuted', { name: userName }));
-      } else {
+  const handleSelect = async (id: string) => {
+    if (id === 'challenge') {
+      setSheetOpen(false);
+      navigate(`/challenges/create?invite=${userId}`);
+      return;
+    }
+    if (id === 'mute') {
+      setSheetOpen(false);
+      try {
         await mute.mutateAsync(userId);
         success(t('privacy.toast.muted', { name: userName }));
+      } catch (err) {
+        error(err instanceof Error ? err.message : t('privacy.toast.actionFailed'));
       }
-    } catch (err) {
-      error(err instanceof Error ? err.message : t('privacy.toast.actionFailed'));
+      return;
+    }
+    if (id === 'unmute') {
+      setSheetOpen(false);
+      try {
+        await unmute.mutateAsync(userId);
+        success(t('privacy.toast.unmuted', { name: userName }));
+      } catch (err) {
+        error(err instanceof Error ? err.message : t('privacy.toast.actionFailed'));
+      }
+      return;
+    }
+    if (id === 'block') {
+      setSheetOpen(false);
+      setConfirmBlockOpen(true);
+      return;
+    }
+    if (id === 'unfriend') {
+      setSheetOpen(false);
+      setConfirmUnfriendOpen(true);
+      return;
     }
   };
 
@@ -71,7 +136,6 @@ export const UserActionsMenu = ({ userId, userName }: UserActionsMenuProps) => {
       await block.mutateAsync(userId);
       success(t('privacy.toast.blocked', { name: userName }));
       setConfirmBlockOpen(false);
-      // After blocking, the profile is no longer accessible — go home.
       navigate('/');
     } catch (err) {
       error(err instanceof Error ? err.message : t('privacy.toast.actionFailed'));
@@ -80,55 +144,37 @@ export const UserActionsMenu = ({ userId, userName }: UserActionsMenuProps) => {
 
   return (
     <>
-      <div className="relative" ref={menuRef}>
-        <button
-          type="button"
-          onClick={() => setIsOpen((v) => !v)}
-          aria-label={t('privacy.menu.open')}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/60 text-gray-700 backdrop-blur transition hover:bg-white/80 dark:border-gray-700/40 dark:bg-gray-900/60 dark:text-gray-200 dark:hover:bg-gray-900/80"
-        >
-          <MoreHorizontal size={18} strokeWidth={2} />
-        </button>
+      <button
+        type="button"
+        onClick={() => setSheetOpen(true)}
+        aria-label={t('privacy.menu.open')}
+        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/60 text-gray-700 backdrop-blur transition hover:bg-white/80 dark:border-gray-700/40 dark:bg-gray-900/60 dark:text-gray-200 dark:hover:bg-gray-900/80"
+      >
+        <MoreHorizontal size={18} strokeWidth={2} />
+      </button>
 
-        {isOpen && (
-          <div
-            className={clsx(
-              'absolute right-0 top-full z-30 mt-2 w-56 overflow-hidden rounded-2xl border border-white/20 bg-white/95 shadow-xl backdrop-blur-lg',
-              'dark:border-gray-800/60 dark:bg-gray-900/95'
-            )}
-          >
-            <button
-              type="button"
-              onClick={handleMuteToggle}
-              className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-gray-900 transition hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-800"
-            >
-              {isMuted ? (
-                <>
-                  <Volume2 size={16} strokeWidth={2} />
-                  {t('privacy.menu.unmute')}
-                </>
-              ) : (
-                <>
-                  <BellOff size={16} strokeWidth={2} />
-                  {t('privacy.menu.mute')}
-                </>
-              )}
-            </button>
-            <div className="my-1 border-t border-gray-200 dark:border-gray-800" />
-            <button
-              type="button"
-              onClick={() => {
-                setIsOpen(false);
-                setConfirmBlockOpen(true);
-              }}
-              className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
-            >
-              <Ban size={16} strokeWidth={2} />
-              {t('privacy.menu.block')}
-            </button>
-          </div>
-        )}
-      </div>
+      <ActionSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        title={userName}
+        items={items}
+        onSelect={handleSelect}
+      />
+
+      <ConfirmModal
+        isOpen={confirmUnfriendOpen}
+        onClose={() => setConfirmUnfriendOpen(false)}
+        onConfirm={() => {
+          setConfirmUnfriendOpen(false);
+          unfriend.mutate(userId);
+        }}
+        title={t('friends.unfriendConfirm.title')}
+        message={t('friends.unfriendConfirm.message')}
+        confirmText={t('friends.unfriendConfirm.confirm')}
+        cancelText={t('common.cancel')}
+        confirmVariant="danger"
+        isLoading={unfriend.isPending}
+      />
 
       <ConfirmModal
         isOpen={confirmBlockOpen}

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Loader2, Sparkles, Trophy } from 'lucide-react';
 import { Layout } from '@components/layout';
-import { GlassCard, Skeleton } from '@components/ui';
+import { GlassCard, PageHeader, Skeleton } from '@components/ui';
 import { personalRecordsService } from '@api/services';
 import { PersonalRecordsBoard } from './PersonalRecordsBoard';
 import { usePersonalRecordsSync } from './usePersonalRecordsSync';
@@ -33,6 +33,7 @@ export const PersonalRecordsPage = () => {
   });
 
   const totalRecords = bands.reduce((sum, b) => sum + b.records.length, 0);
+  const bandsWithRecords = bands.filter((b) => b.records.length > 0).length;
   const hasBacklog = !!status && status.processed < status.total;
   const canResume = !!status && status.userDailyRemaining > 0 && status.appDailyRemaining > 0;
 
@@ -53,7 +54,7 @@ export const PersonalRecordsPage = () => {
     return (
       <Layout>
         <div className="space-y-4">
-          <Skeleton className="h-12 w-full" />
+          <PageHeader title={t('personalRecords.title')} subtitle={t('personalRecords.subtitle')} />
           <Skeleton className="h-24 w-full" />
           {[1, 2, 3, 4, 5, 6, 7].map((i) => (
             <Skeleton key={i} className="h-40" />
@@ -67,15 +68,7 @@ export const PersonalRecordsPage = () => {
     return (
       <Layout>
         <div className="space-y-6">
-          <div>
-            <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-gray-50">
-              <Trophy size={22} strokeWidth={1.75} className="text-strava-orange" />
-              {t('personalRecords.title')}
-            </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {t('personalRecords.subtitle')}
-            </p>
-          </div>
+          <PageHeader title={t('personalRecords.title')} subtitle={t('personalRecords.subtitle')} />
           <GlassCard className="relative overflow-hidden p-10 text-center">
             <span
               className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-strava-orange/20 blur-3xl"
@@ -98,9 +91,15 @@ export const PersonalRecordsPage = () => {
     );
   }
 
+  const headerSubtitle =
+    totalRecords > 0
+      ? t('personalRecords.summary', { bands: bandsWithRecords, total: totalRecords })
+      : t('personalRecords.subtitle');
+
   return (
     <Layout>
       <div className="space-y-4">
+        <PageHeader title={t('personalRecords.title')} subtitle={headerSubtitle} />
         {hasBacklog && status && (
           <BacklogBanner
             isSyncing={syncState.isSyncing}

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import i18n from '@i18n/index';
 
-type Locale = 'en' | 'fr';
+export type Locale = 'en' | 'fr';
 export type Theme = 'light' | 'dark';
 
 interface SettingsState {

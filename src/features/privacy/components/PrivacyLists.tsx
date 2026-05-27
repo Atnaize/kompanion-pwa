@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Ban, BellOff } from 'lucide-react';
 import { privacyService } from '@api/services';
-import { Avatar, GlassCard } from '@components/ui';
+import { Avatar, GlassCard, Skeleton } from '@components/ui';
 import { useToastStore } from '@store/toastStore';
 import { usePrivacyActions } from '../hooks/usePrivacyActions';
 
@@ -55,9 +55,10 @@ export const PrivacyLists = () => {
         </p>
         <GlassCard className="p-2">
           {mutedLoading ? (
-            <p className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-              {t('common.loading')}
-            </p>
+            <div className="space-y-2 p-1">
+              <Skeleton className="h-11 w-full rounded-xl" />
+              <Skeleton className="h-11 w-full rounded-xl" />
+            </div>
           ) : muted.length === 0 ? (
             <p className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
               {t('privacy.muted.empty')}
@@ -100,9 +101,10 @@ export const PrivacyLists = () => {
         </p>
         <GlassCard className="p-2">
           {blockedLoading ? (
-            <p className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
-              {t('common.loading')}
-            </p>
+            <div className="space-y-2 p-1">
+              <Skeleton className="h-11 w-full rounded-xl" />
+              <Skeleton className="h-11 w-full rounded-xl" />
+            </div>
           ) : blocked.length === 0 ? (
             <p className="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
               {t('privacy.blocked.empty')}

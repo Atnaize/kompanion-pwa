@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { ArrowRight, Lock, Minus, TrendingDown, TrendingUp } from 'lucide-react';
 import { Layout } from '@components/layout';
-import { Avatar, Button, GlassCard, Skeleton, TimePeriodSelector } from '@components/ui';
+import {
+  Avatar,
+  BackButton,
+  GlassCard,
+  ListSkeleton,
+  Skeleton,
+  TimePeriodSelector,
+} from '@components/ui';
 import type { TimePeriod } from '@components/ui';
 import { statsCompareService, usersService } from '@api/services';
 import { formatDistance, formatDuration, formatElevation, formatSpeed } from '@utils/format';
@@ -30,7 +37,6 @@ const formatValue = (key: LeaderboardMetricKey, value: number): string => {
 
 export const CompareWithFriendPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const userId = Number(params.id);
   const [period, setPeriod] = useState<TimePeriod>('month');
@@ -63,7 +69,12 @@ export const CompareWithFriendPage = () => {
   if (profileLoading) {
     return (
       <Layout>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
+        <div className="space-y-6">
+          <BackButton />
+          <Skeleton className="h-7 w-40" />
+          <Skeleton className="h-9 w-full rounded-full" />
+          <ListSkeleton count={4} />
+        </div>
       </Layout>
     );
   }
@@ -75,9 +86,9 @@ export const CompareWithFriendPage = () => {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
             {t('userProfile.notFound')}
           </h2>
-          <Button variant="secondary" className="mt-4" onClick={() => navigate(-1)} size="sm">
-            {t('common.back')}
-          </Button>
+          <div className="mt-4 flex justify-center">
+            <BackButton />
+          </div>
         </GlassCard>
       </Layout>
     );
@@ -87,9 +98,7 @@ export const CompareWithFriendPage = () => {
     return (
       <Layout>
         <div className="space-y-4">
-          <Button variant="secondary" size="sm" onClick={() => navigate(-1)}>
-            {t('common.back')}
-          </Button>
+          <BackButton />
           <GlassCard className="p-5">
             <div className="flex items-start gap-3">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
@@ -108,9 +117,7 @@ export const CompareWithFriendPage = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <Button variant="secondary" size="sm" onClick={() => navigate(-1)}>
-          {t('common.back')}
-        </Button>
+        <BackButton />
 
         <div>
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">

@@ -41,8 +41,9 @@ interface TabListProps {
 }
 
 export const TabList = ({ children, className, wrap = false, fade = false }: TabListProps) => {
-  const segmentedBg =
-    'rounded-xl bg-gray-100/80 p-1 ring-1 ring-gray-900/5 dark:bg-gray-800/60 dark:ring-gray-100/5';
+  // White-raised iOS segmented look — the single tab style across every
+  // tabbed surface (stats, challenges, friends, activity, clubs).
+  const segmentedBg = 'rounded-full bg-gray-200/60 p-1 dark:bg-gray-800/60';
 
   if (wrap) {
     return (
@@ -93,39 +94,22 @@ export const Tab = ({ value, label, count, icon, className, compact }: TabProps)
     <button
       onClick={() => onChange(value)}
       className={clsx(
-        'flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg font-medium transition-all',
-        compact ? 'px-2.5 py-1.5 text-[13px]' : 'px-4 py-2 text-sm',
+        'flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-full font-semibold transition-colors',
+        compact ? 'px-3 py-1.5 text-[13px]' : 'px-4 py-1.5 text-sm',
         isActive
-          ? 'bg-gradient-to-r from-orange-400 to-orange-600 text-white shadow-sm shadow-orange-500/30'
-          : 'text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-50',
+          ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-950 dark:text-gray-50'
+          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
         className
       )}
     >
       {icon && (
-        <span
-          className={clsx(
-            'leading-none',
-            compact ? 'text-[14px]' : 'text-base',
-            isActive ? 'opacity-100' : 'opacity-80'
-          )}
-          aria-hidden
-        >
+        <span className={clsx('leading-none', compact ? 'text-[14px]' : 'text-base')} aria-hidden>
           {icon}
         </span>
       )}
       <span>{label}</span>
       {count !== undefined && count > 0 && (
-        <span
-          className={clsx(
-            'rounded-full px-1.5 text-[10px] font-semibold leading-[18px]',
-            compact ? 'min-w-[18px] text-center' : 'min-w-[20px] px-2 text-xs leading-5',
-            isActive
-              ? 'bg-white/25 text-white'
-              : 'bg-gray-900/5 text-gray-600 dark:bg-gray-100/10 dark:text-gray-400'
-          )}
-        >
-          {count}
-        </span>
+        <span className="ml-0.5 text-xs tabular-nums opacity-60">{count}</span>
       )}
     </button>
   );

@@ -1,5 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { achievementsService, friendsService, inboxService } from '@api/services';
+import {
+  achievementsService,
+  conversationsService,
+  friendsService,
+  inboxService,
+} from '@api/services';
 import type { Achievement } from '@types';
 
 interface TabBadge {
@@ -49,6 +54,17 @@ export const useTabBadges = (): TabBadges => {
     refetchInterval: 60_000,
   });
 
+  // Unread chat messages across every conversation — drives the `/messages`
+  // tile bubble.
+  const { data: messagesUnread } = useQuery({
+    queryKey: ['conversations-unread-total'],
+    queryFn: async () => {
+      const response = await conversationsService.unreadTotal();
+      return response.data?.count ?? 0;
+    },
+    refetchInterval: 60_000,
+  });
+
   const badges: TabBadges = {};
 
   if (achievements) {
@@ -73,6 +89,13 @@ export const useTabBadges = (): TabBadges => {
   if (inboxCount && inboxCount > 0) {
     badges['/notifications'] = {
       count: inboxCount,
+      color: 'bg-strava-orange',
+    };
+  }
+
+  if (messagesUnread && messagesUnread > 0) {
+    badges['/messages'] = {
+      count: messagesUnread,
       color: 'bg-strava-orange',
     };
   }

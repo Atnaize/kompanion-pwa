@@ -3,9 +3,14 @@ import { apiClient } from '@api/client';
 import { useAuthStore } from '@store/authStore';
 
 export interface NotificationPreferences {
-  // Challenges
+  // Challenges (lifecycle / invites — not chat)
   challengeInvites: boolean;
   challengeUpdates: boolean;
+  // Chat (scope-agnostic — covers challenge, club, and future DM conversations)
+  chatMessages: boolean;
+  chatMentions: boolean;
+  chatReactions: boolean;
+  chatReplies: boolean;
   // Friends (M3)
   friendRequests: boolean;
   friendAccepted: boolean;

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Activity as ActivityIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Layout } from '@components/layout';
-import { AnimatedNumber, GlassCard, Button, Skeleton, EmptyState } from '@components/ui';
+import { AnimatedNumber, GlassCard, Button, Skeleton, EmptyState, EndOfList } from '@components/ui';
 import { ActivityCard, ActivityTypePicker } from '@components/activity';
 import { activitiesService } from '@api/services';
 import { useInfiniteScroll } from '@hooks/useInfiniteScroll';
@@ -238,9 +238,7 @@ export const ActivitiesPage = () => {
 
             {/* End of List Message */}
             {!hasMore && displayedActivities.length > 0 && (
-              <div className="py-8 text-center text-sm text-gray-600 dark:text-gray-400">
-                {t('activities.endOfList')}
-              </div>
+              <EndOfList label={t('activities.endOfList')} />
             )}
           </div>
         )}

@@ -1,7 +1,8 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import type { LucideIcon } from 'lucide-react';
+import { ChipScroller } from '@components/ui';
 import { getSportPresentation } from '@utils/sport';
 
 interface ActivityTypePickerProps {
@@ -12,44 +13,33 @@ interface ActivityTypePickerProps {
   /** Currently selected type, or null for "All". */
   selected: string | null;
   onChange: (type: string | null) => void;
-  /** How many type chips to show before collapsing the rest behind "+N more". */
-  visibleCount?: number;
 }
 
 /**
- * Shared activity-type filter used on the Activities and Stats pages. Renders
- * a row of polished chips (icon + label + count) with the most-used types
- * inline and the remainder behind a "+N more" toggle. The currently selected
- * type stays visible even when it would otherwise be hidden in the overflow.
+ * Shared activity-type filter used on the Activities, Stats and Leaderboards
+ * pages. Renders polished chips (icon + label + count) in a horizontal-scroll
+ * ChipScroller — replaces the older flex-wrap + "+N more" toggle that pushed
+ * page content down by 60-80px on narrow phones.
  */
 export const ActivityTypePicker = ({
   types,
   totalCount,
   selected,
   onChange,
-  visibleCount = 4,
 }: ActivityTypePickerProps) => {
   const { t } = useTranslation();
-  const [expanded, setExpanded] = useState(false);
 
   const sorted = useMemo(() => [...types].sort((a, b) => b.count - a.count), [types]);
 
-  const visible = expanded ? sorted : sorted.slice(0, visibleCount);
-  const overflowCount = Math.max(0, sorted.length - visibleCount);
-  const selectedInOverflow = selected !== null && !visible.some((row) => row.type === selected);
-  const selectedOverflowRow = selectedInOverflow
-    ? sorted.find((row) => row.type === selected)
-    : undefined;
-
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <ChipScroller ariaLabel={t('common.filter.more', { count: sorted.length })}>
       <Chip
         label={t('common.all')}
         count={totalCount}
         isSelected={selected === null}
         onClick={() => onChange(null)}
       />
-      {visible.map(({ type, count }) => {
+      {sorted.map(({ type, count }) => {
         const { icon: Icon } = getSportPresentation(type);
         return (
           <Chip
@@ -62,25 +52,7 @@ export const ActivityTypePicker = ({
           />
         );
       })}
-      {selectedOverflowRow && (
-        <Chip
-          icon={getSportPresentation(selectedOverflowRow.type).icon}
-          label={selectedOverflowRow.type}
-          count={selectedOverflowRow.count}
-          isSelected
-          onClick={() => onChange(selectedOverflowRow.type)}
-        />
-      )}
-      {overflowCount > 0 && (
-        <ToggleChip
-          expanded={expanded}
-          overflowCount={overflowCount}
-          onClick={() => setExpanded((prev) => !prev)}
-        >
-          {expanded ? t('common.filter.less') : t('common.filter.more', { count: overflowCount })}
-        </ToggleChip>
-      )}
-    </div>
+    </ChipScroller>
   );
 };
 
@@ -116,23 +88,5 @@ const Chip = ({ icon: Icon, label, count, isSelected, onClick }: ChipProps) => (
     >
       {count}
     </span>
-  </button>
-);
-
-interface ToggleChipProps {
-  expanded: boolean;
-  overflowCount: number;
-  onClick: () => void;
-  children: ReactNode;
-}
-
-const ToggleChip = ({ expanded, onClick, children }: ToggleChipProps) => (
-  <button
-    type="button"
-    onClick={onClick}
-    aria-expanded={expanded}
-    className="inline-flex items-center rounded-full bg-white/70 px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-gray-900/5 backdrop-blur-sm transition-all duration-150 hover:bg-white hover:shadow-md active:scale-95 dark:bg-gray-900/70 dark:text-gray-300 dark:ring-gray-100/10 dark:hover:bg-gray-800"
-  >
-    {children}
   </button>
 );

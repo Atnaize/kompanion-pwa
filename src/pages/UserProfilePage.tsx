@@ -3,9 +3,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { GitCompareArrows, Lock, Users } from 'lucide-react';
 import { Layout } from '@components/layout';
-import { Avatar, Button, GlassCard, StatTile } from '@components/ui';
+import {
+  Avatar,
+  BackButton,
+  Button,
+  GlassCard,
+  Skeleton,
+  StatTile,
+  StatTileSkeleton,
+} from '@components/ui';
 import { usersService } from '@api/services';
 import { FriendActionButton } from '@features/friends';
+import { MessageButton } from '@features/chat';
 import { UserActionsMenu } from '@features/privacy';
 
 export const UserProfilePage = () => {
@@ -23,7 +32,23 @@ export const UserProfilePage = () => {
   if (isLoading) {
     return (
       <Layout>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
+        <div className="space-y-6">
+          <BackButton to="/friends" />
+          <GlassCard className="p-6">
+            <div className="flex items-center gap-4">
+              <Skeleton variant="circular" width="64px" height="64px" />
+              <div className="flex-1 space-y-2">
+                <Skeleton width="60%" height="20px" />
+                <Skeleton width="40%" height="14px" />
+              </div>
+            </div>
+          </GlassCard>
+          <div className="grid grid-cols-2 gap-2 min-[360px]:grid-cols-3 sm:gap-3">
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+            <StatTileSkeleton />
+          </div>
+        </div>
       </Layout>
     );
   }
@@ -35,14 +60,9 @@ export const UserProfilePage = () => {
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
             {t('userProfile.notFound')}
           </h2>
-          <Button
-            variant="secondary"
-            className="mt-4"
-            onClick={() => navigate('/friends')}
-            size="sm"
-          >
-            {t('common.back')}
-          </Button>
+          <div className="mt-4 flex justify-center">
+            <BackButton to="/friends" />
+          </div>
         </GlassCard>
       </Layout>
     );
@@ -59,9 +79,7 @@ export const UserProfilePage = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <Button variant="secondary" size="sm" onClick={() => navigate(-1)}>
-          {t('common.back')}
-        </Button>
+        <BackButton />
 
         {/* Profile header */}
         <GlassCard className="p-6">
@@ -83,9 +101,14 @@ export const UserProfilePage = () => {
               </p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
-              <FriendActionButton userId={user.id} state={friendshipState} compact allowUnfriend />
+              {friendshipState === 'friends' && <MessageButton userId={user.id} compact />}
+              <FriendActionButton userId={user.id} state={friendshipState} compact />
               {showActionsMenu && (
-                <UserActionsMenu userId={user.id} userName={`${user.firstname} ${user.lastname}`} />
+                <UserActionsMenu
+                  userId={user.id}
+                  userName={`${user.firstname} ${user.lastname}`}
+                  friendshipState={friendshipState}
+                />
               )}
             </div>
           </div>
@@ -110,7 +133,10 @@ export const UserProfilePage = () => {
             <h3 className="mb-3 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
               {t('userProfile.stats')}
             </h3>
-            <div className="grid grid-cols-3 gap-3">
+            {/* 3-up at ≥360px (most phones); falls back to 2-up with the
+                elevation tile spanning the full width at iPhone-SE-class
+                widths (320px) where 3 columns crush the values. */}
+            <div className="grid grid-cols-2 gap-2 min-[360px]:grid-cols-3 sm:gap-3">
               <StatTile
                 label={t('common.activities')}
                 value={stats.totalActivities.toLocaleString()}
@@ -119,10 +145,12 @@ export const UserProfilePage = () => {
                 label={t('common.distance')}
                 value={`${Math.round(stats.totalDistance / 1000).toLocaleString()} km`}
               />
-              <StatTile
-                label={t('common.elevation')}
-                value={`${Math.round(stats.totalElevation).toLocaleString()} m`}
-              />
+              <div className="col-span-2 min-[360px]:col-span-1">
+                <StatTile
+                  label={t('common.elevation')}
+                  value={`${Math.round(stats.totalElevation).toLocaleString()} m`}
+                />
+              </div>
             </div>
           </section>
         )}

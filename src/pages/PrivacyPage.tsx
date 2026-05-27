@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft } from 'lucide-react';
+import { BackButton } from '@components/ui';
 
 export const PrivacyPage = () => {
   const { t } = useTranslation();
@@ -8,13 +7,9 @@ export const PrivacyPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 px-4 py-8 dark:from-gray-950 dark:to-gray-900">
       <div className="mx-auto max-w-2xl">
-        <Link
-          to="/about"
-          className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-strava-orange dark:text-gray-300"
-        >
-          <ArrowLeft size={16} strokeWidth={2} />
-          {t('legal.back')}
-        </Link>
+        <div className="mb-6">
+          <BackButton to="/about" label={t('legal.back')} />
+        </div>
 
         <article className="space-y-6 rounded-2xl bg-white/80 p-8 shadow-sm backdrop-blur dark:bg-gray-900/80">
           <header>
